@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Det Rena Friska Livssystemet - Solsystem</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --glow-color-system: #A3E635;
+            --glow-color-mat: #F97316;
+            --glow-color-filosofi: #38BDF8;
+            --glow-color-ovrigt: #d946ef; /* fuchsia-500 */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #020617; /* slate-950 */
+            color: #e5e7eb; /* gray-200 */
+            overflow: hidden; /* Hide scrollbars */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        /* Animated particle background for the space feel */
+        .particle-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image:
+                radial-gradient(1px 1px at 25% 15%, rgba(229, 231, 235, 0.4), transparent),
+                radial-gradient(1px 1px at 50% 35%, rgba(229, 231, 235, 0.3), transparent),
+                radial-gradient(1px 1px at 75% 55%, rgba(229, 231, 235, 0.4), transparent),
+                radial-gradient(2px 2px at 15% 75%, rgba(229, 231, 235, 0.5), transparent),
+                radial-gradient(2px 2px at 85% 5%, rgba(229, 231, 235, 0.3), transparent);
+            animation: move-particles 120s linear infinite;
+        }
+        @keyframes move-particles {
+            from { background-position: 0 0; }
+            to { background-position: -1000px 500px; }
+        }
+
+        /* Interactive Hub container */
+        .interactive-hub {
+            position: relative;
+            width: 500px; /* Increased size for a grander scale */
+            height: 500px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* The central sun */
+        .central-sun {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #fef08a 0%, #f97316 60%, #dc2626 100%);
+            animation: pulse-sun 4s ease-in-out infinite;
+        }
+        @keyframes pulse-sun {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 20px #f97316, 0 0 40px #fef08a, inset 0 0 10px #fef08a;
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 0 35px #f97316, 0 0 60px #fef08a, inset 0 0 15px #fef08a;
+            }
+        }
+        
+        /* The container for orbiting planets */
+        .planet-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Individual planets (nodes) */
+        .planet {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 80px;
+            height: 80px;
+            margin: -40px;
+            border-radius: 50%;
+            background-color: #0f172a; /* slate-900 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            border: 2px solid;
+            box-shadow: 0 0 10px;
+            animation-duration: 40s;
+            animation-iteration-count: infinite;
+            animation-timing-function: linear;
+        }
+        
+        .planet-icon-wrapper {
+            transition: transform 0.3s ease-out;
+        }
+
+        .planet:hover .planet-icon-wrapper {
+            transform: scale(1.25);
+        }
+
+        .planet .planet-label {
+            position: absolute;
+            bottom: -30px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            opacity: 0;
+            transition: opacity 0.3s ease-out;
+            pointer-events: none;
+            text-shadow: 0 0 5px;
+            color: white; /* Default color, will be overridden */
+            -webkit-transform-style: preserve-3d;
+            transform-style: preserve-3d;
+        }
+        
+        .planet:hover .planet-label {
+            opacity: 1;
+        }
+
+        /* Positioning and colors for each planet */
+        .planet-system { 
+            border-color: var(--glow-color-system);
+            box-shadow: 0 0 10px var(--glow-color-system);
+            animation-name: orbit-system;
+        }
+        .planet-system .planet-label { color: var(--glow-color-system); text-shadow: 0 0 5px var(--glow-color-system); }
+        .planet-system:hover { box-shadow: 0 0 25px var(--glow-color-system); animation-play-state: paused; }
+
+        .planet-mat { 
+            border-color: var(--glow-color-mat);
+            box-shadow: 0 0 10px var(--glow-color-mat);
+            animation-name: orbit-mat;
+        }
+        .planet-mat .planet-label { color: var(--glow-color-mat); text-shadow: 0 0 5px var(--glow-color-mat); }
+        .planet-mat:hover { box-shadow: 0 0 25px var(--glow-color-mat); animation-play-state: paused; }
+
+        .planet-filosofi { 
+            border-color: var(--glow-color-filosofi);
+            box-shadow: 0 0 10px var(--glow-color-filosofi);
+            animation-name: orbit-filosofi;
+        }
+        .planet-filosofi .planet-label { color: var(--glow-color-filosofi); text-shadow: 0 0 5px var(--glow-color-filosofi); }
+        .planet-filosofi:hover { box-shadow: 0 0 25px var(--glow-color-filosofi); animation-play-state: paused; }
+
+        .planet-ovrigt { 
+            border-color: var(--glow-color-ovrigt);
+            box-shadow: 0 0 10px var(--glow-color-ovrigt);
+            animation-name: orbit-ovrigt;
+        }
+        .planet-ovrigt .planet-label { color: var(--glow-color-ovrigt); text-shadow: 0 0 5px var(--glow-color-ovrigt); }
+        .planet-ovrigt:hover { box-shadow: 0 0 25px var(--glow-color-ovrigt); animation-play-state: paused; }
+
+        /* Orbit paths */
+        @keyframes orbit-system {
+            from { transform: rotate(0deg) translateY(-200px) rotate(0deg); }
+            to   { transform: rotate(360deg) translateY(-200px) rotate(-360deg); }
+        }
+        @keyframes orbit-mat {
+            from { transform: rotate(90deg) translateY(-200px) rotate(-90deg); }
+            to   { transform: rotate(450deg) translateY(-200px) rotate(-450deg); }
+        }
+        @keyframes orbit-filosofi {
+            from { transform: rotate(180deg) translateY(-200px) rotate(-180deg); }
+            to   { transform: rotate(540deg) translateY(-200px) rotate(-540deg); }
+        }
+        @keyframes orbit-ovrigt {
+            from { transform: rotate(270deg) translateY(-200px) rotate(-270deg); }
+            to   { transform: rotate(630deg) translateY(-200px) rotate(-630deg); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="particle-bg"></div>
+
+    <main class="interactive-hub">
+        <div class="central-sun"></div>
+        <div class="planet-container">
+            <!-- Planet for Systemet -->
+            <a href="detrenafriskalivssystemet.html" class="planet planet-system">
+                <div class="planet-icon-wrapper">
+                    <!-- Icon: Brain -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="stroke-current text-lime-400"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.9-3.21 2.5 2.5 0 0 1 .37-5.11 2.5 2.5 0 0 1 4.4-2.24 2.5 2.5 0 0 1 2.59-2.38M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.9-3.21 2.5 2.5 0 0 0-.37-5.11 2.5 2.5 0 0 0-4.4-2.24A2.5 2.5 0 0 0 12 4.5"/></svg>
+                </div>
+                <span class="planet-label">Systemet</span>
+            </a>
+            <!-- Planet for Mat -->
+            <a href="mat.html" class="planet planet-mat">
+                <div class="planet-icon-wrapper">
+                    <!-- Icon: Leaf -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="stroke-current text-orange-500"><path d="M11 20A7 7 0 0 1 4 13V7a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1V7a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v6a7 7 0 0 1-7 7Z"/><path d="M4 14a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1"/></svg>
+                </div>
+                <span class="planet-label">Mat</span>
+            </a>
+            <!-- Planet for Filosofi -->
+            <a href="filosofi.html" class="planet planet-filosofi">
+                <div class="planet-icon-wrapper">
+                    <!-- Icon: Sparkle -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="stroke-current text-sky-400"><path d="m12 3-1.9 4.8-4.8 1.9 4.8 1.9L12 16l1.9-4.8 4.8-1.9-4.8-1.9L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg>
+                </div>
+                <span class="planet-label">Filosofi</span>
+            </a>
+            <!-- Planet for Övrigt -->
+            <a href="ovrigt.html" class="planet planet-ovrigt">
+                <div class="planet-icon-wrapper">
+                    <!-- Icon: Compass -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="stroke-current text-fuchsia-500"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+                </div>
+                <span class="planet-label">Övrigt</span>
+            </a>
+        </div>
+    </main>
+</body>
+</html>
+
