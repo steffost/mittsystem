@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mat - Det Rena Friska Livssystemet</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --glow-color-mat: #F97316;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #020617; /* slate-950 */
+            color: #a7f3d0; /* emerald-200 */
+        }
+
+        .particle-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image:
+                radial-gradient(1px 1px at 25% 15%, rgba(229, 231, 235, 0.4), transparent),
+                radial-gradient(1px 1px at 50% 35%, rgba(229, 231, 235, 0.3), transparent),
+                radial-gradient(1px 1px at 75% 55%, rgba(229, 231, 235, 0.4), transparent),
+                radial-gradient(2px 2px at 15% 75%, rgba(229, 231, 235, 0.5), transparent),
+                radial-gradient(2px 2px at 85% 5%, rgba(229, 231, 235, 0.3), transparent);
+            animation: move-particles 120s linear infinite;
+        }
+        @keyframes move-particles {
+            from { background-position: 0 0; }
+            to { background-position: -1000px 500px; }
+        }
+
+        .main-title {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--glow-color-mat);
+            text-shadow: 0 0 8px var(--glow-color-mat), 0 0 20px rgba(249, 115, 22, 0.5);
+        }
+        
+        /* Navigation Tabs */
+        .nav-tab {
+            font-family: 'Orbitron', sans-serif;
+            transition: color 0.3s ease, border-color 0.3s ease, text-shadow 0.3s ease;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+        }
+        .nav-tab:hover {
+            color: var(--glow-color-mat);
+        }
+        .nav-tab.active {
+            color: var(--glow-color-mat);
+            text-shadow: 0 0 5px var(--glow-color-mat);
+            border-bottom-color: var(--glow-color-mat);
+        }
+        
+        .accordion-item {
+            background-color: rgba(15, 23, 42, 0.8); /* slate-900 with opacity */
+            border: 1px solid var(--glow-color-mat);
+            box-shadow: 0 0 15px rgba(249, 115, 22, 0.3);
+            backdrop-filter: blur(10px);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .accordion-item[open] {
+            box-shadow: 0 0 25px rgba(249, 115, 22, 0.6);
+        }
+        
+        .accordion-title {
+             font-family: 'Orbitron', sans-serif;
+             color: var(--glow-color-mat);
+             text-shadow: 0 0 5px rgba(249, 115, 22, 0.7);
+             cursor: pointer;
+        }
+
+        .accordion-title::-webkit-details-marker {
+            display: none;
+        }
+        
+        .accordion-content li::marker,
+        .accordion-content ol li::marker {
+            color: var(--glow-color-mat);
+        }
+
+        .back-button {
+            border-color: var(--glow-color-mat);
+            box-shadow: 0 0 10px var(--glow-color-mat);
+            transition: all 0.3s ease;
+        }
+        .back-button:hover {
+             box-shadow: 0 0 25px var(--glow-color-mat);
+             transform: scale(1.05);
+        }
+
+    </style>
+</head>
+<body class="min-h-screen">
+    <div class="particle-bg"></div>
+
+    <div class="container mx-auto px-4 py-8 md:py-12">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl md:text-6xl font-bold main-title tracking-widest">KROPPENS BRÄNSLE</h1>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="flex justify-center gap-8 mb-10">
+            <a id="tab-oversikt" class="nav-tab active text-xl pb-1">Översikt</a>
+            <a id="tab-recept" class="nav-tab text-xl pb-1">Recept</a>
+        </nav>
+        
+        <main class="max-w-4xl mx-auto">
+            <!-- Overview Content -->
+            <div id="content-oversikt" class="space-y-6">
+                <p class="text-center text-emerald-300 text-lg mb-8">Jag följer alltid en 100% vegansk kost.</p>
+                
+                <details class="accordion-item rounded-lg p-6" open>
+                    <summary class="accordion-title text-2xl flex justify-between items-center"><span>Koststrategi per Dagtyp</span><svg class="w-6 h-6 transform transition-transform duration-300 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                    <div class="accordion-content mt-4 space-y-3"><ul class="list-disc list-inside space-y-2"><li><strong>Aktiva dagar:</strong> Äter jag efter ett exakt protokoll.</li><li><strong>Drönardagar:</strong> Äter jag mer som jag vill, men jag äter inom ett ätfönster mellan 14:00 - 20:00.</li><li><strong>Vilodagar:</strong> Äter jag mer bulk för att ha energi till kommande vecka, tex en större söndagsmiddag eller skördetallrik med egenodlade grönsaker.</li></ul></div>
+                </details>
+                <details class="accordion-item rounded-lg p-6">
+                    <summary class="accordion-title text-2xl flex justify-between items-center"><span>Sallad och Groddar</span><svg class="w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                    <div class="accordion-content mt-4"><p>Grön sallad är något jag äter till varje måltid, det är en stapelvara som jag tar på yttersta allvar. Grön sallad eller groddar är med i varje rätt i någon form. Ibland gör jag en sallad som jag äter innan själva rätten, som förrätt, ibland har jag den till rätten. Jag äter sallad med vinägrett för att maximera näringsupptag och främja matsmältningen.</p></div>
+                </details>
+                <details class="accordion-item rounded-lg p-6">
+                    <summary class="accordion-title text-2xl flex justify-between items-center"><span>Specialdrycker och Hacks</span><svg class="w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                    <div class="accordion-content mt-4 space-y-3"><ul class="list-disc list-inside space-y-2"><li><strong>Kombite:</strong> Pau D’Arco te, ingefära, citron och xylitol.</li><li><strong>Motivationsdricka:</strong> Växtmjölk, Raw kakao, xylitol, salt, kreatin, lionsmane, c8 olja. Denna dricka är skapad för att öka motivationen inför något, det ger energi och klar tanke.</li><li><strong>Matsmältning:</strong> Enzymer tillskott för att lättare smälta vissa saker för att maximera näringsintag.</li><li><strong>Vinägrett:</strong> Hemgjord maskrosvinäger på egen äppelcidervinäger, linfröolja.</li></ul></div>
+                </details>
+                <details class="accordion-item rounded-lg p-6">
+                    <summary class="accordion-title text-2xl flex justify-between items-center"><span>Kosttillskott</span><svg class="w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                    <div class="accordion-content mt-4 space-y-3"><ul class="list-disc list-inside space-y-2"><li>D-vitamin</li><li>B-12</li><li>K-2</li><li>Omega-3 Algolja</li><li>Enzymer (för matsmältning)</li><li>Havtornsolja (för huden)</li><li>Elektrolyter (för återfuktning)</li></ul></div>
+                </details>
+                <details class="accordion-item rounded-lg p-6">
+                    <summary class="accordion-title text-2xl flex justify-between items-center"><span>Hälsa & Fasta</span><svg class="w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                    <div class="accordion-content mt-4"><ul class="list-disc list-inside space-y-2"><li><strong>Kombivecka (minst 2 om året):</strong> Sallad i två dagar, följt av fasta i 3-5 dagar.</li></ul></div>
+                </details>
+            </div>
+            
+            <!-- Recipes Content -->
+            <div id="content-recept" class="hidden space-y-6">
+                <p class="text-center text-emerald-300 text-lg mb-8">Inspiration för rena och livgivande måltider.</p>
+
+                <details class="accordion-item rounded-lg p-6">
+                    <summary class="accordion-title text-2xl flex justify-between items-center"><span>Dhal Supreém</span><svg class="w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                    <div class="accordion-content mt-4 space-y-4"><div><h3 class="font-bold text-lg mb-2 text-emerald-300">Ingredienser</h3><ul class="list-disc list-inside space-y-1"><li>2 dl röda linser</li><li>1 gul lök, finhackad</li><li>2 vitlöksklyftor, pressade</li><li>1 msk färsk ingefära, riven</li><li>1 burk krossade tomater</li><li>1 burk kokosmjölk</li><li>Kryddor: gurkmeja, spiskummin, koriander, chili</li><li>Färsk spenat & koriander</li></ul></div><div><h3 class="font-bold text-lg mb-2 text-emerald-300">Instruktioner</h3><ol class="list-decimal list-inside space-y-1"><li>Skölj linserna noggrant.</li><li>Fräs lök, vitlök och ingefära i lite olja tills det blir mjukt.</li><li>Tillsätt kryddorna och fräs i en minut till.</li><li>Häll i linser, krossade tomater och kokosmjölk. Låt sjuda i ca 20 minuter.</li><li>Rör ner färsk spenat och smaka av med salt. Servera med färsk koriander.</li></ol></div></div>
+                </details>
+                <details class="accordion-item rounded-lg p-6">
+                    <summary class="accordion-title text-2xl flex justify-between items-center"><span>Quinoa Dream</span><svg class="w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                    <div class="accordion-content mt-4 space-y-4"><div><h3 class="font-bold text-lg mb-2 text-emerald-300">Ingredienser</h3><ul class="list-disc list-inside space-y-1"><li>3 dl quinoa (valfri färg)</li><li>1 röd paprika, tärnad</li><li>1 gurka, tärnad</li><li>1 burk kikärtor, sköljda</li><li>Färsk mynta & persilja</li><li>Dressing: Olivolja, citronsaft, dijonsenap, salt & peppar</li></ul></div><div><h3 class="font-bold text-lg mb-2 text-emerald-300">Instruktioner</h3><ol class="list-decimal list-inside space-y-1"><li>Koka quinoan enligt anvisningarna på paketet och låt den svalna.</li><li>Blanda den svalnade quinoan med paprika, gurka och kikärtor.</li><li>Hacka färska örter och blanda ner i salladen.</li><li>Vispa ihop ingredienserna till dressingen och häll över.</li><li>Blanda väl och servera.</li></ol></div></div>
+                </details>
+                <details class="accordion-item rounded-lg p-6">
+                    <summary class="accordion-title text-2xl flex justify-between items-center"><span>Overnight Oat</span><svg class="w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                    <div class="accordion-content mt-4 space-y-4"><div><h3 class="font-bold text-lg mb-2 text-emerald-300">Ingredienser</h3><ul class="list-disc list-inside space-y-1"><li>1 dl havregryn</li><li>1 msk chiafrön</li><li>2 dl växtbaserad mjölk (havre, mandel)</li><li>1 msk lönnsirap eller annan sötning</li><li>Valfria bär och nötter för topping</li></ul></div><div><h3 class="font-bold text-lg mb-2 text-emerald-300">Instruktioner</h3><ol class="list-decimal list-inside space-y-1"><li>Blanda havregryn, chiafrön, mjölk och sötning i en burk eller skål.</li><li>Rör om väl, sätt på lock och ställ i kylen över natten.</li><li>På morgonen, rör om igen och toppa med dina favoritbär och nötter.</li><li>Servera kall och njut!</li></ol></div></div>
+                </details>
+            </div>
+        </main>
+        
+        <footer class="text-center mt-12">
+            <a href="index.html" class="inline-block bg-slate-900/80 text-orange-400 font-bold py-3 px-6 rounded-full border-2 back-button">
+                &larr; Tillbaka till Solsystemet
+            </a>
+        </footer>
+    </div>
+
+    <script>
+        // Tab switching logic
+        const tabOversikt = document.getElementById('tab-oversikt');
+        const tabRecept = document.getElementById('tab-recept');
+        const contentOversikt = document.getElementById('content-oversikt');
+        const contentRecept = document.getElementById('content-recept');
+
+        tabOversikt.addEventListener('click', () => {
+            tabOversikt.classList.add('active');
+            tabRecept.classList.remove('active');
+            contentOversikt.classList.remove('hidden');
+            contentRecept.classList.add('hidden');
+        });
+
+        tabRecept.addEventListener('click', () => {
+            tabRecept.classList.add('active');
+            tabOversikt.classList.remove('active');
+            contentRecept.classList.remove('hidden');
+            contentOversikt.classList.add('hidden');
+        });
+
+        // Accordion arrow rotation logic
+        document.querySelectorAll('details').forEach((detail) => {
+            detail.addEventListener('toggle', (event) => {
+                const arrow = detail.querySelector('summary svg');
+                if (detail.open) {
+                    arrow.style.transform = 'rotate(180deg)';
+                } else {
+                    arrow.style.transform = 'rotate(0deg)';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+
