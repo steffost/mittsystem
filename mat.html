@@ -74,10 +74,10 @@
         }
         
         .accordion-title {
-             font-family: 'Orbitron', sans-serif;
-             color: var(--glow-color-mat);
-             text-shadow: 0 0 5px rgba(249, 115, 22, 0.7);
-             cursor: pointer;
+              font-family: 'Orbitron', sans-serif;
+              color: var(--glow-color-mat);
+              text-shadow: 0 0 5px rgba(249, 115, 22, 0.7);
+              cursor: pointer;
         }
 
         .accordion-title::-webkit-details-marker {
@@ -95,8 +95,8 @@
             transition: all 0.3s ease;
         }
         .back-button:hover {
-             box-shadow: 0 0 25px var(--glow-color-mat);
-             transform: scale(1.05);
+              box-shadow: 0 0 25px var(--glow-color-mat);
+              transform: scale(1.05);
         }
 
     </style>
@@ -120,8 +120,8 @@
             <div id="content-oversikt" class="space-y-6">
                 <p class="text-center text-emerald-300 text-lg mb-8">Jag följer alltid en 100% vegansk kost.</p>
                 
-                <details class="accordion-item rounded-lg p-6" open>
-                    <summary class="accordion-title text-2xl flex justify-between items-center"><span>Koststrategi per Dagtyp</span><svg class="w-6 h-6 transform transition-transform duration-300 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                <details class="accordion-item rounded-lg p-6">
+                    <summary class="accordion-title text-2xl flex justify-between items-center"><span>Koststrategi per Dagtyp</span><svg class="w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
                     <div class="accordion-content mt-4 space-y-3"><ul class="list-disc list-inside space-y-2"><li><strong>Aktiva dagar:</strong> Äter jag efter ett exakt protokoll.</li><li><strong>Drönardagar:</strong> Äter jag mer som jag vill, men jag äter inom ett ätfönster mellan 14:00 - 20:00.</li><li><strong>Vilodagar:</strong> Äter jag mer bulk för att ha energi till kommande vecka, tex en större söndagsmiddag eller skördetallrik med egenodlade grönsaker.</li></ul></div>
                 </details>
                 <details class="accordion-item rounded-lg p-6">
@@ -148,15 +148,106 @@
 
                 <details class="accordion-item rounded-lg p-6">
                     <summary class="accordion-title text-2xl flex justify-between items-center"><span>Dhal Supreém</span><svg class="w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
-                    <div class="accordion-content mt-4 space-y-4"><div><h3 class="font-bold text-lg mb-2 text-emerald-300">Ingredienser</h3><ul class="list-disc list-inside space-y-1"><li>2 dl röda linser</li><li>1 gul lök, finhackad</li><li>2 vitlöksklyftor, pressade</li><li>1 msk färsk ingefära, riven</li><li>1 burk krossade tomater</li><li>1 burk kokosmjölk</li><li>Kryddor: gurkmeja, spiskummin, koriander, chili</li><li>Färsk spenat & koriander</li></ul></div><div><h3 class="font-bold text-lg mb-2 text-emerald-300">Instruktioner</h3><ol class="list-decimal list-inside space-y-1"><li>Skölj linserna noggrant.</li><li>Fräs lök, vitlök och ingefära i lite olja tills det blir mjukt.</li><li>Tillsätt kryddorna och fräs i en minut till.</li><li>Häll i linser, krossade tomater och kokosmjölk. Låt sjuda i ca 20 minuter.</li><li>Rör ner färsk spenat och smaka av med salt. Servera med färsk koriander.</li></ol></div></div>
+                    <div class="accordion-content mt-4 space-y-4">
+                        <div>
+                            <h3 class="font-bold text-lg mb-2 text-emerald-300">Ingredienser</h3>
+                            <ul class="list-disc list-inside space-y-1">
+                                <li>8 dl röda linser</li>
+                                <li>3 buljongtärningar</li>
+                                <li>1 liter vatten (plus eventuellt mer)</li>
+                                <li>1 hel vitlök, finhackad eller pressad</li>
+                                <li>Färsk chili i skivor (efter smak)</li>
+                                <li>Olja för stekning (t.ex. kokosolja)</li>
+                                <li>1 msk spiskummin</li>
+                                <li>1 msk koriander</li>
+                                <li>1 tsk kanel</li>
+                                <li>1 tsk kardemumma</li>
+                                <li>1 tsk cayennepeppar</li>
+                                <li>1 msk sweet chilisås</li>
+                                <li>Salt (efter smak)</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg mb-2 text-emerald-300">Instruktioner</h3>
+                            <ol class="list-decimal list-inside space-y-2">
+                                <li><strong>Förbered linserna:</strong> Lägg linserna i ett durkslag och skölj dem väl under kallt vatten. Häll sedan över dem i en kastrull, täck med vatten och koka upp. Låt koka 1-2 minuter, häll av och skölj igen. Detta tar bort ämnen som kan vara hårda för magen. Ställ åt sidan.</li>
+                                <li><strong>Brygg smakbasen:</strong> Hetta upp lite olja i en stor kastrull eller gryta. Fräs vitlök och färsk chili i någon minut tills det doftar gott.</li>
+                                <li><strong>Rosta kryddorna:</strong> Tillsätt alla torra kryddor (spiskummin, koriander, kanel, kardemumma, cayenne) och bryn dem under omrörning i ca 30-60 sekunder. Detta frigör smakerna.</li>
+                                <li><strong>Skapa kryddpastan:</strong> Tillsätt sweet chilisås och buljongtärningar. Häll i en liten skvätt vatten (ca 0.5 dl) och rör om så att allt löses upp. Låt det småkoka i en minut till en aromatisk pasta.</li>
+                                <li><strong>Kombinera och koka:</strong> Tillsätt de förberedda linserna och resten av vattnet (1 liter). Rör om ordentligt.</li>
+                                <li><strong>Koka upp och vila:</strong> Koka upp alltsammans, stäng sedan av plattan och lägg på locket. Låt dhalen stå och dra på eftervärmen i minst 20-30 minuter, eller tills linserna är mjuka och har absorberat smakerna.</li>
+                                <li><strong>Smaka av:</strong> Rör om och smaka av med salt. Justera eventuellt med mer kryddor eller chili. Servera!</li>
+                            </ol>
+                        </div>
+                    </div>
                 </details>
                 <details class="accordion-item rounded-lg p-6">
                     <summary class="accordion-title text-2xl flex justify-between items-center"><span>Quinoa Dream</span><svg class="w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
-                    <div class="accordion-content mt-4 space-y-4"><div><h3 class="font-bold text-lg mb-2 text-emerald-300">Ingredienser</h3><ul class="list-disc list-inside space-y-1"><li>3 dl quinoa (valfri färg)</li><li>1 röd paprika, tärnad</li><li>1 gurka, tärnad</li><li>1 burk kikärtor, sköljda</li><li>Färsk mynta & persilja</li><li>Dressing: Olivolja, citronsaft, dijonsenap, salt & peppar</li></ul></div><div><h3 class="font-bold text-lg mb-2 text-emerald-300">Instruktioner</h3><ol class="list-decimal list-inside space-y-1"><li>Koka quinoan enligt anvisningarna på paketet och låt den svalna.</li><li>Blanda den svalnade quinoan med paprika, gurka och kikärtor.</li><li>Hacka färska örter och blanda ner i salladen.</li><li>Vispa ihop ingredienserna till dressingen och häll över.</li><li>Blanda väl och servera.</li></ol></div></div>
+                    <div class="accordion-content mt-4 space-y-4">
+                        <div>
+                            <h3 class="font-bold text-lg mb-2 text-emerald-300">Bas</h3>
+                            <ul class="list-disc list-inside space-y-1">
+                                <li>Quinoa</li>
+                                <li>Korn</li>
+                                <li>Basmatiris</li>
+                                <li>Kaschew nötter</li>
+                                <li>Russin</li>
+                                <li>Linser</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg mb-2 text-emerald-300">Bönröra</h3>
+                            <ul class="list-disc list-inside space-y-1">
+                                <li>Stora vita bönor</li>
+                                <li>Kidneybönor</li>
+                                <li>Kikärtor</li>
+                                <li>Tomatpure</li>
+                                <li>Inlagd jalapenos</li>
+                                <li>Kryddor</li>
+                                <li>Tempeh</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg mb-2 text-emerald-300">Fröbröd</h3>
+                            <ul class="list-disc list-inside space-y-1">
+                                <li>Linfrö</li>
+                                <li>Chiafrön</li>
+                                <li>Solrosfrön</li>
+                                <li>Pumpafrön</li>
+                                <li>Sesamfrön</li>
+                                <li>Valmofrön</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg mb-2 text-emerald-300">Sallad</h3>
+                            <ul class="list-disc list-inside space-y-1">
+                                <li>Sallad roccula eller kinakål</li>
+                                <li>Avokado</li>
+                                <li>Rostade pumpafrön</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg mb-2 text-emerald-300">Vinigrett</h3>
+                            <ul class="list-disc list-inside space-y-1">
+                                <li>Äppelcidervinäger</li>
+                                <li>Linfröolja</li>
+                                <li>Senap</li>
+                                <li>Vitlök</li>
+                                <li>Kryddor</li>
+                            </ul>
+                        </div>
+                          <div>
+                            <h3 class="font-bold text-lg mb-2 text-emerald-300">Tillbehör</h3>
+                            <ul class="list-disc list-inside space-y-1">
+                                <li>Surkål eller kimchi</li>
+                                <li>Havre yoghurt eller creamefriech</li>
+                            </ul>
+                        </div>
+                    </div>
                 </details>
                 <details class="accordion-item rounded-lg p-6">
                     <summary class="accordion-title text-2xl flex justify-between items-center"><span>Overnight Oat</span><svg class="w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
-                    <div class="accordion-content mt-4 space-y-4"><div><h3 class="font-bold text-lg mb-2 text-emerald-300">Ingredienser</h3><ul class="list-disc list-inside space-y-1"><li>1 dl havregryn</li><li>1 msk chiafrön</li><li>2 dl växtbaserad mjölk (havre, mandel)</li><li>1 msk lönnsirap eller annan sötning</li><li>Valfria bär och nötter för topping</li></ul></div><div><h3 class="font-bold text-lg mb-2 text-emerald-300">Instruktioner</h3><ol class="list-decimal list-inside space-y-1"><li>Blanda havregryn, chiafrön, mjölk och sötning i en burk eller skål.</li><li>Rör om väl, sätt på lock och ställ i kylen över natten.</li><li>På morgonen, rör om igen och toppa med dina favoritbär och nötter.</li><li>Servera kall och njut!</li></ol></div></div>
+                    <div class="accordion-content mt-4 space-y-4"><div><h3 class="font-bold text-lg mb-2 text-emerald-300">Ingredienser</h3><ul class="list-disc list-inside space-y-1"><li>1 dl havregryn</li><li>1 msk chiafrön</li><li>1 dl växtmjölk</li><li>2 dl blandade bär med xylitol mixat till en kall sylt</li></ul></div><div><h3 class="font-bold text-lg mb-2 text-emerald-300">Instruktioner</h3><ol class="list-decimal list-inside space-y-1"><li>Blanda havregryn, chiafrön och växtmjölk i en burk eller skål.</li><li>Rör om väl, sätt på lock och ställ i kylen över natten.</li><li>På morgonen, rör om i gröten och toppa med den kalla sylten.</li><li>Servera och njut!</li></ol></div></div>
                 </details>
             </div>
         </main>
@@ -203,4 +294,7 @@
     </script>
 </body>
 </html>
+
+
+
 
