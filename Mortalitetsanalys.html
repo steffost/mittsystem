@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global vs Sweden - Cyberpunk Analytics</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Sci-Fi Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            background-color: #030305;
+            color: #e2e8f0;
+            font-family: 'Rajdhani', sans-serif;
+            background-image: 
+                linear-gradient(rgba(16, 185, 129, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(16, 185, 129, 0.02) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        h1, h2, h3, .zone-label { font-family: 'Orbitron', sans-serif; letter-spacing: 1px; }
+
+        .text-glow-green {
+            color: #4ade80;
+            text-shadow: 0 0 10px rgba(74, 222, 128, 0.6);
+        }
+        
+        .text-glow-orange {
+            color: #fbbf24;
+            text-shadow: 0 0 10px rgba(251, 191, 36, 0.6);
+        }
+
+        .cyber-container {
+            background: rgba(10, 10, 15, 0.85);
+            border: 1px solid #1f2937;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(5px);
+            position: relative;
+        }
+
+        .info-alert {
+            background: rgba(6, 78, 59, 0.2);
+            border: 1px solid rgba(52, 211, 153, 0.3);
+            border-left: 4px solid #34d399;
+        }
+
+        .stat-box {
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid #334155;
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 4px;
+            margin-top: 10px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+        }
+
+        /* Cyberpunk Button */
+        .cyber-btn {
+            background: transparent;
+            border: 1px solid;
+            padding: 6px 12px;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            user-select: none;
+            opacity: 0.7; /* Dimmed when inactive */
+        }
+        
+        .cyber-btn:hover {
+            box-shadow: 0 0 10px currentColor;
+            background: rgba(255,255,255,0.05);
+            opacity: 1;
+        }
+        
+        .cyber-btn.active {
+            background: rgba(255,255,255,0.15);
+            box-shadow: 0 0 15px currentColor;
+            border-color: currentColor;
+            opacity: 1;
+        }
+
+        .btn-dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background-color: currentColor;
+            box-shadow: 0 0 5px currentColor;
+        }
+
+        .corner-accent {
+            position: absolute;
+            width: 12px; height: 12px;
+            border: 2px solid;
+            box-shadow: 0 0 8px currentColor;
+        }
+        .accent-swe { border-color: #4ade80; color: #4ade80; }
+        .accent-world { border-color: #fbbf24; color: #fbbf24; }
+
+        .top-left { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+        .top-right { top: -1px; right: -1px; border-left: none; border-bottom: none; }
+        .bottom-left { bottom: -1px; left: -1px; border-right: none; border-top: none; }
+        .bottom-right { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+
+        .chart-wrapper { position: relative; height: 50vh; width: 100%; }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8">
+
+    <div class="max-w-7xl mx-auto space-y-12">
+        
+        <!-- HEADER -->
+        <div class="text-center">
+            <h1 class="text-4xl md:text-6xl font-black text-white mb-2 uppercase tracking-widest">
+                Mortalitets Analys
+            </h1>
+            <p class="text-gray-500 font-mono text-sm">JÄMFÖRELSE: NATIONELL VS GLOBAL DATA</p>
+        </div>
+
+        <!-- FÖRKLARING: SPÄDBARNSDÖDLIGHET -->
+        <div class="cyber-container info-alert p-4 rounded-lg mb-6 max-w-4xl mx-auto">
+            <h3 class="text-lg font-bold text-green-400 mb-1 flex items-center gap-2">
+                <span class="text-xl">ℹ️</span> SYSTEM NOTERING: STARTEN AV LIVET
+            </h3>
+            <p class="text-gray-300 text-sm leading-relaxed">
+                <strong class="text-green-300">Varför 100%?</strong> Linjen startar på 100% eftersom den representerar födelsekullen vid födelseögonblicket (0 år). 
+                <br>
+                <strong class="text-green-300">Varför en stapel direkt?</strong> Den rosa stapeln vid 0 år visar <em>spädbarnsdödlighet</em>. Trots att vi är nya är det första levnadsåret biologiskt skört.
+            </p>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- GRAF 1: SVERIGE -->
+        <!-- ========================================== -->
+        <section>
+            <div class="flex items-center gap-4 mb-4">
+                <div class="h-px flex-1 bg-gradient-to-r from-transparent to-green-500"></div>
+                <h2 class="text-2xl md:text-3xl font-bold text-glow-green uppercase">Sverige (Höginkomst)</h2>
+                <div class="h-px flex-1 bg-gradient-to-l from-transparent to-green-500"></div>
+            </div>
+
+            <div class="cyber-container p-4 rounded-xl border-t-2 border-green-500">
+                <div class="corner-accent accent-swe top-left"></div>
+                <div class="corner-accent accent-swe top-right"></div>
+                <div class="corner-accent accent-swe bottom-left"></div>
+                <div class="corner-accent accent-swe bottom-right"></div>
+                
+                <!-- Controls Sweden -->
+                <div class="flex flex-wrap gap-3 mb-4 justify-end border-b border-green-900/50 pb-2">
+                    <span class="text-xs font-mono text-green-600 self-center mr-auto">DATABANK // KONTROLL</span>
+                    
+                    <!-- HUVUDDATASETS (Index 0 & 1) -->
+                    <button class="cyber-btn active text-cyan-400 border-cyan-400/50" onclick="toggleDataset('swedenChart', 0, this)">
+                        <div class="btn-dot"></div> Överlevande
+                    </button>
+                    <button class="cyber-btn active text-pink-500 border-pink-500/50" onclick="toggleDataset('swedenChart', 1, this)">
+                        <div class="btn-dot"></div> Dödsfall
+                    </button>
+
+                    <div class="w-px bg-green-900/50 mx-2"></div> <!-- Separator -->
+
+                    <!-- ORSAKER (Index 2, 3, 4) -->
+                    <button class="cyber-btn text-red-500 border-red-500/50" onclick="toggleDataset('swedenChart', 2, this)">
+                        <div class="btn-dot"></div> Hjärt-Kärl
+                    </button>
+                    <button class="cyber-btn text-yellow-400 border-yellow-400/50" onclick="toggleDataset('swedenChart', 3, this)">
+                        <div class="btn-dot"></div> Cancer
+                    </button>
+                    <button class="cyber-btn text-blue-400 border-blue-400/50" onclick="toggleDataset('swedenChart', 4, this)">
+                        <div class="btn-dot"></div> Yttre Orsaker
+                    </button>
+                </div>
+
+                <div class="chart-wrapper">
+                    <canvas id="swedenChart"></canvas>
+                </div>
+
+                <!-- MEDELLIVSLÄNGD RUTA (SVERIGE) -->
+                <div class="text-center mt-4">
+                    <div class="stat-box text-green-400 border-green-500/50 shadow-[0_0_15px_rgba(74,222,128,0.3)]">
+                        MEDELLIVSLÄNGD: ~83 ÅR
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ========================================== -->
+        <!-- GRAF 2: VÄRLDEN -->
+        <!-- ========================================== -->
+        <section>
+            <div class="flex items-center gap-4 mb-4">
+                <div class="h-px flex-1 bg-gradient-to-r from-transparent to-amber-500"></div>
+                <h2 class="text-2xl md:text-3xl font-bold text-glow-orange uppercase">Världen (Globalt Snitt)</h2>
+                <div class="h-px flex-1 bg-gradient-to-l from-transparent to-amber-500"></div>
+            </div>
+
+            <div class="cyber-container p-4 rounded-xl border-t-2 border-amber-500">
+                <div class="corner-accent accent-world top-left"></div>
+                <div class="corner-accent accent-world top-right"></div>
+                <div class="corner-accent accent-world bottom-left"></div>
+                <div class="corner-accent accent-world bottom-right"></div>
+
+                <!-- Controls World -->
+                <div class="flex flex-wrap gap-3 mb-4 justify-end border-b border-amber-900/50 pb-2">
+                    <span class="text-xs font-mono text-amber-600 self-center mr-auto">DATABANK // KONTROLL</span>
+                    
+                    <!-- HUVUDDATASETS (Index 0 & 1) -->
+                    <button class="cyber-btn active text-cyan-400 border-cyan-400/50" onclick="toggleDataset('globalChart', 0, this)">
+                        <div class="btn-dot"></div> Överlevande
+                    </button>
+                    <button class="cyber-btn active text-pink-500 border-pink-500/50" onclick="toggleDataset('globalChart', 1, this)">
+                        <div class="btn-dot"></div> Dödsfall
+                    </button>
+
+                    <div class="w-px bg-amber-900/50 mx-2"></div> <!-- Separator -->
+
+                    <!-- ORSAKER (Index 2, 3, 4) -->
+                    <button class="cyber-btn text-red-500 border-red-500/50" onclick="toggleDataset('globalChart', 2, this)">
+                        <div class="btn-dot"></div> Hjärt-Kärl
+                    </button>
+                    <button class="cyber-btn text-purple-400 border-purple-400/50" onclick="toggleDataset('globalChart', 3, this)">
+                        <div class="btn-dot"></div> Infektioner
+                    </button>
+                    <button class="cyber-btn text-yellow-400 border-yellow-400/50" onclick="toggleDataset('globalChart', 4, this)">
+                        <div class="btn-dot"></div> Cancer
+                    </button>
+                </div>
+
+                <div class="chart-wrapper">
+                    <canvas id="globalChart"></canvas>
+                </div>
+
+                 <!-- MEDELLIVSLÄNGD RUTA (VÄRLDEN) -->
+                 <div class="text-center mt-4">
+                    <div class="stat-box text-amber-400 border-amber-500/50 shadow-[0_0_15px_rgba(251,191,36,0.3)]">
+                        MEDELLIVSLÄNGD: ~73 ÅR
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-4 bg-gray-900/50 p-4 border-l-4 border-amber-500 text-sm text-gray-400 leading-relaxed max-w-4xl mx-auto">
+                <strong class="text-amber-400 uppercase">Observera skillnaden:</strong> 
+                I världsgrafen ovan ser du en betydligt högre stapel vid 0–5 år (barnadödlighet). 
+                Överlevnadslinjen (Cyan) börjar också dala tidigare än i Sverige.
+            </div>
+        </section>
+
+        <!-- FÖRKLARINGAR -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-8 border-t border-gray-800">
+            <!-- Vänster: Överlevande (Cyan) -->
+            <div class="cyber-container p-6 border-l-4 border-cyan-400 rounded-r-xl">
+                <h3 class="text-xl font-bold text-cyan-400 mb-2">ÖVERLEVANDE (Vänster Axel)</h3>
+                <p class="text-gray-400 text-sm leading-relaxed">
+                    Den <span class="text-cyan-400 font-bold">CYANFÄRGADE</span> linjen visar hur många procent som lever kvar.
+                    Kurvan ligger högt och stabilt genom hela uppväxten men dyker brant nedåt när Medelåldern tar slut.
+                </p>
+            </div>
+
+            <!-- Höger: Dödsfall (Magenta) -->
+            <div class="cyber-container p-6 border-l-4 border-pink-500 rounded-r-xl">
+                <h3 class="text-xl font-bold text-pink-500 mb-2">DÖDSFALL (Höger Axel)</h3>
+                <p class="text-gray-400 text-sm leading-relaxed">
+                    De <span class="text-pink-500 font-bold">ROSA</span> staplarna visar risken att dö.
+                    Observera "Ungdomspuckeln" runt 20 år och den massiva toppen ("Peaken") djupt in i Ålderdomen.
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Store chart instances globally
+        const charts = {};
+
+        // === TOGGLE FUNCTION ===
+        function toggleDataset(chartId, index, btn) {
+            const chart = charts[chartId];
+            
+            // Check if dataset is currently visible
+            const isVisible = chart.isDatasetVisible(index);
+            
+            // Toggle visibility
+            chart.setDatasetVisibility(index, !isVisible);
+            chart.update();
+
+            // Toggle active state for button
+            btn.classList.toggle('active');
+        }
+
+        // --- 1. DATA GENERERING (SVERIGE) ---
+        function generateSwedenData() {
+            const ages = [];
+            const deaths = []; 
+            const survivors = []; 
+            
+            const heart = [];
+            const cancer = [];
+            const external = [];
+
+            let population = 100000;
+            const startPop = 100000;
+
+            for (let age = 0; age <= 110; age++) {
+                ages.push(age);
+                let risk = 0.0002 + (0.00002 * Math.exp(0.108 * age));
+                if (age === 0) risk += 0.0020; 
+                
+                let accidentRisk = 0;
+                if (age >= 15 && age <= 30) {
+                    accidentRisk = 0.0004 * (1 - Math.abs(age - 22)/8);
+                    risk += accidentRisk;
+                }
+                if (risk > 1) risk = 1;
+
+                let dying = population * risk;
+                
+                let deathRate = (dying / startPop) * 100;
+                
+                // 1. Yttre orsaker
+                let extShare = 0.05; 
+                if (age < 40) extShare = 0.6; 
+                if (age < 15) extShare = 0.2;
+                external.push(deathRate * extShare);
+
+                // 2. Cancer
+                let cancerShare = 0;
+                if (age > 30) cancerShare = 0.3;
+                if (age > 50) cancerShare = 0.45;
+                if (age > 80) cancerShare = 0.25; 
+                cancer.push(deathRate * cancerShare);
+
+                // 3. Hjärt-Kärl
+                let heartShare = 0;
+                if (age > 50) heartShare = 0.3;
+                if (age > 75) heartShare = 0.5;
+                if (age > 90) heartShare = 0.65;
+                heart.push(deathRate * heartShare);
+
+                deaths.push(deathRate); 
+                survivors.push((population / startPop) * 100); 
+                population -= dying;
+                if (population < 0) population = 0;
+            }
+            // RETURNERA MAXVÄRDE OCKSÅ FÖR ATT LÅSA SKALAN
+            const maxDeath = Math.max(...deaths);
+            return { ages, deaths, survivors, heart, cancer, external, maxDeath };
+        }
+
+        // --- 2. DATA GENERERING (GLOBALT) ---
+        function generateGlobalData() {
+            const ages = [];
+            const deaths = []; 
+            const survivors = [];
+            
+            const heart = [];
+            const infection = [];
+            const cancer = [];
+
+            let population = 100000;
+            const startPop = 100000;
+
+            for (let age = 0; age <= 110; age++) {
+                ages.push(age);
+                let risk = 0.0015 + (0.000025 * Math.exp(0.106 * age));
+
+                if (age === 0) risk += 0.028; 
+                if (age > 0 && age <= 4) risk += 0.003; 
+                if (age >= 15 && age <= 29) risk += 0.0012;
+
+                if (risk > 1) risk = 1;
+
+                let dying = population * risk;
+                let deathRate = (dying / startPop) * 100;
+
+                // 1. Infektioner
+                let infShare = 0.1;
+                if (age <= 5) infShare = 0.6; 
+                if (age > 5 && age < 50) infShare = 0.25;
+                infection.push(deathRate * infShare);
+
+                // 2. Cancer
+                let cancerShare = 0.1;
+                if (age > 40) cancerShare = 0.25;
+                cancer.push(deathRate * cancerShare);
+
+                // 3. Hjärt-Kärl
+                let heartShare = 0.1;
+                if (age > 45) heartShare = 0.35;
+                if (age > 70) heartShare = 0.5;
+                heart.push(deathRate * heartShare);
+
+                deaths.push(deathRate); 
+                survivors.push((population / startPop) * 100); 
+                population -= dying;
+                if (population < 0) population = 0;
+            }
+            const maxDeath = Math.max(...deaths);
+            return { ages, deaths, survivors, heart, infection, cancer, maxDeath };
+        }
+
+        const sweData = generateSwedenData();
+        const worldData = generateGlobalData();
+
+
+        // --- 3. PLUGIN: ZON-HANTERING ---
+        const zonePlugin = {
+            id: 'zonePlugin',
+            afterDatasetsDraw: (chart) => {
+                const { ctx, chartArea: { top, bottom, left, right }, scales: { x } } = chart;
+                
+                const isWorld = chart.canvas.id === 'globalChart';
+                const mainColor = isWorld ? '#fbbf24' : '#4ade80'; 
+                const glowColor = isWorld ? 'rgba(251, 191, 36, 0.4)' : 'rgba(74, 222, 128, 0.4)';
+
+                const phases = [
+                    { start: 0, end: 12, label: 'BARNDOMEN' },
+                    { start: 13, end: 19, label: 'UNGDOMEN' },
+                    { start: 20, end: 39, label: 'VUXENLIVET' },
+                    { start: 40, end: 64, label: 'MEDELÅLDERN' },
+                    { start: 65, end: 110, label: 'ÅLDERDOMEN' }
+                ];
+
+                ctx.save();
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.font = 'bold 12px "Orbitron"';
+
+                phases.forEach((phase, index) => {
+                    const startX = x.getPixelForValue(phase.start);
+                    let endX = x.getPixelForValue(phase.end);
+                    if (phase.end >= 110) endX = right;
+
+                    const width = endX - startX;
+                    const centerX = startX + (width / 2);
+                    
+                    const yOffset = (index % 2 === 0) ? 20 : 45; 
+                    const textY = top + yOffset;
+                    const textWidth = ctx.measureText(phase.label).width + 10;
+                    
+                    ctx.setLineDash([]); 
+                    ctx.fillStyle = "rgba(0, 5, 0, 0.8)";
+                    ctx.fillRect(centerX - textWidth/2, textY - 8, textWidth, 16);
+                    ctx.strokeStyle = glowColor;
+                    ctx.lineWidth = 1;
+                    ctx.strokeRect(centerX - textWidth/2, textY - 8, textWidth, 16);
+                    ctx.shadowColor = mainColor;
+                    ctx.shadowBlur = 10;
+                    ctx.fillStyle = mainColor;
+                    ctx.fillText(phase.label, centerX, textY);
+                    ctx.shadowBlur = 0;
+
+                    if (index < phases.length - 1) {
+                        const lineX = x.getPixelForValue(phase.end + 0.5); 
+                        ctx.beginPath();
+                        ctx.moveTo(lineX, top);
+                        ctx.lineTo(lineX, bottom);
+                        ctx.lineWidth = 1;
+                        ctx.strokeStyle = glowColor;
+                        ctx.setLineDash([4, 4]); 
+                        ctx.stroke();
+                    }
+                });
+                ctx.restore();
+            }
+        };
+
+
+        // --- 4. RENDER FUNCTION ---
+        function renderChart(canvasId, data, isWorld) {
+            const ctx = document.getElementById(canvasId).getContext('2d');
+            
+            let gradDeath = ctx.createLinearGradient(0, 0, 0, 400);
+            gradDeath.addColorStop(0, 'rgba(236, 72, 153, 0.9)');
+            gradDeath.addColorStop(1, 'rgba(236, 72, 153, 0.1)');
+
+            let gradLife = ctx.createLinearGradient(0, 0, 0, 400);
+            gradLife.addColorStop(0, 'rgba(6, 182, 212, 0.3)');
+            gradLife.addColorStop(1, 'rgba(6, 182, 212, 0.0)');
+
+            // LÅS SKALAN FÖR Y-AXELN
+            // Vi lägger till 20% marginal så toppen inte slår i taket
+            const yAxisMax = Math.ceil(data.maxDeath * 1.2);
+
+            const datasets = [
+                {
+                    type: 'line',
+                    label: 'ÖVERLEVANDE (%)',
+                    yAxisID: 'y_survivors',
+                    data: data.survivors,
+                    borderColor: '#06b6d4',
+                    backgroundColor: gradLife,
+                    borderWidth: 3,
+                    pointRadius: 0,
+                    tension: 0.4,
+                    fill: true,
+                    order: 10
+                },
+                {
+                    type: 'bar',
+                    label: 'DÖDSFALL (TOTALT %)',
+                    yAxisID: 'y_deaths',
+                    data: data.deaths,
+                    backgroundColor: gradDeath,
+                    borderColor: '#ec4899',
+                    borderWidth: 1,
+                    barPercentage: 1.0,
+                    categoryPercentage: 1.0,
+                    order: 20
+                }
+            ];
+
+            if (!isWorld) {
+                datasets.push({
+                    type: 'line', label: 'Hjärt-Kärl', yAxisID: 'y_deaths', data: data.heart,
+                    borderColor: '#ef4444', borderWidth: 2, pointRadius: 0, tension: 0.4, hidden: true, order: 5
+                });
+                datasets.push({
+                    type: 'line', label: 'Cancer', yAxisID: 'y_deaths', data: data.cancer,
+                    borderColor: '#facc15', borderWidth: 2, pointRadius: 0, tension: 0.4, hidden: true, order: 5
+                });
+                datasets.push({
+                    type: 'line', label: 'Yttre Orsaker', yAxisID: 'y_deaths', data: data.external,
+                    borderColor: '#60a5fa', borderWidth: 2, pointRadius: 0, tension: 0.4, hidden: true, order: 5
+                });
+            } else {
+                datasets.push({
+                    type: 'line', label: 'Hjärt-Kärl', yAxisID: 'y_deaths', data: data.heart,
+                    borderColor: '#ef4444', borderWidth: 2, pointRadius: 0, tension: 0.4, hidden: true, order: 5
+                });
+                datasets.push({
+                    type: 'line', label: 'Infektioner', yAxisID: 'y_deaths', data: data.infection,
+                    borderColor: '#c084fc', borderWidth: 2, pointRadius: 0, tension: 0.4, hidden: true, order: 5
+                });
+                datasets.push({
+                    type: 'line', label: 'Cancer', yAxisID: 'y_deaths', data: data.cancer,
+                    borderColor: '#facc15', borderWidth: 2, pointRadius: 0, tension: 0.4, hidden: true, order: 5
+                });
+            }
+
+            const chart = new Chart(ctx, {
+                type: 'bar',
+                data: { labels: data.ages, datasets: datasets },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: { padding: { top: 10 } },
+                    interaction: { mode: 'index', intersect: false },
+                    plugins: { 
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(5, 5, 5, 0.95)',
+                            titleColor: '#e2e8f0',
+                            bodyColor: '#cbd5e1',
+                            borderColor: '#334155',
+                            borderWidth: 1,
+                            padding: 10,
+                            titleFont: { family: 'Orbitron' },
+                            bodyFont: { family: 'Rajdhani', size: 13 },
+                            displayColors: true,
+                            callbacks: {
+                                label: function(context) {
+                                    let val = context.parsed.y.toFixed(2) + '%';
+                                    return context.dataset.label + ': ' + val + ' (av födelsekullen)';
+                                }
+                            }
+                        }
+                    }, 
+                    scales: {
+                        x: {
+                            grid: { color: '#1f2937', drawBorder: false },
+                            ticks: {
+                                color: '#94a3b8',
+                                font: { family: 'Rajdhani', size: 12 },
+                                maxRotation: 0,
+                                autoSkip: false,
+                                callback: function(value) { return value % 10 === 0 ? value : ''; }
+                            }
+                        },
+                        y_survivors: {
+                            type: 'linear', display: true, position: 'left', min: 0, max: 100,
+                            grid: { display: false },
+                            ticks: { color: '#06b6d4', font: { family: 'Rajdhani', weight: 'bold', size: 14 } },
+                            title: { display: true, text: 'ÖVERLEVANDE %', color: '#06b6d4', font: { family: 'Orbitron', size: 14, weight: 'bold' } }
+                        },
+                        y_deaths: {
+                            type: 'linear', display: true, position: 'right',
+                            // HÄR SÄTTER VI MAX-VÄRDET
+                            max: yAxisMax,
+                            grid: { color: 'rgba(236, 72, 153, 0.1)', borderDash: [5, 5] },
+                            ticks: { color: '#ec4899', font: { family: 'Rajdhani', weight: 'bold', size: 14 } },
+                            title: { display: true, text: 'DÖDSFALL & ORSAKER (%)', color: '#ec4899', font: { family: 'Orbitron', size: 14, weight: 'bold' } }
+                        }
+                    }
+                },
+                plugins: [zonePlugin]
+            });
+
+            charts[canvasId] = chart;
+        }
+
+        renderChart('swedenChart', sweData, false);
+        renderChart('globalChart', worldData, true);
+
+    </script>
+</body>
+</html>
