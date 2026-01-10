@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Årskalender 2026 - Futuristiskt Tema</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000000;
+            background-image: 
+                linear-gradient(rgba(0, 255, 255, 0.07) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 255, 0.07) 1px, transparent 1px);
+            background-size: 30px 30px;
+            animation: pan-grid 60s linear infinite;
+        }
+
+        @keyframes pan-grid {
+            0% { background-position: 0 0; }
+            100% { background-position: 300px 300px; }
+        }
+
+        /* Stilar för cirkulär kalender - Futuristiskt Tema */
+        .month-text {
+            font-size: 16px;
+            font-weight: 500;
+            fill: #D1D5DB; /* gray-300 (Elfenbenston) */
+        }
+        .day-line {
+            stroke: #1F2937; /* gray-800 */
+            stroke-width: 1;
+        }
+        .current-day-marker {
+            fill: #5EEAD4; /* teal-300 */
+            stroke: #F0FDFA; /* teal-50 */
+            stroke-width: 2;
+        }
+        .current-day-text {
+            font-weight: 700;
+            fill: #5EEAD4; /* teal-300 */
+            stroke: #5EEAD4; /* teal-300 */
+            stroke-width: 2;
+        }
+
+        /* Animationer för glöd-effekt */
+        @keyframes glow-cyan {
+            0%, 100% {
+                filter: drop-shadow(0 0 5px rgba(34, 211, 238, 0.8));
+            }
+            50% {
+                filter: drop-shadow(0 0 10px rgba(34, 211, 238, 1));
+            }
+        }
+
+        @keyframes glow-lime {
+            0%, 100% {
+                box-shadow: 0 0 6px rgba(163, 230, 53, 0.7), 0 0 12px rgba(163, 230, 53, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 12px rgba(163, 230, 53, 1), 0 0 24px rgba(163, 230, 53, 0.7);
+            }
+        }
+        
+        @keyframes arc-glow {
+            0%, 100% {
+                filter: drop-shadow(0 0 8px rgba(204, 251, 241, 0.9)) drop-shadow(0 0 16px rgba(204, 251, 241, 0.7));
+            }
+            50% {
+                filter: drop-shadow(0 0 16px rgba(204, 251, 241, 1)) drop-shadow(0 0 32px rgba(204, 251, 241, 0.9));
+            }
+        }
+        
+        @keyframes pulse-frame {
+            0%, 100% {
+                stroke: #A7F3D0; /* emerald-200 */
+                stroke-opacity: 1;
+            }
+            50% {
+                stroke: #FFFFFF; /* white */
+                stroke-opacity: 0.9;
+            }
+        }
+
+        .glowing-arc {
+            animation: arc-glow 1.5s ease-in-out infinite;
+        }
+        
+        .pulsing-frame {
+            animation: pulse-frame 2s ease-in-out infinite;
+        }
+        
+        .glowing-legend span:last-child {
+            color: #A3E635; /* lime-400 */
+            text-shadow: 0 0 8px rgba(163, 230, 53, 0.9);
+        }
+
+        .animated-glow-svg {
+            animation: glow-cyan 2s ease-in-out infinite;
+        }
+        
+        .animated-glow-box {
+            animation: glow-lime 2s ease-in-out infinite;
+            border: 1px solid #D9F99D; /* lime-200 */
+        }
+        
+        .chart-bar {
+            transition: width 0.5s ease-in-out;
+        }
+        .override-btn {
+            background-color: #111827; /* gray-900 */
+            color: #9CA3AF; /* gray-400 */
+            border: 1px solid #0D9488; /* teal-600 */
+            width: 28px;
+            height: 28px;
+            border-radius: 9999px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .override-btn:hover {
+            background-color: #0F766E; /* teal-700 */
+            color: #CCFBF1; /* teal-100 */
+            box-shadow: 0 0 8px rgba(20, 184, 166, 0.7);
+        }
+        
+        /* Tooltip stilar */
+        .tooltip-container {
+            position: relative;
+            cursor: help;
+        }
+        .tooltip-text {
+            visibility: hidden;
+            opacity: 0;
+            width: 240px;
+            background-color: #020617; /* slate-950 */
+            color: #94A3B8; /* slate-400 */
+            text-align: center;
+            border-radius: 0.25rem;
+            padding: 0.75rem;
+            position: absolute;
+            z-index: 10;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            transition: opacity 0.3s;
+            border: 1px solid #14B8A6; /* teal-500 */
+            box-shadow: 0 4px 15px rgba(20, 184, 166, 0.2);
+            pointer-events: none;
+        }
+        .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #14B8A6 transparent transparent transparent;
+        }
+        .tooltip-container:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+        .legend-item {
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .legend-item:hover {
+            opacity: 0.8;
+        }
+        
+        .panel {
+            background-color: rgba(2, 6, 23, 0.8); /* slate-950 with transparency */
+            border: 1px solid #042f2e; /* dark teal */
+            backdrop-filter: blur(4px);
+        }
+
+        /* Stilar för dragspelsmodul (accordion) */
+        .accordion-header {
+            cursor: pointer;
+            padding: 0.75rem;
+            background-color: rgba(15, 23, 42, 0.5); /* slate-900 med transparens */
+            border: 1px solid #1e293b; /* slate-800 */
+            border-radius: 0.375rem;
+            transition: background-color 0.2s;
+        }
+        .accordion-header:hover {
+            background-color: rgba(30, 41, 59, 0.7); /* slate-800 med transparens */
+        }
+        .accordion-icon {
+            transition: transform 0.3s ease-in-out;
+        }
+        .accordion-header.active .accordion-icon {
+            transform: rotate(180deg);
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-in-out;
+            padding: 0 0.75rem;
+        }
+        .accordion-content-inner {
+            padding: 1rem 0;
+            border-top: 1px solid #1e293b; /* slate-800 */
+        }
+    </style>
+</head>
+<body class="text-gray-300">
+
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
+        <!-- Behållare för alla sektioner -->
+        <div class="flex flex-col items-center space-y-12">
+
+            <!-- Cirkulär Kalender (årshjul) -->
+            <div id="circular-calendar-container" class="w-full max-w-xl">
+                <h1 class="text-3xl font-bold text-center text-gray-300 mb-4">Årshjul 2026</h1>
+                
+                 <div class="flex justify-center flex-wrap gap-x-4 sm:gap-x-6 gap-y-2 mb-4 text-sm text-gray-400">
+                    <div class="flex items-center legend-item" data-arc-name="Dödens kvartal">
+                        <span class="w-4 h-4 rounded-full mr-2" style="background-color: #312E81;"></span>
+                        <span>Dödens kvartal</span>
+                    </div>
+                    <div class="flex items-center legend-item" data-arc-name="Sommar">
+                        <span class="w-4 h-4 rounded-full mr-2" style="background-color: #065F46;"></span>
+                        <span>Sommar</span>
+                    </div>
+                    <div class="flex items-center legend-item" data-arc-name="Lisa">
+                        <span class="w-4 h-4 rounded-full" style="background-color: #A1A1AA"></span>
+                        <span class="ml-2">Lisa</span>
+                    </div>
+                    <div class="flex items-center legend-item" data-arc-name="Själv">
+                        <span class="w-4 h-4 rounded-full" style="background-color: #52525B"></span>
+                        <span class="ml-2">Själv</span>
+                    </div>
+                    <div class="flex items-center legend-item" data-arc-name="Förodling">
+                        <span class="w-4 h-4 rounded-full" style="background-color: #B45309"></span>
+                        <span class="ml-2">Förodling</span>
+                    </div>
+                    <div class="flex items-center legend-item" data-arc-name="Odling">
+                        <span class="w-4 h-4 rounded-full" style="background-color: #365314"></span>
+                        <span class="ml-2">Odling</span>
+                    </div>
+                     <div class="flex items-center legend-item" data-arc-name="Allergi">
+                        <span class="w-4 h-4 rounded-full" style="background-color: #881337"></span>
+                        <span class="ml-2">Allergi</span>
+                    </div>
+                     <div class="flex items-center legend-item" data-arc-name="Semester">
+                        <span class="w-4 h-4 rounded-full" style="background-color: #0D9488"></span>
+                        <span class="ml-2">Semester</span>
+                    </div>
+                     <div class="flex items-center legend-item" data-arc-name="Hjortron">
+                        <span class="w-4 h-4 rounded-full" style="background-color: #9A3412"></span>
+                        <span class="ml-2">Hjortron</span>
+                    </div>
+                    <div class="flex items-center legend-item" data-arc-name="Blåbär">
+                        <span class="w-4 h-4 rounded-full" style="background-color: #1E40AF"></span>
+                        <span class="ml-2">Blåbär</span>
+                    </div>
+                    <div class="flex items-center legend-item" data-arc-name="Lingon">
+                        <span class="w-4 h-4 rounded-full" style="background-color: #9F1239"></span>
+                        <span class="ml-2">Lingon</span>
+                    </div>
+                    <div class="flex items-center legend-item" data-arc-name="Trattkantareller">
+                        <span class="w-4 h-4 rounded-full" style="background-color: #7C2D12"></span>
+                        <span class="ml-2">Trattkantareller</span>
+                    </div>
+                    <div class="flex items-center legend-item" data-arc-name="Odling Inne">
+                        <span class="w-4 h-4 rounded-full" style="background-color: #14532D"></span>
+                        <span class="ml-2">Odling Inne</span>
+                    </div>
+                     <div class="flex items-center legend-item" data-arc-name="Äpplen">
+                        <span class="w-4 h-4 rounded-full" style="background-color: #991B1B"></span>
+                        <span class="ml-2">Äpplen</span>
+                    </div>
+                     <div class="flex items-center legend-item" data-arc-name="Zucchini">
+                        <span class="w-4 h-4 rounded-full" style="background-color: #15803D"></span>
+                        <span class="ml-2">Zucchini</span>
+                    </div>
+                     <div class="flex items-center legend-item" data-arc-name="Potatis">
+                        <span class="w-4 h-4 rounded-full" style="background-color: #713F12"></span>
+                        <span class="ml-2">Potatis</span>
+                    </div>
+                     <div class="flex items-center legend-item" data-arc-name="Tranbär">
+                        <span class="w-4 h-4 rounded-full" style="background-color: #831843"></span>
+                        <span class="ml-2">Tranbär</span>
+                    </div>
+                </div>
+
+                <svg id="circular-calendar" viewBox="0 0 800 800" class="w-full h-full"></svg>
+            </div>
+
+            <!-- Grid-baserad Kalender -->
+            <div id="grid-calendar-container" class="w-full">
+                 <h1 id="grid-year-header" class="text-3xl font-bold text-center text-gray-300 mb-4">Kalender 2026</h1>
+                
+                <!-- Färgkodsförklaring -->
+                <div class="flex justify-center flex-wrap gap-x-4 sm:gap-x-6 gap-y-2 mb-8 text-sm text-gray-400">
+                    <div class="flex items-center">
+                        <span class="w-4 h-4 rounded-sm bg-slate-800 mr-2 border border-slate-600"></span>
+                        <div class="tooltip-container">
+                            <span>Aktiva dagar</span>
+                            <span class="tooltip-text">Strikt schema och konsekvens, snarare än att gå på lust.</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="w-4 h-4 rounded-sm bg-lime-500 mr-2"></span>
+                        <div class="tooltip-container">
+                            <span>Drönardagar</span>
+                            <span class="tooltip-text">Mer fritt och lustdrivet, ofta med fokus på ett enda projekt.</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="w-4 h-4 rounded-sm bg-orange-700 mr-2"></span>
+                        <div class="tooltip-container">
+                            <span>Vilodagar</span>
+                            <span class="tooltip-text">Seriös återhämtning för kropp och psyke för att maximera energin.</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="w-4 h-4 rounded-sm bg-cyan-400 mr-2"></span>
+                        <div class="tooltip-container">
+                            <span>Syndardagar</span>
+                            <span class="tooltip-text">Möjlighet för sociala evenemang, fest eller att äta mer onyttigt.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="months-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                    <!-- Månaderna kommer att genereras här av JavaScript -->
+                </div>
+            </div>
+
+            <!-- Behållare för Diagram och andra moduler -->
+            <div class="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+                <!-- Årsöversikt Diagram -->
+                <div id="summary-chart-container" class="w-full panel p-6 rounded-lg shadow-lg">
+                    <h2 class="text-2xl font-bold text-center text-gray-300 mb-6">Årsöversikt: Dagtyper</h2>
+                    <div id="summary-chart" class="space-y-4">
+                        <!-- Diagrammet genereras här av JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Overrides Modul -->
+                <div id="overrides-container" class="w-full panel p-6 rounded-lg shadow-lg">
+                    <h2 class="text-2xl font-bold text-center text-gray-300 mb-6">Overrides: Flexibla Dagar</h2>
+                    <div class="space-y-3">
+                        <!-- Trix & Fix -->
+                        <div class="accordion-item">
+                            <div class="accordion-header flex justify-between items-center">
+                                <span class="font-medium">Trix & Fix</span>
+                                <svg class="accordion-icon w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-content-inner text-sm text-gray-400">
+                                    <p class="mb-4">Dagar för oplanerade men viktiga ärenden som ekonomi, läkarbesök eller akuta reparationer i hemmet.</p>
+                                    <div class="flex items-center justify-center gap-3 text-gray-300">
+                                        <button id="trix-minus" class="override-btn">-</button>
+                                        <span id="trix-count" class="text-lg font-bold w-8 text-center">1</span>
+                                        <button id="trix-plus" class="override-btn">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Sjuksystem -->
+                        <div class="accordion-item">
+                            <div class="accordion-header flex justify-between items-center">
+                                <span class="font-medium">Sjuksystem</span>
+                                <svg class="accordion-icon w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-content-inner text-sm text-gray-400">
+                                    <p class="mb-4">System för snabbt tillfrisknande. Används vid första tecken på sjukdom och fortsätter tills du är helt frisk igen.</p>
+                                    <div class="flex items-center justify-center gap-3 text-gray-300">
+                                        <button id="sjuk-minus" class="override-btn">-</button>
+                                        <span id="sjuk-count" class="text-lg font-bold w-8 text-center">1</span>
+                                        <button id="sjuk-plus" class="override-btn">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Semester -->
+                        <div class="accordion-item">
+                            <div class="accordion-header flex justify-between items-center">
+                                <span class="font-medium">Semester</span>
+                                <svg class="accordion-icon w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-content-inner text-sm text-gray-400">
+                                    <p class="mb-4">Flexibel vecka för resor, att hälsa på vänner och familj, eller för när de kommer på besök.</p>
+                                    <div class="flex items-center justify-center gap-3 text-gray-300">
+                                        <button id="semester-minus" class="override-btn">-</button>
+                                        <span id="semester-count" class="text-lg font-bold w-8 text-center">7</span>
+                                        <button id="semester-plus" class="override-btn">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Konsumentdagar -->
+                        <div class="accordion-item">
+                            <div class="accordion-header flex justify-between items-center">
+                                <span class="font-medium">Konsumentdagar</span>
+                                <svg class="accordion-icon w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-content-inner text-sm text-gray-400">
+                                    <p class="mb-4">Efter en syndardag kan upp till 3 drönardagar omvandlas. Används för att gå ut i naturen, återhämta sig, göra research och hämta inspiration (t.ex. se en film).</p>
+                                    <div class="flex items-center justify-center gap-3 text-gray-300">
+                                        <button id="konsument-minus" class="override-btn">-</button>
+                                        <span id="konsument-count" class="text-lg font-bold w-8 text-center">3</span>
+                                        <button id="konsument-plus" class="override-btn">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Aktiva Dagar Modul -->
+                <div id="active-days-container" class="w-full panel p-6 rounded-lg shadow-lg lg:col-span-2">
+                    <h2 class="text-2xl font-bold text-center text-gray-300 mb-2">Aktiva Dagar</h2>
+                    <p class="text-center text-gray-400 mb-6 text-sm">Dessa dagar går jag inte på lust, utan följer systematiskt ett konsekvent schema.</p>
+                    <div class="space-y-3">
+                        <!-- Fas 1 -->
+                        <div class="accordion-item">
+                            <div class="accordion-header flex justify-between items-center">
+                                <span class="font-medium">Fas 1</span>
+                                <svg class="accordion-icon w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-content-inner text-sm text-gray-400">
+                                    <p class="mb-4">Detta är starten på dagen och systemet för att få igång kroppen och hålla den i trim. Den är till för att skapa den bästa förutsättningen för dagen.</p>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2">
+                                        <ul class="space-y-2">
+                                            <li>- Skogspromenad 4 km</li>
+                                            <li>- Wim Hof Andning</li>
+                                            <li>- Reningsritualer för kropp och själ</li>
+                                            <li>- Avancerat tandvårdssystem</li>
+                                        </ul>
+                                        <ul class="space-y-2">
+                                            <li>- Hinkterapi 2 hinkar över huvudet från brunnen oavsett väder och vind</li>
+                                            <li>- Meditation 20 min</li>
+                                            <li>- Fysisk träning 30 minuter</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Fas 2 -->
+                        <div class="accordion-item">
+                            <div class="accordion-header flex justify-between items-center">
+                                <span class="font-medium">Fas 2</span>
+                                <svg class="accordion-icon w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-content-inner text-sm text-gray-400">
+                                    <p class="mb-4">Denna fasen är inriktad på lärande. Jag fördjupar kunskapen i mina intressen.</p>
+                                    <ul class="space-y-2">
+                                        <li>- Programering / Ai 1h → Trix å fix 20 min</li>
+                                        <li>- Blender 1h → Trix å fix 20 min</li>
+                                        <li>- Unreal Engine 1h → Trix å fix 20 min</li>
+                                        <li>- Reason studio 1h → Mat paus kl 14:00 → promenad</li>
+                                        <li>- Huset timmen</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Fas 3 -->
+                        <div class="accordion-item">
+                            <div class="accordion-header flex justify-between items-center">
+                                <span class="font-medium">Fas 3</span>
+                                <svg class="accordion-icon w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-content-inner text-sm text-gray-400">
+                                    <p class="mb-4">Fas 3 är till för att jobba med projekt och varva ner inför natten.</p>
+                                     <ul class="space-y-2">
+                                        <li>- 2D Grafik → Mat paus kl 17:00 → promenad</li>
+                                        <li>- Valfritt projekt → Mat paus kl 20:00 → promenad</li>
+                                        <li>- Nervavvning inför natten → Går och lägger mig kl 23:00</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Mat -->
+                        <div class="accordion-item">
+                            <div class="accordion-header flex justify-between items-center">
+                                <span class="font-medium">Mat Protokoll</span>
+                                <svg class="accordion-icon w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-content-inner text-sm text-gray-400">
+                                    <ul class="space-y-2">
+                                        <li><strong>14:00 Overnight Oat</strong> → Havre, chiafrön, växtmjölk, rå sylt med blandade bär, pumpafrön och cashewnötter.</li>
+                                        <li><strong>17:00 Dhal Supréem</strong> → Dhal på 2 sortes linser, havrevåffla med broccoligroddar, rostade pumpafrön och havreghurt.</li>
+                                        <li><strong>20:00 Quinoa Dream</strong> → Quinoa, ris, korn, pumpafrön, linser, surkål/kimchi, bönröra med tempeh, sallad med vinägrett, yoghurt och sambal oelek.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Övriga Dagtyper Modul -->
+                <div id="other-day-types-container" class="w-full panel p-6 rounded-lg shadow-lg lg:col-span-2">
+                    <h2 class="text-2xl font-bold text-center text-gray-300 mb-2">Övriga Dagtyper</h2>
+                    <p class="text-center text-gray-400 mb-6 text-sm">Beskrivning av drönar-, vilo- och syndardagar.</p>
+                    <div class="space-y-3">
+                        <!-- Drönardagar -->
+                        <div class="accordion-item">
+                            <div class="accordion-header flex justify-between items-center">
+                                <span class="font-medium">Drönardagar</span>
+                                <svg class="accordion-icon w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-content-inner text-sm text-gray-400">
+                                    <ul class="space-y-3 list-disc list-inside">
+                                        <li>Jag har full frihet att snöa in i vilket projekt jag vill, hur länge jag vill.</li>
+                                        <li>Jag kan äta vad jag vill, så länge det inte är onyttigt. Dagen styrs av ren glädje och lust framför allt.</li>
+                                        <li>Efter en syndardag (fest eller besök) kan dessa dagar omvandlas till upp till 3 <strong>konsumentdagar</strong>.</li>
+                                        <li>Under konsumentdagar stänger jag ibland av all elektricitet och går ut i skogen, eller så håller jag på med research som att kolla på andras saker, se filmer, testa spel, etc.</li>
+                                        <li><strong>Kombivecka (2 ggr/år):</strong> Under en drönarvecka infaller en period med 2 dagar sallad, följt av 3-5 dagars ren fasta.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Vilodagar -->
+                        <div class="accordion-item">
+                            <div class="accordion-header flex justify-between items-center">
+                                <span class="font-medium">Vilodagar</span>
+                                <svg class="accordion-icon w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-content-inner text-sm text-gray-400">
+                                    <ul class="space-y-3 list-disc list-inside">
+                                        <li>Jag vilar fysiskt, särskilt leder och muskler, för att återhämta mig.</li>
+                                        <li>Jag kan sitta med projekt, men på ett mer avslappnat sätt.</li>
+                                        <li>Dagen används för att organisera och ladda upp mentalt inför den kommande veckan.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Syndardagar -->
+                        <div class="accordion-item">
+                            <div class="accordion-header flex justify-between items-center">
+                                <span class="font-medium">Syndardagar</span>
+                                <svg class="accordion-icon w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-content-inner text-sm text-gray-400">
+                                    <ul class="space-y-3 list-disc list-inside">
+                                        <li>Full möjlighet att ta en fest, leva ut fullständigt och "go bananas".</li>
+                                        <li>Jag kan äta hur onyttigt jag vill.</li>
+                                        <li>Dagen är till för att leva ut och släppa på spänningar. Det är meningen att jag ska synda, men bara under denna dag.</li>
+                                        <li>Jag behöver inte ta tillfället i akt, men möjligheten finns alltid där.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Övriga Regler Modul -->
+                <div id="other-rules-container" class="w-full panel p-6 rounded-lg shadow-lg lg:col-span-2">
+                    <h2 class="text-2xl font-bold text-center text-gray-300 mb-2">Övriga Regler</h2>
+                    <p class="text-center text-gray-400 mb-6 text-sm">Allmänna riktlinjer och principer.</p>
+                    <div class="space-y-3">
+                        <!-- Kommunikation Regel -->
+                        <div class="accordion-item">
+                            <div class="accordion-header flex justify-between items-center">
+                                <span class="font-medium">Kommunikation</span>
+                                <svg class="accordion-icon w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-content-inner text-sm text-gray-400">
+                                    <p class="mb-4">Detta är specialregler som alltid ska följas.</p>
+                                    <ul class="space-y-2 list-disc list-inside">
+                                        <li>Ingen telefon från söndag 23:00 - fredag 15:00, men jag kan nås på Discord om det är viktigt.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Sociala Medier & Konsumtion -->
+                        <div class="accordion-item">
+                            <div class="accordion-header flex justify-between items-center">
+                                <span class="font-medium">Sociala Medier & Konsumtion</span>
+                                <svg class="accordion-icon w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-content-inner text-sm text-gray-400">
+                                    <ul class="space-y-2 list-disc list-inside">
+                                        <li>Ingen social media måndag-fredag, men kan se YouTube om det är tutorials eller information om det jag håller på med.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Hälsa & Fasta -->
+                        <div class="accordion-item">
+                            <div class="accordion-header flex justify-between items-center">
+                                <span class="font-medium">Hälsa & Fasta</span>
+                                <svg class="accordion-icon w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-content-inner text-sm text-gray-400">
+                                    <ul class="space-y-2 list-disc list-inside">
+                                        <li><strong>Kombivecka (minst 2 om året):</strong> Sallad i två dagar, följt av fasta i 3-5 dagar.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Socialisering -->
+                        <div class="accordion-item">
+                            <div class="accordion-header flex justify-between items-center">
+                                <span class="font-medium">Socialisering</span>
+                                <svg class="accordion-icon w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-content-inner text-sm text-gray-400">
+                                    <ul class="space-y-2 list-disc list-inside">
+                                        <li>Semester 1 vecka om året för socialisering med fysisk kropp.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Fest -->
+                        <div class="accordion-item">
+                            <div class="accordion-header flex justify-between items-center">
+                                <span class="font-medium">Fest</span>
+                                <svg class="accordion-icon w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </div>
+                            <div class="accordion-content">
+                                <div class="accordion-content-inner text-sm text-gray-400">
+                                    <ul class="space-y-2 list-disc list-inside">
+                                        <li>Jag har möjlighet att ta en fest och dricka alkohol, men bara på en syndardag.</li>
+                                        <li>Festen varar tills jag somnar, så ibland kan den hålla på även in på lördagen.</li>
+                                        <li>Jag kan flytta en syndardag från fredagen till lördagen för att börja festen tidigare. Då somnar jag oftast på kvällen istället för att vara uppe hela natten, vilket är fördelaktigt för större fester med mycket matlagning.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // --- START: GLOBALA VARIABLER OCH HJÄLPFUNKTIONER ---
+        let defaultCenterText = {};
+        let combinedArcData = [];
+        let currentlyGlowingElements = { arc: null, legend: null, name: null, originalColor: null };
+        
+        function getDateFromDayOfYear(year, dayOfYear) {
+            const date = new Date(year, 0);
+            date.setDate(dayOfYear);
+            return date.toLocaleDateString('sv-SE', { day: 'numeric', month: 'long' });
+        }
+
+        /**
+         * Ljusar upp en hex-färg med en viss procent.
+         * @param {string} hex - Färgen i hex-format (t.ex. '#RRGGBB').
+         * @param {number} percent - Procent att ljusa upp (0-100).
+         * @returns {string} Den nya, ljusare hex-färgen.
+         */
+        function lightenColor(hex, percent) {
+            hex = hex.replace(/^#/, '');
+            if (hex.length === 3) {
+                hex = hex.split('').map(char => char + char).join('');
+            }
+            const r = parseInt(hex.substring(0, 2), 16);
+            const g = parseInt(hex.substring(2, 4), 16);
+            const b = parseInt(hex.substring(4, 6), 16);
+            const amount = Math.floor(255 * (percent / 100));
+            const newR = Math.min(255, r + amount).toString(16).padStart(2, '0');
+            const newG = Math.min(255, g + amount).toString(16).padStart(2, '0');
+            const newB = Math.min(255, b + amount).toString(16).padStart(2, '0');
+            return `#${newR}${newG}${newB}`;
+        }
+
+        function updateCenterText(line1, line2, line3, colors = {}) {
+            const text1 = document.getElementById('center-text-1');
+            const text2 = document.getElementById('center-text-2');
+            const text3 = document.getElementById('center-text-3');
+
+            if (text1) {
+                text1.textContent = line1 || '';
+                text1.style.fill = colors.line1 || '#99F6E4';
+                text1.setAttribute('class', (line1 && line1.length > 12) ? 'text-4xl font-bold' : 'text-5xl font-bold');
+            }
+            if (text2) {
+                text2.textContent = line2 || '';
+                text2.setAttribute('class', 'text-xl');
+                text2.style.fill = colors.line2 || '#99F6E4';
+            }
+            if (text3) {
+                text3.textContent = line3 || '';
+                text3.setAttribute('class', 'text-2xl font-bold');
+                text3.style.fill = colors.line3 || '#99F6E4';
+            }
+        }
+        // --- SLUT: GLOBALA VARIABLER OCH HJÄLPFUNKTIONER ---
+
+
+        // --- START: DELAD LOGIK OCH DATA ---
+        const calendarYear = 2026;
+
+        // Mönstret: Drönarvecka (Mån-Fre) följer ofta efter en Syndardag (Fre)
+        // Syndardagar (Fre): 9 Jan, 30 Jan, 20 Feb, 13 Mar, 3 Apr, 24 Apr, 15 Maj, 5 Jun, 26 Jun, 17 Jul, 7 Aug, 28 Aug, 18 Sep, 9 Okt, 30 Okt, 20 Nov, 11 Dec
+        // Drönarveckor (Mån-Fre): 12-16 Jan, 2-6 Feb, 23-27 Feb, 16-20 Mar, 6-10 Apr, 27 Apr-1 Maj, 18-22 Maj, 8-12 Jun, 29 Jun-3 Jul, 20-24 Jul, 10-14 Aug, 31 Aug-4 Sep, 21-25 Sep, 12-16 Okt, 2-6 Nov, 23-27 Nov, 14-18 Dec
+        
+        const specialRedDays = {
+            0: [{start: 12, end: 16}], // Jan (W3 only, removed 1-3)
+            1: [{start: 2, end: 6}, {start: 23, end: 27}],
+            2: [{start: 16, end: 20}],
+            3: [{start: 6, end: 10}, {start: 27, end: 30}],
+            4: [{start: 1, end: 1}, {start: 18, end: 22}],
+            5: [{start: 8, end: 12}, {start: 29, end: 30}],
+            6: [{start: 1, end: 3}, {start: 20, end: 24}],
+            7: [{start: 10, end: 14}, {start: 31, end: 31}],
+            8: [{start: 1, end: 4}, {start: 21, end: 25}],
+            9: [{start: 12, end: 16}],
+            10: [{start: 2, end: 6}, {start: 23, end: 27}],
+            11: [{start: 14, end: 18}, {start: 28, end: 31}] // Dec (W51 + 28th-31st)
+        };
+
+        const dateOverrides = { 
+            // Fasta datum
+            // '1-2': 'yellow',  <-- Borttagen då vilodagar endast är söndagar
+            '6-1': 'red',     // 1 Juli (Drönardag)
+            '11-24': 'blue',  // 24 Dec (Julafton/Syndardag)
+
+            // Special user requests (Blue/Syndardagar)
+            '5-19': 'blue',   // Midsommarafton (19 Juni)
+            '11-20': 'blue',  // 20 Dec
+            '11-31': 'blue',  // Nyårsafton (31 Dec)
+
+            // Syndardagar 2026 (21-dagarscykel)
+            '0-9': 'blue',    // Jan 9
+            '0-30': 'blue',   // Jan 30
+            '1-20': 'blue',   // Feb 20
+            '2-13': 'blue',   // Mar 13
+            '3-3': 'blue',    // Apr 3
+            '3-24': 'blue',   // Apr 24
+            '4-15': 'blue',   // Maj 15
+            '5-5': 'blue',    // Jun 5
+            '5-26': 'blue',   // Jun 26
+            '6-17': 'blue',   // Jul 17
+            '7-7': 'blue',    // Aug 7
+            '7-28': 'blue',   // Aug 28
+            '8-18': 'blue',   // Sep 18
+            '9-9': 'blue',    // Okt 9
+            '9-30': 'blue',   // Okt 30
+            '10-20': 'blue',  // Nov 20
+            '11-11': 'blue'   // Dec 11
+        };
+
+        function getDayType(year, monthIndex, dayNum) {
+            function isSpecialRedDay(month, day) {
+                if (specialRedDays[month]) {
+                    for (const range of specialRedDays[month]) {
+                        if (day >= range.start && day <= range.end) return true;
+                    }
+                }
+                return false;
+            }
+
+            const dayOfWeek = new Date(year, monthIndex, dayNum).getDay();
+            const dateKey = `${monthIndex}-${dayNum}`;
+            const overrideColor = dateOverrides[dateKey];
+
+            if (overrideColor === 'blue') {
+                return { name: 'Aktiv dag', isSinDay: true, centerTextColor: '#67E8F9', className: 'bg-cyan-400 text-cyan-900 font-bold' };
+            } else if (overrideColor === 'yellow' || dayOfWeek === 0) {
+                return { name: 'Vilodag', isSinDay: false, centerTextColor: '#F97316', className: 'bg-orange-700 text-orange-100' };
+            } else if (overrideColor === 'red' || isSpecialRedDay(monthIndex, dayNum) || dayOfWeek === 6) {
+                return { name: 'Drönardag', isSinDay: false, centerTextColor: '#BEF264', className: 'bg-lime-500 text-gray-900 font-bold' };
+            } else {
+                return { name: 'Aktiv dag', isSinDay: false, centerTextColor: '#94A3B8', className: 'bg-slate-800 text-slate-300' };
+            }
+        }
+        // --- SLUT: DELAD LOGIK OCH DATA ---
+
+
+        // --- START: KOD FÖR CIRKULÄR KALENDER ---
+        function createCircularCalendar() {
+            const svg = document.getElementById('circular-calendar');
+            svg.innerHTML = ''; 
+            const now = new Date(); // Använder nuvarande datum för markering, men visar 2026 data
+            const year = 2026;
+            const isLeap = (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
+            const daysInYear = isLeap ? 366 : 365;
+            
+            // Justera currentDayOfYear om vi inte är i 2026 ännu, för att undvika fel, eller visa dagens datum
+            let currentDayOfYear = -1;
+            if (now.getFullYear() === year) {
+                currentDayOfYear = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24));
+            }
+
+            const centerX = 400;
+            const centerY = 400;
+            
+            const monthRadius = 220;
+            const dayLineStartRadius = 260;
+            const dayLineEndRadius = 270;
+            const monthSeparatorStartRadius = 190;
+            const monthSeparatorEndRadius = 270;
+
+            const months = [
+                { name: 'Januari', days: 31 }, { name: 'Februari', days: isLeap ? 29 : 28 },
+                { name: 'Mars', days: 31 }, { name: 'April', days: 30 },
+                { name: 'Maj', days: 31 }, { name: 'Juni', days: 30 },
+                { name: 'Juli', days: 31 }, { name: 'Augusti', days: 31 },
+                { name: 'September', days: 30 }, { name: 'Oktober', days: 31 },
+                { name: 'November', days: 30 }, { name: 'December', days: 31 }
+            ];
+            const daysInMonths = months.map(m => m.days);
+
+            function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
+                const angleInRadians = (angleInDegrees - 90) * Math.PI / 180.0;
+                return {
+                    x: centerX + (radius * Math.cos(angleInRadians)),
+                    y: centerY + (radius * Math.sin(angleInRadians))
+                };
+            }
+            
+            const defs = document.createElementNS("http://www.w3.org/2000/svg", 'defs');
+            svg.appendChild(defs);
+
+            const backgroundGroup = document.createElementNS("http://www.w3.org/2000/svg", 'g');
+            svg.appendChild(backgroundGroup);
+
+            function createArc(data) {
+                const startAngle = ((data.startDay - 1) / daysInYear) * 360;
+                const endAngle = ((data.endDay - 1) / daysInYear) * 360;
+
+                const startPoint = polarToCartesian(centerX, centerY, data.radius, startAngle);
+                const endPoint = polarToCartesian(centerX, centerY, data.radius, endAngle);
+                let angleDiff = endAngle - startAngle;
+                if (angleDiff < 0) {
+                    angleDiff += 360;
+                }
+                const largeArcFlag = angleDiff > 180 ? 1 : 0;
+                const d = `M ${startPoint.x} ${startPoint.y} A ${data.radius} ${data.radius} 0 ${largeArcFlag} 1 ${endPoint.x} ${endPoint.y}`;
+                const arcPath = document.createElementNS("http://www.w3.org/2000/svg", 'path');
+                arcPath.setAttribute("d", d);
+                arcPath.setAttribute("stroke", data.color);
+                arcPath.setAttribute("stroke-width", data.width || 15);
+                arcPath.setAttribute("fill", "none");
+                arcPath.setAttribute("id", 'arc-' + data.name.toLowerCase().replace(/ /g, '-'));
+                
+                arcPath.style.cursor = 'pointer';
+                arcPath.addEventListener('click', () => toggleGlow(data.name));
+
+                svg.appendChild(arcPath);
+            }
+
+            const dayOffsets = daysInMonths.reduce((acc, days, i) => {
+                acc.push((acc[i-1] || 0) + days);
+                return acc;
+            }, []);
+            const getDayOfYear = (month, day) => (dayOffsets[month-2] || 0) + day;
+
+            const arcsData = [
+                { name: 'Lisa', startDay: getDayOfYear(3, 20), endDay: getDayOfYear(10, 20), radius: 285, color: '#A1A1AA' },
+                { name: 'Själv', startDay: getDayOfYear(10, 21), endDay: getDayOfYear(3, 19), radius: 285, color: '#52525B' },
+                { name: 'Förodling', startDay: getDayOfYear(4, 1), endDay: getDayOfYear(6, 1), radius: 310, color: '#B45309' },
+                { name: 'Odling', startDay: getDayOfYear(6, 2), endDay: getDayOfYear(10, 10), radius: 310, color: '#365314' },
+                { name: 'Odling Inne', startDay: getDayOfYear(11, 1), endDay: getDayOfYear(3, 31), radius: 310, color: '#14532D' },
+                { name: 'Hjortron', startDay: getDayOfYear(7, 15), endDay: getDayOfYear(8, 1), radius: 335, color: '#9A3412' },
+                { name: 'Blåbär', startDay: getDayOfYear(8, 1), endDay: getDayOfYear(8, 31), radius: 335, color: '#1E40AF' },
+                { name: 'Lingon', startDay: getDayOfYear(9, 1), endDay: getDayOfYear(9, 30), radius: 335, color: '#9F1239' },
+                { name: 'Trattkantareller', startDay: getDayOfYear(10, 1), endDay: getDayOfYear(10, 31), radius: 335, color: '#7C2D12' },
+                { name: 'Allergi', startDay: getDayOfYear(6, 15), endDay: getDayOfYear(7, 15), radius: 360, color: '#881337' },
+                { name: 'Semester', startDay: getDayOfYear(7, 25), endDay: getDayOfYear(7, 31), radius: 360, color: '#0D9488' },
+                { name: 'Äpplen', startDay: getDayOfYear(8, 1), endDay: getDayOfYear(8, 10), radius: 360, color: '#991B1B' },
+                { name: 'Zucchini', startDay: getDayOfYear(8, 15), endDay: getDayOfYear(9, 15), radius: 360, color: '#15803D' },
+                { name: 'Potatis', startDay: getDayOfYear(9, 15), endDay: getDayOfYear(10, 31), radius: 360, color: '#713F12' },
+                { name: 'Tranbär', startDay: getDayOfYear(11, 1), endDay: getDayOfYear(11, 15), radius: 360, color: '#831843' },
+            ];
+            
+            let currentDay = 1;
+            months.forEach((month, i) => {
+                const monthStartDay = currentDay;
+                const monthEndDay = currentDay + month.days - 1;
+                
+                const startAngleArc = ((monthStartDay - 1.5) / daysInYear) * 360;
+                const endAngleArc = ((monthEndDay - 0.5) / daysInYear) * 360;
+
+                const outerRadius = dayLineEndRadius;
+                const innerRadius = monthSeparatorStartRadius;
+
+                const outerStart = polarToCartesian(centerX, centerY, outerRadius, startAngleArc);
+                const outerEnd = polarToCartesian(centerX, centerY, outerRadius, endAngleArc);
+                const innerStart = polarToCartesian(centerX, centerY, innerRadius, startAngleArc);
+                const innerEnd = polarToCartesian(centerX, centerY, innerRadius, endAngleArc);
+
+                const largeArcFlag = (endAngleArc - startAngleArc) > 180 ? 1 : 0;
+                const d = `M ${outerStart.x} ${outerStart.y} A ${outerRadius} ${outerRadius} 0 ${largeArcFlag} 1 ${outerEnd.x} ${outerEnd.y} L ${innerEnd.x} ${innerEnd.y} A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 0 ${innerStart.x} ${innerStart.y} Z`;
+
+                const arcPath = document.createElementNS("http://www.w3.org/2000/svg", 'path');
+                arcPath.setAttribute("d", d);
+                arcPath.setAttribute("stroke", "#083344");
+                arcPath.setAttribute("stroke-width", "2");
+
+                let fill;
+                let seasonName = null;
+                if (i >= 0 && i <= 2) {
+                    fill = "#312E81"; // Dödens kvartal - Mörk Indigo
+                    seasonName = "Dödens kvartal";
+                } else if (i >= 5 && i <= 7) {
+                    fill = "#065F46"; // Sommar - Grön
+                    seasonName = "Sommar";
+                } else {
+                    fill = "#1E293B"; // Standard - Slate
+                }
+                arcPath.setAttribute("fill", fill);
+                
+                if (seasonName) {
+                    arcPath.style.cursor = 'pointer';
+                    arcPath.addEventListener('click', () => toggleGlow(seasonName));
+                }
+                
+                backgroundGroup.appendChild(arcPath);
+
+                const midAngle = startAngleArc + (endAngleArc - startAngleArc) / 2;
+                const textArcStart = polarToCartesian(centerX, centerY, monthRadius, startAngleArc + 5);
+                const textArcEnd = polarToCartesian(centerX, centerY, monthRadius, endAngleArc - 5);
+                
+                const textArcPath = document.createElementNS("http://www.w3.org/2000/svg", 'path');
+                const pathId = `monthPath${i}`;
+                textArcPath.setAttribute('id', pathId);
+                let pathData = (midAngle > 90 && midAngle < 270)
+                    ? `M ${textArcEnd.x} ${textArcEnd.y} A ${monthRadius} ${monthRadius} 0 0 0 ${textArcStart.x} ${textArcStart.y}`
+                    : `M ${textArcStart.x} ${textArcStart.y} A ${monthRadius} ${monthRadius} 0 0 1 ${textArcEnd.x} ${textArcEnd.y}`;
+                textArcPath.setAttribute('d', pathData);
+                defs.appendChild(textArcPath);
+
+                const textElement = document.createElementNS("http://www.w3.org/2000/svg", 'text');
+                const textPath = document.createElementNS("http://www.w3.org/2000/svg", 'textPath');
+                textPath.setAttribute('href', `#${pathId}`);
+                textPath.setAttribute('startOffset', '50%');
+                textPath.setAttribute('text-anchor', 'middle');
+                textPath.setAttribute('class', 'month-text');
+                textPath.textContent = month.name;
+                textElement.appendChild(textPath);
+                svg.appendChild(textElement);
+
+                for (let dayNum = 1; dayNum <= month.days; dayNum++) {
+                    const dayOfYearForThisDay = monthStartDay + dayNum - 1;
+                    const dayAngle = ((dayOfYearForThisDay - 1) / daysInYear) * 360;
+                    const start = polarToCartesian(centerX, centerY, dayLineStartRadius, dayAngle);
+                    const end = polarToCartesian(centerX, centerY, dayLineEndRadius, dayAngle);
+                    const line = document.createElementNS("http://www.w3.org/2000/svg", 'line');
+                    line.setAttribute('x1', start.x);
+                    line.setAttribute('y1', start.y);
+                    line.setAttribute('x2', end.x);
+                    line.setAttribute('y2', end.y);
+                    line.setAttribute('class', 'day-line');
+                    svg.appendChild(line);
+                    
+                    // Markera aktuell dag om det är 2026
+                    if (year === now.getFullYear() && dayOfYearForThisDay === currentDayOfYear) {
+                         line.setAttribute('class', 'day-line current-day-text animated-glow-svg');
+                         const markerPos = polarToCartesian(centerX, centerY, dayLineStartRadius - 10, dayAngle);
+                         const circleMarker = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
+                         circleMarker.setAttribute('cx', markerPos.x);
+                         circleMarker.setAttribute('cy', markerPos.y);
+                         circleMarker.setAttribute('r', '10');
+                         circleMarker.setAttribute('class', 'current-day-marker animated-glow-svg');
+                         svg.appendChild(circleMarker);
+                    }
+                }
+                currentDay += month.days;
+            });
+            
+            arcsData.forEach(createArc);
+            
+            const seasonData = [
+                { name: 'Dödens kvartal', startDay: 1, endDay: 90 },
+                { name: 'Sommar', startDay: 152, endDay: 243 }
+            ];
+            
+            function createSeasonFrame(data) {
+                const startAngle = ((data.startDay - 1.5) / daysInYear) * 360;
+                const endAngle = ((data.endDay - 0.5) / daysInYear) * 360;
+                const outerRadius = dayLineEndRadius;
+                const innerRadius = monthSeparatorStartRadius;
+                const outerStart = polarToCartesian(centerX, centerY, outerRadius, startAngle);
+                const outerEnd = polarToCartesian(centerX, centerY, outerRadius, endAngle);
+                const innerStart = polarToCartesian(centerX, centerY, innerRadius, startAngle);
+                const innerEnd = polarToCartesian(centerX, centerY, innerRadius, endAngle);
+                const largeArcFlag = (endAngle - startAngle) >= 180 ? 1 : 0;
+                const d = `M ${outerStart.x} ${outerStart.y} A ${outerRadius} ${outerRadius} 0 ${largeArcFlag} 1 ${outerEnd.x} ${outerEnd.y} L ${innerEnd.x} ${innerEnd.y} A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 0 ${innerStart.x} ${innerStart.y} Z`;
+                const framePath = document.createElementNS("http://www.w3.org/2000/svg", 'path');
+                framePath.setAttribute("d", d);
+                framePath.setAttribute("fill", "none");
+                framePath.setAttribute("stroke-width", "4");
+                framePath.setAttribute("stroke-linejoin", "round");
+                framePath.setAttribute("id", 'arc-' + data.name.toLowerCase().replace(/ /g, '-'));
+                framePath.style.pointerEvents = 'none';
+                svg.appendChild(framePath);
+            }
+            
+            seasonData.forEach(createSeasonFrame);
+            
+            combinedArcData = [
+                ...arcsData,
+                ...seasonData.map(s => ({ ...s, radius: 0, color: 'none' }))
+            ];
+
+            // Uppdatera mittentexten, om vi inte är i 2026, visa generisk 2026 text
+            const todayInfo = (now.getFullYear() === year) 
+                ? getDayType(now.getFullYear(), now.getMonth(), now.getDate())
+                : { name: 'Framtiden', isSinDay: false, centerTextColor: '#94A3B8' };
+
+            const yearText = document.createElementNS("http://www.w3.org/2000/svg", 'text');
+            yearText.setAttribute('id', 'center-text-1');
+            yearText.setAttribute('x', centerX);
+            yearText.setAttribute('y', centerY - 25);
+            yearText.setAttribute('text-anchor', 'middle');
+            yearText.setAttribute('class', 'text-5xl font-bold');
+            yearText.style.fill = todayInfo.centerTextColor;
+            yearText.textContent = year;
+            svg.appendChild(yearText);
+
+            const dateAndDayText = document.createElementNS("http://www.w3.org/2000/svg", 'text');
+            dateAndDayText.setAttribute('id', 'center-text-2');
+            dateAndDayText.setAttribute('x', centerX);
+            dateAndDayText.setAttribute('y', centerY + 15);
+            dateAndDayText.setAttribute('text-anchor', 'middle');
+            dateAndDayText.setAttribute('class', 'text-xl');
+            dateAndDayText.style.fill = todayInfo.centerTextColor;
+            // Om idag inte är 2026, visa bara "Välkommen" eller liknande
+            dateAndDayText.textContent = (now.getFullYear() === year)
+                ? now.toLocaleDateString('sv-SE', { weekday: 'long', day: 'numeric', month: 'long' })
+                : "Planering";
+            svg.appendChild(dateAndDayText);
+
+            const dayTypeText = document.createElementNS("http://www.w3.org/2000/svg", 'text');
+            dayTypeText.setAttribute('id', 'center-text-3');
+            dayTypeText.setAttribute('x', centerX);
+            dayTypeText.setAttribute('y', centerY + 50);
+            dayTypeText.setAttribute('text-anchor', 'middle');
+            dayTypeText.setAttribute('class', 'text-2xl font-bold');
+            dayTypeText.style.fill = todayInfo.centerTextColor;
+            dayTypeText.textContent = todayInfo.isSinDay ? 'Syndardag' : todayInfo.name;
+            svg.appendChild(dayTypeText);
+
+            defaultCenterText = {
+                line1: { text: yearText.textContent, fill: yearText.style.fill },
+                line2: { text: dateAndDayText.textContent, fill: dateAndDayText.style.fill },
+                line3: { text: dayTypeText.textContent, fill: dayTypeText.style.fill }
+            };
+        }
+        // --- SLUT: KOD FÖR CIRKULÄR KALENDER ---
+
+
+        // --- START: KOD FÖR GRID-KALENDER ---
+        function createGridCalendar() {
+            const monthsGrid = document.getElementById('months-grid');
+            const now = new Date();
+            const today = now.getFullYear() === calendarYear ? now.getDate() : -1;
+            const thisMonth = now.getFullYear() === calendarYear ? now.getMonth() : -1;
+
+            document.getElementById('grid-year-header').textContent = `Kalender ${calendarYear}`;
+            const monthNames = ["Januari", "Februari", "Mars", "April", "Maj", "Juni", "Juli", "Augusti", "September", "Oktober", "November", "December"];
+            const weekDays = ["M", "T", "O", "T", "F", "L", "S"];
+
+            monthNames.forEach((monthName, monthIndex) => {
+                const monthContainer = document.createElement('div');
+                monthContainer.className = 'panel rounded-lg shadow-md p-4';
+
+                const monthHeader = document.createElement('h3');
+                monthHeader.className = 'text-center text-lg font-bold text-gray-300 bg-black/50 p-2 rounded-t-md -m-4 mb-4';
+                monthHeader.textContent = monthName;
+                monthContainer.appendChild(monthHeader);
+
+                const calendarGrid = document.createElement('div');
+                calendarGrid.className = 'grid grid-cols-7 gap-1 text-center text-sm';
+                
+                weekDays.forEach(dayName => {
+                    const dayHeader = document.createElement('div');
+                    dayHeader.className = 'font-bold text-gray-300';
+                    dayHeader.textContent = dayName;
+                    calendarGrid.appendChild(dayHeader);
+                });
+
+                const firstDay = new Date(calendarYear, monthIndex, 1);
+                let startDay = firstDay.getDay();
+                startDay = startDay === 0 ? 6 : startDay - 1;
+
+                for (let i = 0; i < startDay; i++) {
+                    calendarGrid.appendChild(document.createElement('div'));
+                }
+
+                const daysInMonth = new Date(calendarYear, monthIndex + 1, 0).getDate();
+                for (let dayNum = 1; dayNum <= daysInMonth; dayNum++) {
+                    const dayCell = document.createElement('div');
+                    const dayInfo = getDayType(calendarYear, monthIndex, dayNum);
+                    
+                    dayCell.className = 'p-1.5 rounded-sm';
+                    dayCell.classList.add(...dayInfo.className.split(' '));
+                    dayCell.textContent = dayNum;
+
+                    if (dayNum === today && monthIndex === thisMonth) {
+                        dayCell.classList.add('animated-glow-box');
+                    }
+                    calendarGrid.appendChild(dayCell);
+                }
+
+                monthContainer.appendChild(calendarGrid);
+                monthsGrid.appendChild(monthContainer);
+            });
+        }
+        // --- SLUT: KOD FÖR GRID-KALENDER ---
+        
+        // --- START: KOD FÖR ÖVERSIKTSDIAGRAM ---
+        function createSummaryChart() {
+            const dayCounts = { 'Aktiv dag': 0, 'Drönardag': 0, 'Vilodag': 0, 'Syndardag': 0 };
+            const dayColors = {
+                'Aktiv dag': 'bg-slate-700',
+                'Drönardag': 'bg-lime-500',
+                'Vilodag': 'bg-orange-700',
+                'Syndardag': 'bg-cyan-400'
+            };
+             const dayTooltips = {
+                'Aktiv dag': 'Strikt schema och konsekvens, snarare än att gå på lust.',
+                'Drönardag': 'Mer fritt och lustdrivet, ofta med fokus på ett enda projekt.',
+                'Vilodag': 'Seriös återhämtning för kropp och psyke för att maximera energin.',
+                'Syndardag': 'Möjlighet för sociala evenemang, fest eller att äta mer onyttigt.'
+            };
+            let totalDays = 0;
+
+            for (let month = 0; month < 12; month++) {
+                const daysInMonth = new Date(calendarYear, month + 1, 0).getDate();
+                totalDays += daysInMonth;
+                for (let dayNum = 1; dayNum <= daysInMonth; dayNum++) {
+                    const dayInfo = getDayType(calendarYear, month, dayNum);
+                    if (dayInfo.isSinDay) {
+                        dayCounts['Syndardag']++;
+                    } else {
+                        dayCounts[dayInfo.name]++;
+                    }
+                }
+            }
+
+            const chartContainer = document.getElementById('summary-chart');
+            chartContainer.innerHTML = '';
+            
+            const displayOrder = ['Aktiv dag', 'Drönardag', 'Vilodag', 'Syndardag'];
+
+            displayOrder.forEach(dayType => {
+                const count = dayCounts[dayType];
+                const percentage = ((count / totalDays) * 100).toFixed(1);
+                
+                const row = document.createElement('div');
+                row.className = 'flex items-center text-gray-300';
+                
+                const labelContainer = document.createElement('div');
+                labelContainer.className = 'w-28 text-sm font-medium pr-4 text-right tooltip-container';
+                
+                const label = document.createElement('span');
+                label.textContent = dayType;
+
+                const tooltip = document.createElement('span');
+                tooltip.className = 'tooltip-text';
+                tooltip.textContent = dayTooltips[dayType];
+
+                labelContainer.appendChild(label);
+                labelContainer.appendChild(tooltip);
+                
+                const barWrapper = document.createElement('div');
+                barWrapper.className = 'flex-1 bg-slate-800 rounded-full h-6';
+                
+                const bar = document.createElement('div');
+                bar.className = `h-6 rounded-full chart-bar ${dayColors[dayType]}`;
+                setTimeout(() => { bar.style.width = `${percentage}%`; }, 100);
+
+                const value = document.createElement('div');
+                value.className = 'w-32 text-sm pl-4';
+                value.textContent = `${count} dagar (${percentage}%)`;
+
+                barWrapper.appendChild(bar);
+                row.appendChild(labelContainer);
+                row.appendChild(barWrapper);
+                row.appendChild(value);
+                chartContainer.appendChild(row);
+            });
+        }
+        // --- SLUT: KOD FÖR ÖVERSIKTSDIAGRAM ---
+
+        // --- START: KOD FÖR OVERRIDES MODUL ---
+        function createOverridesModule() {
+            let trixDays = 1;
+            let sjukDays = 1;
+            let semesterDays = 7;
+            let konsumentDays = 3;
+
+            const trixCountEl = document.getElementById('trix-count');
+            const sjukCountEl = document.getElementById('sjuk-count');
+            const semesterCountEl = document.getElementById('semester-count');
+            const konsumentCountEl = document.getElementById('konsument-count');
+
+            const updateCounters = () => {
+                trixCountEl.textContent = trixDays;
+                sjukCountEl.textContent = sjukDays;
+                semesterCountEl.textContent = semesterDays;
+                konsumentCountEl.textContent = konsumentDays;
+            };
+
+            document.getElementById('trix-minus').addEventListener('click', () => { if (trixDays > 0) trixDays--; updateCounters(); });
+            document.getElementById('trix-plus').addEventListener('click', () => { trixDays++; updateCounters(); });
+
+            document.getElementById('sjuk-minus').addEventListener('click', () => { if (sjukDays > 0) sjukDays--; updateCounters(); });
+            document.getElementById('sjuk-plus').addEventListener('click', () => { sjukDays++; updateCounters(); });
+            
+            document.getElementById('semester-minus').addEventListener('click', () => { if (semesterDays > 0) semesterDays--; updateCounters(); });
+            document.getElementById('semester-plus').addEventListener('click', () => { semesterDays++; updateCounters(); });
+            
+            document.getElementById('konsument-minus').addEventListener('click', () => { if (konsumentDays > 0) konsumentDays--; updateCounters(); });
+            document.getElementById('konsument-plus').addEventListener('click', () => { konsumentDays++; updateCounters(); });
+
+            updateCounters();
+        }
+        // --- SLUT: KOD FÖR OVERRIDES MODUL ---
+
+        // --- START: LOGIK FÖR ATT HANTERA GLÖD-INTERAKTIONER ---
+        function toggleGlow(arcName) {
+            // Återställ föregående glödande element
+            if (currentlyGlowingElements.arc) {
+                currentlyGlowingElements.arc.classList.remove('glowing-arc', 'pulsing-frame');
+                // Återställ färgen om det inte är en säsongsram
+                if (currentlyGlowingElements.originalColor) {
+                    currentlyGlowingElements.arc.setAttribute('stroke', currentlyGlowingElements.originalColor);
+                }
+            }
+            if (currentlyGlowingElements.legend) {
+                currentlyGlowingElements.legend.classList.remove('glowing-legend');
+            }
+
+            // Om vi klickar på samma igen, nollställ och avsluta
+            if (currentlyGlowingElements.name === arcName) {
+                currentlyGlowingElements = { arc: null, legend: null, name: null, originalColor: null };
+                updateCenterText(
+                    defaultCenterText.line1.text, 
+                    defaultCenterText.line2.text, 
+                    defaultCenterText.line3.text,
+                    { line1: defaultCenterText.line1.fill, line2: defaultCenterText.line2.fill, line3: defaultCenterText.line3.fill }
+                );
+                return;
+            }
+
+            // Hitta de nya elementen
+            const newArcId = 'arc-' + arcName.toLowerCase().replace(/ /g, '-');
+            const newArcElement = document.getElementById(newArcId);
+            const newLegendElement = document.querySelector(`.legend-item[data-arc-name="${arcName}"]`);
+
+            if (newArcElement && newLegendElement) {
+                const isSeason = arcName === 'Dödens kvartal' || arcName === 'Sommar';
+                const data = combinedArcData.find(d => d.name === arcName);
+                
+                // Applicera glöd och färgändring
+                if (isSeason) {
+                    newArcElement.classList.add('pulsing-frame');
+                    currentlyGlowingElements.originalColor = null; // Ingen färg att återställa
+                } else if (data) {
+                    const originalColor = data.color;
+                    const lighterColor = lightenColor(originalColor, 40); // Ljusar upp med 40%
+                    newArcElement.setAttribute('stroke', lighterColor);
+                    newArcElement.classList.add('glowing-arc');
+                    currentlyGlowingElements.originalColor = originalColor;
+                }
+                
+                newLegendElement.classList.add('glowing-legend');
+                
+                // Uppdatera mittentexten
+                if (data) {
+                    const startDateStr = getDateFromDayOfYear(calendarYear, data.startDay);
+                    const endDateStr = getDateFromDayOfYear(calendarYear, data.endDay);
+                    
+                    if (data.startDay > data.endDay) {
+                         updateCenterText(data.name, `${startDateStr}`, `till ${endDateStr} (nästa år)`);
+                    } else {
+                         updateCenterText(data.name, `Från: ${startDateStr}`, `Till: ${endDateStr}`);
+                    }
+                }
+                
+                // Spara de nya elementen
+                currentlyGlowingElements = {
+                    arc: newArcElement,
+                    legend: newLegendElement,
+                    name: arcName,
+                    originalColor: currentlyGlowingElements.originalColor // Behåll den sparade originalfärgen
+                };
+            }
+        }
+
+        function setupGlowInteractions() {
+            document.querySelectorAll('.legend-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const arcName = item.dataset.arcName;
+                    if (arcName) toggleGlow(arcName);
+                });
+            });
+        }
+        // --- SLUT: LOGIK FÖR ATT HANTERA GLÖD-INTERAKTIONER ---
+        
+        // --- START: LOGIK FÖR DRAGSPELSMODUL (ACCORDION) ---
+        function setupAccordions() {
+            const accordionHeaders = document.querySelectorAll('.accordion-header');
+            accordionHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    const content = header.nextElementSibling;
+                    header.classList.toggle('active');
+                    if (content.style.maxHeight) {
+                        content.style.maxHeight = null;
+                    } else {
+                        content.style.maxHeight = content.scrollHeight + "px";
+                    }
+                });
+            });
+        }
+        // --- SLUT: LOGIK FÖR DRAGSPELSMODUL (ACCORDION) ---
+
+        window.onload = function() {
+            createCircularCalendar();
+            createGridCalendar();
+            createSummaryChart();
+            createOverridesModule();
+            setupGlowInteractions(); 
+            setupAccordions();
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,304 @@
+import React, { useState, useMemo, useEffect } from 'react';
+import { Calendar, Info, HeartPulse, Clock, MapPin, Activity, ChevronRight, Sun } from 'lucide-react';
+
+const App = () => {
+  // Användarens födelsedatum och inställningar
+  const [birthDate, setBirthDate] = useState('1974-12-20');
+  const [lifeExpectancy, setLifeExpectancy] = useState(83);
+  
+  const TOTAL_YEARS = 100;
+  const WEEKS_PER_YEAR = 52;
+  const MS_PER_DAY = 1000 * 60 * 60 * 24;
+
+  const getWeekOfYear = (date) => {
+    const startOfYear = new Date(date.getFullYear(), 0, 1);
+    const pastDays = (date - startOfYear) / MS_PER_DAY;
+    return Math.min(Math.floor(pastDays / 7), 51);
+  };
+
+  const stats = useMemo(() => {
+    const start = new Date(birthDate);
+    const now = new Date(); 
+    
+    const currentYear = now.getFullYear();
+    const birthYear = start.getFullYear();
+    const currentWeekIndex = getWeekOfYear(now);
+    const birthWeekIndex = getWeekOfYear(start);
+
+    const yearsDiff = currentYear - birthYear;
+    // Beräkning för statistik
+    const totalWeeksLived = (yearsDiff * WEEKS_PER_YEAR) + currentWeekIndex - birthWeekIndex;
+    const totalWeeksExpectancy = lifeExpectancy * WEEKS_PER_YEAR;
+
+    // Nya beräkningar för perspektiv
+    const remainingWeeks = Math.max(0, totalWeeksExpectancy - totalWeeksLived);
+    const remainingDays = Math.floor(remainingWeeks * 7);
+    const remainingYears = Math.max(0, lifeExpectancy - yearsDiff);
+
+    return {
+      birthYear,
+      birthWeekIndex,
+      currentYear,
+      currentWeekIndex,
+      totalWeeksLived,
+      percentage: ((totalWeeksLived / totalWeeksExpectancy) * 100).toFixed(1),
+      yearsLived: yearsDiff,
+      remainingDays,
+      remainingWeeks,
+      remainingYears
+    };
+  }, [birthDate, lifeExpectancy]);
+
+  const getWeekStatus = (yearIndex, weekIndex) => {
+    const rowYear = stats.birthYear + yearIndex;
+
+    if (rowYear < stats.birthYear) return 'void';
+
+    if (rowYear === stats.birthYear) {
+      if (weekIndex < stats.birthWeekIndex) return 'void'; 
+      if (rowYear < stats.currentYear) return 'lived';
+    }
+
+    if (rowYear > stats.birthYear && rowYear < stats.currentYear) {
+      return 'lived';
+    }
+
+    if (rowYear === stats.currentYear) {
+      if (weekIndex < stats.currentWeekIndex) return 'lived';
+      if (weekIndex === stats.currentWeekIndex) return 'current';
+      return 'future';
+    }
+
+    if (rowYear > stats.currentYear) {
+      const ageAtRow = rowYear - stats.birthYear;
+      if (ageAtRow === lifeExpectancy) return 'expectancy'; 
+      if (ageAtRow > lifeExpectancy) return 'bonus';
+      return 'future';
+    }
+
+    return 'future';
+  };
+
+  return (
+    <div className="min-h-screen bg-[#0a0a0a] text-zinc-300 font-sans p-4 md:p-8 flex flex-col items-center selection:bg-orange-900 selection:text-orange-100">
+      
+      {/* Header */}
+      <header className="w-full max-w-5xl mb-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-6 border-b border-zinc-800 pb-6">
+        <div>
+          <h1 className="text-3xl md:text-5xl font-thin tracking-tight text-zinc-100 mb-2 font-mono">
+            MEMENTO <span className="text-orange-500 font-bold">MORI</span>
+          </h1>
+          <p className="text-zinc-500 text-sm max-w-md font-mono">
+            SYSTEM STATUS: <span className="text-orange-500">ACTIVE</span> // KALENDERÅR
+          </p>
+        </div>
+
+        <div className="flex flex-col gap-4 w-full md:w-auto font-mono text-sm">
+          <div className="flex flex-col gap-1">
+            <label className="text-[10px] uppercase tracking-widest text-zinc-600 font-bold">Födelsedatum</label>
+            <input 
+              type="date" 
+              value={birthDate}
+              onChange={(e) => setBirthDate(e.target.value)}
+              className="bg-zinc-900 border border-zinc-800 text-orange-500 px-4 py-2 rounded focus:outline-none focus:border-orange-500/50 transition-colors uppercase"
+            />
+          </div>
+          
+          <div className="flex flex-col gap-1">
+            <label className="text-[10px] uppercase tracking-widest text-zinc-600 font-bold">Medellivslängd</label>
+            <div className="flex items-center gap-2">
+              <input 
+                type="range" 
+                min="70" 
+                max="100" 
+                value={lifeExpectancy}
+                onChange={(e) => setLifeExpectancy(parseInt(e.target.value))}
+                className="w-32 h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-orange-500"
+              />
+              <span className="text-orange-500">{lifeExpectancy} år</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Dashboard Stats */}
+      <div className="w-full max-w-5xl grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div className="bg-zinc-900/50 p-4 border border-zinc-800/50 backdrop-blur-sm group hover:border-orange-500/30 transition-all duration-500">
+          <div className="text-[10px] uppercase tracking-widest text-zinc-600 mb-2 group-hover:text-orange-500/70 transition-colors">Nuvarande År</div>
+          <div className="text-3xl font-mono text-zinc-100 flex items-baseline gap-2">
+            {stats.currentYear}
+          </div>
+        </div>
+        <div className="bg-zinc-900/50 p-4 border border-zinc-800/50 backdrop-blur-sm group hover:border-orange-500/30 transition-all duration-500">
+          <div className="text-[10px] uppercase tracking-widest text-zinc-600 mb-2 group-hover:text-orange-500/70 transition-colors">Vecka</div>
+          <div className="text-3xl font-mono text-zinc-100 flex items-baseline gap-2">
+            {stats.currentWeekIndex + 1}<span className="text-sm text-zinc-600">/52</span>
+          </div>
+        </div>
+        <div className="bg-zinc-900/50 p-4 border border-zinc-800/50 backdrop-blur-sm group hover:border-orange-500/30 transition-all duration-500">
+          <div className="text-[10px] uppercase tracking-widest text-zinc-600 mb-2 group-hover:text-orange-500/70 transition-colors">Beräknat Slut</div>
+          <div className="text-3xl font-mono text-zinc-100">{stats.birthYear + lifeExpectancy}</div>
+        </div>
+        <div className="bg-zinc-900/50 p-4 border border-zinc-800/50 backdrop-blur-sm group hover:border-orange-500/30 transition-all duration-500">
+          <div className="text-[10px] uppercase tracking-widest text-zinc-600 mb-2 group-hover:text-orange-500/70 transition-colors">Progress</div>
+          <div className="text-3xl font-mono text-orange-500">{stats.percentage}%</div>
+        </div>
+      </div>
+
+      {/* NYTT: Perspective / Resources Section */}
+      <div className="w-full max-w-5xl mb-12">
+        <h3 className="text-[10px] uppercase tracking-widest text-zinc-600 font-mono mb-3 flex items-center gap-2">
+          <Activity size={10} className="text-orange-500" /> 
+          Perspective // Resurser kvar
+        </h3>
+        <div className="grid grid-cols-3 gap-4">
+          <div className="bg-zinc-900/30 p-4 border border-zinc-800/30 flex items-center gap-4">
+            <div className="p-2 bg-zinc-800 rounded-full text-orange-500/80">
+              <Clock size={16} />
+            </div>
+            <div>
+              <div className="text-xl font-mono text-zinc-200">{stats.remainingDays.toLocaleString()}</div>
+              <div className="text-[10px] uppercase tracking-widest text-zinc-600">Dagar</div>
+            </div>
+          </div>
+          <div className="bg-zinc-900/30 p-4 border border-zinc-800/30 flex items-center gap-4">
+            <div className="p-2 bg-zinc-800 rounded-full text-orange-500/80">
+              <Calendar size={16} />
+            </div>
+            <div>
+              <div className="text-xl font-mono text-zinc-200">{Math.floor(stats.remainingWeeks).toLocaleString()}</div>
+              <div className="text-[10px] uppercase tracking-widest text-zinc-600">Helger</div>
+            </div>
+          </div>
+          <div className="bg-zinc-900/30 p-4 border border-zinc-800/30 flex items-center gap-4">
+            <div className="p-2 bg-zinc-800 rounded-full text-orange-500/80">
+              <Sun size={16} />
+            </div>
+            <div>
+              <div className="text-xl font-mono text-zinc-200">{stats.remainingYears}</div>
+              <div className="text-[10px] uppercase tracking-widest text-zinc-600">Somrar</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Grid Container */}
+      <div className="w-full max-w-5xl bg-[#0f0f0f] p-4 md:p-10 rounded-xl shadow-2xl border border-zinc-800/50 overflow-x-auto relative">
+        
+        {/* Grid Background Effect */}
+        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_0%,rgba(249,115,22,0.03),transparent_70%)] pointer-events-none" />
+
+        <div className="min-w-[700px] relative z-10">
+          
+          {/* Legend */}
+          <div className="flex gap-8 mb-8 text-[10px] uppercase tracking-widest justify-end sticky left-0 font-mono">
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-zinc-900 border border-zinc-800 rounded-[1px]"></div>
+              <span className="text-zinc-600">Void</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-orange-900/60 border border-orange-700/50 rounded-[1px]"></div>
+              <span className="text-zinc-500">History</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-orange-500 rounded-[1px] shadow-[0_0_10px_rgba(249,115,22,0.5)]"></div>
+              <span className="text-orange-500 font-bold">Current</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 border border-zinc-700 rounded-[1px]"></div>
+              <span className="text-zinc-500">Future</span>
+            </div>
+          </div>
+
+          <div className="flex flex-col items-start gap-[2px]">
+            {Array.from({ length: TOTAL_YEARS }).map((_, yearIndex) => {
+              const rowYear = stats.birthYear + yearIndex;
+              const isCurrentYear = rowYear === stats.currentYear;
+              const isExpectancyYear = (yearIndex === lifeExpectancy);
+
+              return (
+                <div 
+                  key={yearIndex} 
+                  className={`flex items-center gap-3 transition-all duration-500 ease-out w-full
+                    ${isCurrentYear 
+                      ? 'my-6 py-4 bg-zinc-900/30 border-y border-orange-500/20 scale-[1.02] shadow-[0_0_30px_rgba(0,0,0,0.5)]' 
+                      : 'hover:bg-zinc-900/40 opacity-80 hover:opacity-100'
+                    }`}
+                >
+                  
+                  {/* Year Label */}
+                  <div className={`
+                    w-12 text-right font-mono select-none flex justify-end items-center gap-2 shrink-0 transition-colors
+                    ${isCurrentYear ? 'text-orange-500 font-bold text-lg' : 'text-[10px] text-zinc-700'}
+                  `}>
+                     <span>{rowYear}</span>
+                     {(yearIndex % 10 === 0 || isCurrentYear) && (
+                       <span className={`
+                         ${isCurrentYear ? 'text-sm text-orange-500/50' : 'text-[8px] text-zinc-800'}
+                       `}>
+                         {yearIndex}
+                       </span>
+                     )}
+                  </div>
+
+                  {/* Weeks Row */}
+                  <div className="flex gap-[2px] md:gap-[3px] flex-1">
+                    {Array.from({ length: WEEKS_PER_YEAR }).map((_, weekIndex) => {
+                      const status = getWeekStatus(yearIndex, weekIndex);
+                      
+                      let sizeClass = isCurrentYear 
+                        ? "w-2 h-4 md:w-3 md:h-8" 
+                        : "w-2 h-2 md:w-3 md:h-3";
+
+                      let colorClass = "transition-all duration-300 rounded-[1px]";
+                      
+                      if (status === 'void') {
+                         colorClass += " bg-transparent border border-zinc-800/20"; 
+                      } else if (status === 'lived') {
+                        // Ändrat: Alla lived (historik) är nu orange
+                        colorClass += " bg-orange-900/60 border border-orange-700/50";
+                      } else if (status === 'current') {
+                        colorClass += " bg-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.8)] z-10 scale-110 animate-pulse border border-orange-400";
+                      } else if (status === 'expectancy') {
+                        colorClass += " bg-zinc-800 border border-orange-900/30";
+                      } else if (status === 'bonus') {
+                        colorClass += " bg-zinc-900/50 border border-zinc-900 opacity-20";
+                      } else {
+                        if (isCurrentYear) {
+                            colorClass += " bg-zinc-800 border border-zinc-700/50";
+                        } else {
+                            colorClass += " bg-zinc-900 border border-zinc-800/60 hover:border-zinc-700";
+                        }
+                      }
+
+                      return (
+                        <div 
+                          key={weekIndex} 
+                          className={`${sizeClass} ${colorClass}`}
+                          title={`${rowYear}, V${weekIndex + 1}`}
+                        />
+                      );
+                    })}
+                  </div>
+
+                  {/* Expectancy Marker */}
+                  {isExpectancyYear && !isCurrentYear && (
+                     <div className="absolute right-0 text-zinc-600 text-[9px] font-mono flex items-center gap-2 pointer-events-none translate-x-2">
+                       ← SNITT ({lifeExpectancy})
+                     </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+      
+      <footer className="mt-16 text-zinc-700 text-[10px] font-mono text-center max-w-2xl border-t border-zinc-900 pt-8 uppercase tracking-widest">
+        <p>Tid är den enda valuta du inte kan spara.</p>
+      </footer>
+    </div>
+  );
+};
+
+export default App;
