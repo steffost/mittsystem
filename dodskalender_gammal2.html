@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memento Mori - Mars Rost Edition</title>
+    <!-- Ladda Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Ladda React och ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <!-- Ladda Babel för att översätta koden i webbläsaren -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Chart.js för analyssidan -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Sci-Fi Typsnitt -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body { background-color: #0a0a0a; }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3f3f46; }
+        
+        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+            -webkit-appearance: none; margin: 0;
+        }
+
+        /* Cyberpunk Styles för Analysvyn */
+        .cyber-font { font-family: 'Rajdhani', sans-serif; }
+        .orbitron { font-family: 'Orbitron', sans-serif; }
+        
+        .text-glow-green { color: #4ade80; text-shadow: 0 0 10px rgba(74, 222, 128, 0.6); }
+        .text-glow-orange { color: #fbbf24; text-shadow: 0 0 10px rgba(251, 191, 36, 0.6); }
+
+        .cyber-container {
+            background: rgba(10, 10, 15, 0.85);
+            border: 1px solid #1f2937;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(5px);
+            position: relative;
+        }
+
+        .stat-box {
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid #334155;
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        .cyber-btn-small {
+            background: transparent;
+            border: 1px solid;
+            padding: 4px 8px;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            opacity: 0.6;
+        }
+        
+        .cyber-btn-small.active { opacity: 1; background: rgba(255,255,255,0.1); box-shadow: 0 0 10px currentColor; }
+
+        .corner-accent { position: absolute; width: 10px; height: 10px; border: 2px solid; }
+        .accent-swe { border-color: #4ade80; color: #4ade80; }
+        .accent-world { border-color: #fbbf24; color: #fbbf24; }
+        .top-left { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+        .top-right { top: -1px; right: -1px; border-left: none; border-bottom: none; }
+        .bottom-left { bottom: -1px; left: -1px; border-right: none; border-top: none; }
+        .bottom-right { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useMemo, useEffect, useRef } = React;
+
+        // --- IKONER ---
+        const Clock = ({ size = 24, className = "" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        );
+        const Calendar = ({ size = 24, className = "" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        );
+        const Sun = ({ size = 24, className = "" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="5"/><path d="M12 1v2"/><path d="M12 21v2"/><path d="M4.22 4.22l1.42 1.42"/><path d="M18.36 18.36l1.42 1.42"/><path d="M1 12h2"/><path d="M21 12h2"/><path d="M4.22 19.78l1.42-1.42"/><path d="M18.36 5.64l1.42-1.42"/></svg>
+        );
+        const Activity = ({ size = 24, className = "" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        );
+        const ChevronLeft = ({ size = 24, className = "" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polyline points="15 18 9 12 15 6"/></svg>
+        );
+
+        // --- APP LOGIK ---
+        const App = () => {
+            const [view, setView] = useState('memento'); 
+            const [bYear, setBYear] = useState(1974);
+            const [bMonth, setBMonth] = useState(12);
+            const [bDay, setBDay] = useState(20);
+            const [lifeExpectancy, setLifeExpectancy] = useState(83);
+            
+            const TOTAL_YEARS = 100;
+            const WEEKS_PER_YEAR = 52;
+            const MS_PER_DAY = 1000 * 60 * 60 * 24;
+
+            const birthDate = useMemo(() => {
+                const y = bYear || 1900;
+                const m = String(bMonth || 1).padStart(2, '0');
+                const d = String(bDay || 1).padStart(2, '0');
+                return `${y}-${m}-${d}`;
+            }, [bYear, bMonth, bDay]);
+
+            const getWeekOfYear = (date) => {
+                if (!date || isNaN(date.getTime())) return 0;
+                const d = new Date(date.getTime());
+                d.setHours(0, 0, 0, 0);
+                d.setDate(d.getDate() + 4 - (d.getDay() || 7));
+                const yearStart = new Date(d.getFullYear(), 0, 1);
+                const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+                return weekNo - 1; 
+            };
+
+            const stats = useMemo(() => {
+                const start = new Date(birthDate);
+                const now = new Date(); 
+                if (isNaN(start.getTime())) return { birthYear: bYear || 1900, yearsLived: 0, remainingDays: 0, percentage: "0.0" };
+
+                const currentYear = now.getFullYear();
+                const birthYear = start.getFullYear();
+                const currentWeekIndex = getWeekOfYear(now);
+                const birthWeekIndex = getWeekOfYear(start);
+
+                let actualAge = currentYear - birthYear;
+                const m = now.getMonth() - start.getMonth();
+                if (m < 0 || (m === 0 && now.getDate() < start.getDate())) actualAge--;
+                
+                const yearsDiff = currentYear - birthYear;
+                const totalWeeksLived = (yearsDiff * WEEKS_PER_YEAR) + currentWeekIndex - birthWeekIndex;
+                const totalWeeksExpectancy = (lifeExpectancy || 1) * WEEKS_PER_YEAR;
+
+                return {
+                    birthYear,
+                    birthWeekIndex,
+                    currentYear,
+                    currentWeekIndex,
+                    percentage: totalWeeksExpectancy > 0 ? ((totalWeeksLived / totalWeeksExpectancy) * 100).toFixed(1) : "0.0",
+                    yearsLived: isNaN(actualAge) ? 0 : actualAge,
+                    remainingDays: Math.floor(Math.max(0, totalWeeksExpectancy - totalWeeksLived) * 7)
+                };
+            }, [birthDate, lifeExpectancy, bYear]);
+
+            const getWeekStatus = (yearIndex, weekIndex) => {
+                const rowYear = stats.birthYear + yearIndex;
+                if (rowYear < stats.birthYear) return 'void';
+                if (rowYear === stats.birthYear) {
+                    if (weekIndex < stats.birthWeekIndex) return 'void'; 
+                    if (rowYear < stats.currentYear) return 'lived';
+                }
+                if (rowYear > stats.birthYear && rowYear < stats.currentYear) return 'lived';
+                if (rowYear === stats.currentYear) {
+                    if (weekIndex < stats.currentWeekIndex) return 'lived';
+                    if (weekIndex === stats.currentWeekIndex) return 'current';
+                    return 'future';
+                }
+                if (rowYear > stats.currentYear) {
+                    const ageAtRow = rowYear - stats.birthYear;
+                    if (ageAtRow === lifeExpectancy) return 'expectancy'; 
+                    if (ageAtRow > lifeExpectancy) return 'bonus';
+                    return 'future';
+                }
+                return 'future';
+            };
+
+            // --- ANALYS LOGIK (FÖR CHART.JS) ---
+            const swedenChartRef = useRef(null);
+            const globalChartRef = useRef(null);
+            const chartInstances = useRef({});
+
+            useEffect(() => {
+                if (view === 'analysis') {
+                    // Starta rendering efter en kort delay så DOM hinner uppdateras
+                    const timer = setTimeout(() => {
+                        initCharts();
+                    }, 100);
+                    return () => clearTimeout(timer);
+                }
+            }, [view]);
+
+            const initCharts = () => {
+                const zonePlugin = {
+                    id: 'zonePlugin',
+                    afterDatasetsDraw: (chart) => {
+                        const { ctx, chartArea: { top, bottom, left, right }, scales: { x } } = chart;
+                        const isWorld = chart.canvas.id === 'globalChart';
+                        const mainColor = isWorld ? '#fbbf24' : '#4ade80'; 
+                        const glowColor = isWorld ? 'rgba(251, 191, 36, 0.4)' : 'rgba(74, 222, 128, 0.4)';
+                        const phases = [
+                            { start: 0, end: 12, label: 'BARNDOMEN' },
+                            { start: 13, end: 19, label: 'UNGDOMEN' },
+                            { start: 20, end: 39, label: 'VUXENLIVET' },
+                            { start: 40, end: 64, label: 'MEDELÅLDERN' },
+                            { start: 65, end: 110, label: 'ÅLDERDOMEN' }
+                        ];
+                        ctx.save(); ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.font = 'bold 10px "Orbitron"';
+                        phases.forEach((phase, index) => {
+                            const startX = x.getPixelForValue(phase.start);
+                            let endX = x.getPixelForValue(phase.end);
+                            if (phase.end >= 110) endX = right;
+                            const centerX = startX + ((endX - startX) / 2);
+                            const textY = top + (index % 2 === 0 ? 15 : 35);
+                            ctx.fillStyle = mainColor; ctx.fillText(phase.label, centerX, textY);
+                        });
+                        ctx.restore();
+                    }
+                };
+
+                const renderSingle = (id, data, isWorld) => {
+                    const canvas = document.getElementById(id);
+                    if (!canvas) return;
+                    const ctx = canvas.getContext('2d');
+                    
+                    if (chartInstances.current[id]) chartInstances.current[id].destroy();
+
+                    const config = {
+                        type: 'bar',
+                        data: {
+                            labels: data.ages,
+                            datasets: [
+                                { type: 'line', label: 'ÖVERLEVANDE (%)', yAxisID: 'y_survivors', data: data.survivors, borderColor: '#06b6d4', borderWidth: 2, pointRadius: 0, tension: 0.4, fill: false, order: 1 },
+                                { type: 'bar', label: 'DÖDSFALL (%)', yAxisID: 'y_deaths', data: data.deaths, backgroundColor: 'rgba(236, 72, 153, 0.6)', borderColor: '#ec4899', borderWidth: 1, order: 2 }
+                            ]
+                        },
+                        options: {
+                            responsive: true, maintainAspectRatio: false,
+                            plugins: { legend: { display: false }, zonePlugin },
+                            scales: {
+                                x: { grid: { color: '#1f2937' }, ticks: { color: '#94a3b8', font: { family: 'Rajdhani' }, callback: (v) => v % 10 === 0 ? v : '' } },
+                                y_survivors: { type: 'linear', position: 'left', min: 0, max: 100, ticks: { color: '#06b6d4' } },
+                                y_deaths: { type: 'linear', position: 'right', max: data.maxDeath * 1.2, ticks: { color: '#ec4899' } }
+                            }
+                        },
+                        plugins: [zonePlugin]
+                    };
+                    chartInstances.current[id] = new Chart(ctx, config);
+                };
+
+                renderSingle('swedenChart', generateData(false), false);
+                renderSingle('globalChart', generateData(true), true);
+            };
+
+            const generateData = (isWorld) => {
+                const ages = []; const deaths = []; const survivors = [];
+                let pop = 100000; const start = 100000;
+                for (let a = 0; a <= 110; a++) {
+                    ages.push(a);
+                    let risk = isWorld ? (0.0015 + (0.000025 * Math.exp(0.106 * a))) : (0.0002 + (0.00002 * Math.exp(0.108 * a)));
+                    if (a === 0) risk += isWorld ? 0.028 : 0.002;
+                    let dying = pop * risk;
+                    deaths.push((dying / start) * 100);
+                    survivors.push((pop / start) * 100);
+                    pop -= dying;
+                }
+                return { ages, deaths, survivors, maxDeath: Math.max(...deaths) };
+            };
+
+            // --- RENDERING ---
+            if (view === 'analysis') {
+                return (
+                    <div className="min-h-screen bg-[#030305] text-[#e2e8f0] cyber-font p-4 md:p-8 flex flex-col items-center">
+                        <header className="w-full max-w-6xl mb-8 flex justify-between items-end border-b border-zinc-800 pb-6">
+                            <div className="text-left">
+                                <h1 className="orbitron text-3xl md:text-5xl font-black text-white uppercase tracking-widest">
+                                    MORTALITETS<span className="text-orange-500">ANALYS</span>
+                                </h1>
+                                <p className="text-zinc-500 text-xs font-mono uppercase tracking-widest mt-1">Jämförelse: Nationell vs Global Data</p>
+                            </div>
+                            <button onClick={() => setView('memento')} className="px-4 py-2 border border-zinc-800 hover:border-orange-500/50 text-zinc-500 hover:text-orange-500 transition-all font-mono text-xs flex items-center gap-2">
+                                <ChevronLeft size={14} /> TILLBAKA
+                            </button>
+                        </header>
+
+                        <div className="w-full max-w-6xl space-y-12">
+                            {/* Sverige */}
+                            <section>
+                                <h2 className="orbitron text-xl text-glow-green mb-4">SVERIGE (HÖGINKOMST)</h2>
+                                <div className="cyber-container p-4 rounded-xl border-t-2 border-green-500">
+                                    <div className="corner-accent accent-swe top-left" /><div className="corner-accent accent-swe top-right" />
+                                    <div className="h-[300px] w-full"><canvas id="swedenChart" /></div>
+                                    <div className="text-center mt-4"><div className="stat-box text-green-400 border-green-500/30 text-xs uppercase">Medellivslängd: ~83 År</div></div>
+                                </div>
+                            </section>
+
+                            {/* Världen */}
+                            <section>
+                                <h2 className="orbitron text-xl text-glow-orange mb-4">VÄRLDEN (GLOBALT SNITT)</h2>
+                                <div className="cyber-container p-4 rounded-xl border-t-2 border-amber-500">
+                                    <div className="corner-accent accent-world top-left" /><div className="corner-accent accent-world top-right" />
+                                    <div className="h-[300px] w-full"><canvas id="globalChart" /></div>
+                                    <div className="text-center mt-4"><div className="stat-box text-amber-400 border-amber-500/30 text-xs uppercase">Medellivslängd: ~73 År</div></div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                );
+            }
+
+            return (
+                <div className="min-h-screen bg-[#0a0a0a] text-zinc-300 font-sans p-4 md:p-8 flex flex-col items-center selection:bg-orange-900 selection:text-orange-100">
+                    <header className="w-full max-w-5xl mb-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-6 border-b border-zinc-800 pb-6">
+                        <div>
+                            <h1 className="text-3xl md:text-5xl font-thin tracking-tight text-zinc-100 mb-2 font-mono">MEMENTO <span className="text-orange-500 font-bold">MORI</span></h1>
+                            <p className="text-zinc-500 text-sm max-w-md font-mono uppercase tracking-widest">System Status: <span className="text-orange-500">Active</span></p>
+                        </div>
+                        <div className="flex gap-4 font-mono text-sm">
+                            <div className="flex flex-col gap-1">
+                                <label className="text-[10px] uppercase text-zinc-600 font-bold">Födelsedatum</label>
+                                <div className="flex gap-2">
+                                    <input type="number" value={bYear || ''} onChange={(e) => setBYear(parseInt(e.target.value) || 0)} className="w-20 bg-zinc-900 border border-zinc-800 text-orange-500 px-2 py-2 rounded focus:outline-none focus:border-orange-500/50 text-center" />
+                                    <input type="number" value={bMonth || ''} onChange={(e) => setBMonth(Math.min(12, Math.max(1, parseInt(e.target.value) || 0)))} className="w-12 bg-zinc-900 border border-zinc-800 text-orange-500 px-2 py-2 rounded focus:outline-none focus:border-orange-500/50 text-center" />
+                                    <input type="number" value={bDay || ''} onChange={(e) => setBDay(Math.min(31, Math.max(1, parseInt(e.target.value) || 0)))} className="w-12 bg-zinc-900 border border-zinc-800 text-orange-500 px-2 py-2 rounded focus:outline-none focus:border-orange-500/50 text-center" />
+                                </div>
+                            </div>
+                            <div className="flex flex-col gap-1">
+                                <label className="text-[10px] uppercase text-zinc-600 font-bold">Medellivslängd</label>
+                                <div className="flex items-center gap-2 pt-2">
+                                    <input type="range" min="70" max="100" value={lifeExpectancy} onChange={(e) => setLifeExpectancy(parseInt(e.target.value))} className="w-24 accent-orange-500" />
+                                    <span className="text-orange-500 text-xs">{lifeExpectancy} år</span>
+                                </div>
+                            </div>
+                        </div>
+                    </header>
+
+                    <div className="w-full max-w-5xl grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+                        <div className="bg-zinc-900/50 p-4 border border-zinc-800/50"><div className="text-[10px] uppercase tracking-widest text-zinc-600 mb-2">Ålder</div><div className="text-3xl font-mono text-zinc-100">{stats.yearsLived}</div></div>
+                        <div className="bg-zinc-900/50 p-4 border border-zinc-800/50"><div className="text-[10px] uppercase tracking-widest text-zinc-600 mb-2">Vecka</div><div className="text-3xl font-mono text-zinc-100">{stats.currentWeekIndex + 1}</div></div>
+                        <div className="bg-zinc-900/50 p-4 border border-zinc-800/50"><div className="text-[10px] uppercase tracking-widest text-zinc-600 mb-2">Dagar kvar</div><div className="text-3xl font-mono text-zinc-100">{stats.remainingDays.toLocaleString()}</div></div>
+                        <div className="bg-zinc-900/50 p-4 border border-zinc-800/50"><div className="text-[10px] uppercase tracking-widest text-zinc-600 mb-2">Progress</div><div className="text-3xl font-mono text-orange-500">{stats.percentage}%</div></div>
+                    </div>
+
+                    <div className="w-full max-w-5xl bg-[#0f0f0f] p-4 md:p-10 rounded-xl shadow-2xl border border-zinc-800/50 overflow-x-auto relative mb-12">
+                        <div className="min-w-[700px] flex flex-col items-start gap-[2px]">
+                            {Array.from({ length: TOTAL_YEARS }).map((_, yearIndex) => {
+                                const isCurrent = stats.birthYear + yearIndex === stats.currentYear;
+                                return (
+                                    <div key={yearIndex} className={`flex items-center gap-3 w-full ${isCurrent ? 'my-4 py-2 bg-zinc-900/50 border-y border-orange-500/20' : ''}`}>
+                                        <div className={`w-12 text-right font-mono ${isCurrent ? 'text-orange-500 font-bold' : 'text-[10px] text-zinc-700'}`}>
+                                            {stats.birthYear + yearIndex}
+                                        </div>
+                                        <div className="flex gap-[2px] flex-1">
+                                            {Array.from({ length: WEEKS_PER_YEAR }).map((_, weekIndex) => {
+                                                const status = getWeekStatus(yearIndex, weekIndex);
+                                                let color = "bg-zinc-900 border border-zinc-800/60";
+                                                if (status === 'lived') color = "bg-orange-900/60 border border-orange-700/50";
+                                                if (status === 'current') color = "bg-orange-500 shadow-[0_0_12px_rgba(249,115,22,0.7)] animate-pulse border border-orange-400 scale-110 z-10";
+                                                if (status === 'void') color = "bg-transparent border border-zinc-800/20";
+                                                return <div key={weekIndex} className={`w-2 h-2 md:w-3 md:h-3 ${color} rounded-[1px]`} />;
+                                            })}
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+
+                    <div className="w-full max-w-5xl mb-12">
+                        <button onClick={() => setView('analysis')} className="w-full py-4 border border-orange-500/30 bg-orange-500/5 hover:bg-orange-500/10 transition-all rounded-lg font-mono text-sm tracking-[0.2em] text-orange-500 group flex items-center justify-center gap-3">
+                            <Activity size={16} className="group-hover:animate-pulse" /> MORTALITETSANALYS
+                        </button>
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
