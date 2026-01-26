@@ -175,12 +175,15 @@
 
             const stats = useMemo(() => {
                 const y = bYear || 1900;
-                const m = (bMonth || 1) - 1;
-                const d = bDay || 1;
+                // Säkerställ att månad och dag är inom rimliga gränser här istället för i onChange
+                const validMonth = Math.max(1, Math.min(12, bMonth || 1));
+                const validDay = Math.max(1, Math.min(31, bDay || 1));
                 
-                // Använd setFullYear för säker datumhantering
-                const start = new Date();
-                start.setFullYear(y, m, d);
+                const m = validMonth - 1;
+                const d = validDay;
+                
+                // Använd konstruktorn istället för setFullYear för att undvika problem med "dagens datum" (t.ex. om idag är den 31:a)
+                const start = new Date(y, m, d);
                 start.setHours(0,0,0,0);
                 
                 const now = new Date(); 
@@ -479,8 +482,8 @@
                                 <label className="text-[10px] uppercase text-zinc-600 font-bold">Födelsedatum</label>
                                 <div className="flex gap-2">
                                     <input type="number" value={bYear || ''} onChange={(e) => setBYear(parseInt(e.target.value) || 0)} className="w-20 bg-zinc-900 border border-zinc-800 text-orange-500 px-2 py-2 rounded focus:outline-none focus:border-orange-500/50 text-center" />
-                                    <input type="number" value={bMonth || ''} onChange={(e) => setBMonth(Math.min(12, Math.max(1, parseInt(e.target.value) || 0)))} className="w-12 bg-zinc-900 border border-zinc-800 text-orange-500 px-2 py-2 rounded focus:outline-none focus:border-orange-500/50 text-center" />
-                                    <input type="number" value={bDay || ''} onChange={(e) => setBDay(Math.min(31, Math.max(1, parseInt(e.target.value) || 0)))} className="w-12 bg-zinc-900 border border-zinc-800 text-orange-500 px-2 py-2 rounded focus:outline-none focus:border-orange-500/50 text-center" />
+                                    <input type="number" value={bMonth || ''} onChange={(e) => setBMonth(parseInt(e.target.value) || 0)} className="w-12 bg-zinc-900 border border-zinc-800 text-orange-500 px-2 py-2 rounded focus:outline-none focus:border-orange-500/50 text-center" />
+                                    <input type="number" value={bDay || ''} onChange={(e) => setBDay(parseInt(e.target.value) || 0)} className="w-12 bg-zinc-900 border border-zinc-800 text-orange-500 px-2 py-2 rounded focus:outline-none focus:border-orange-500/50 text-center" />
                                 </div>
                             </div>
                             <div className="flex flex-col gap-1">
@@ -551,10 +554,10 @@
                                 const isCurrent = rowYear === stats.currentYear;
                                 return (
                                     <div key={yearIndex} className={`flex items-center gap-3 w-full transition-all duration-500 ${isCurrent ? 'my-6 py-4 bg-zinc-900/30 border-y border-orange-500/20 scale-[1.02] shadow-[0_0_30px_rgba(0,0,0,0.5)]' : 'opacity-80 hover:opacity-100 hover:bg-zinc-900/40'}`}>
-                                        <div className={`w-12 text-right font-mono flex justify-end items-center gap-2 shrink-0 ${isCurrent ? 'text-orange-500 font-bold text-lg' : 'text-[10px] text-zinc-700'}`}>
+                                        <div className={`w-12 text-right font-mono flex justify-end items-center gap-2 shrink-0 ${isCurrent ? 'text-orange-500 font-bold text-lg' : 'text-[10px] text-zinc-400'}`}>
                                             <span>{rowYear}</span>
                                             {(yearIndex % 10 === 0 || isCurrent) && (
-                                                <span className={`${isCurrent ? 'text-sm text-orange-500/50' : 'text-[8px] text-zinc-800'}`}>
+                                                <span className={`${isCurrent ? 'text-sm text-orange-500/50' : 'text-[8px] text-zinc-600'}`}>
                                                     {isCurrent ? stats.yearsLived : yearIndex}
                                                 </span>
                                             )}
