@@ -12,6 +12,7 @@
         :root {
             --glow-color-system: #A3E635;
             --glow-color-mat: #F97316;
+            --glow-color-rening: #14b8a6; /* teal-500 — Reningssystem */
             --glow-color-filosofi: #38BDF8;
             --glow-color-ovrigt: #d946ef; /* fuchsia-500 */
             --glow-color-dodskalender: #9a3412; /* Rust/Red-Orange theme */
@@ -164,13 +165,21 @@
         .planet-system .planet-label { color: var(--glow-color-system); text-shadow: 0 0 5px var(--glow-color-system); }
         .planet-system:hover .planet-visual { box-shadow: 0 0 25px var(--glow-color-system); }
 
-        .planet-mat .planet-visual { 
+        .planet-mat .planet-visual {
             border-color: var(--glow-color-mat);
             box-shadow: 0 0 10px var(--glow-color-mat);
         }
         .planet-mat { animation-name: orbit-mat; }
         .planet-mat .planet-label { color: var(--glow-color-mat); text-shadow: 0 0 5px var(--glow-color-mat); }
         .planet-mat:hover .planet-visual { box-shadow: 0 0 25px var(--glow-color-mat); }
+
+        .planet-rening .planet-visual {
+            border-color: var(--glow-color-rening);
+            box-shadow: 0 0 10px var(--glow-color-rening);
+        }
+        .planet-rening { animation-name: orbit-rening; }
+        .planet-rening .planet-label { color: var(--glow-color-rening); text-shadow: 0 0 5px var(--glow-color-rening); }
+        .planet-rening:hover .planet-visual { box-shadow: 0 0 25px var(--glow-color-rening); }
 
         .planet-filosofi .planet-visual { 
             border-color: var(--glow-color-filosofi);
@@ -198,32 +207,37 @@
         .planet-dodskalender:hover .planet-visual { box-shadow: 0 0 25px var(--glow-color-dodskalender); }
 
 
-        /* Orbit paths - Distributed evenly (360 degrees / 5 planets = 72 degrees per planet)
+        /* Orbit paths - Distributed evenly (360 degrees / 6 planets = 60 degrees per planet)
            1. System: 0
-           2. Mat: 72
-           3. Filosofi: 144
-           4. Övrigt: 216
-           5. Dödskalender: 288
+           2. Mat: 60
+           3. Reningssystem: 120  ← NEW
+           4. Filosofi: 180
+           5. Övrigt: 240
+           6. Dödskalender: 300
         */
         @keyframes orbit-system {
             from { transform: rotate(0deg) translateY(-200px) rotate(0deg); }
             to   { transform: rotate(360deg) translateY(-200px) rotate(-360deg); }
         }
         @keyframes orbit-mat {
-            from { transform: rotate(72deg) translateY(-200px) rotate(-72deg); }
-            to   { transform: rotate(432deg) translateY(-200px) rotate(-432deg); }
+            from { transform: rotate(60deg) translateY(-200px) rotate(-60deg); }
+            to   { transform: rotate(420deg) translateY(-200px) rotate(-420deg); }
+        }
+        @keyframes orbit-rening {
+            from { transform: rotate(120deg) translateY(-200px) rotate(-120deg); }
+            to   { transform: rotate(480deg) translateY(-200px) rotate(-480deg); }
         }
         @keyframes orbit-filosofi {
-            from { transform: rotate(144deg) translateY(-200px) rotate(-144deg); }
-            to   { transform: rotate(504deg) translateY(-200px) rotate(-504deg); }
+            from { transform: rotate(180deg) translateY(-200px) rotate(-180deg); }
+            to   { transform: rotate(540deg) translateY(-200px) rotate(-540deg); }
         }
         @keyframes orbit-ovrigt {
-            from { transform: rotate(216deg) translateY(-200px) rotate(-216deg); }
-            to   { transform: rotate(576deg) translateY(-200px) rotate(-576deg); }
+            from { transform: rotate(240deg) translateY(-200px) rotate(-240deg); }
+            to   { transform: rotate(600deg) translateY(-200px) rotate(-600deg); }
         }
         @keyframes orbit-dodskalender {
-            from { transform: rotate(288deg) translateY(-200px) rotate(-288deg); }
-            to   { transform: rotate(648deg) translateY(-200px) rotate(-648deg); }
+            from { transform: rotate(300deg) translateY(-200px) rotate(-300deg); }
+            to   { transform: rotate(660deg) translateY(-200px) rotate(-660deg); }
         }
 
     </style>
@@ -276,6 +290,17 @@
                 <span class="planet-label">Övrigt</span>
             </a>
             
+             <!-- Planet for Reningssystem (New) -->
+            <a href="reningssystem.html" class="planet planet-rening">
+                <div class="planet-visual">
+                    <div class="planet-icon-wrapper">
+                        <!-- Icon: Droplet (Cleansing) -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="stroke-current text-teal-400"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/><path d="M9 14h.01"/><path d="M12 17h.01"/><path d="M15 14h.01"/></svg>
+                    </div>
+                </div>
+                <span class="planet-label">Reningssystem</span>
+            </a>
+
              <!-- Planet for Dödskalender (New) -->
             <a href="dodskalender.html" class="planet planet-dodskalender">
                 <div class="planet-visual">

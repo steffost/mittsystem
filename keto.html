@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keto - Reningssystem</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --glow-color-keto: #a3e635; /* lime */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #020617;
+            color: #a7f3d0;
+        }
+
+        .particle-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background-image:
+                radial-gradient(1px 1px at 25% 15%, rgba(229, 231, 235, 0.4), transparent),
+                radial-gradient(1px 1px at 50% 35%, rgba(229, 231, 235, 0.3), transparent),
+                radial-gradient(1px 1px at 75% 55%, rgba(229, 231, 235, 0.4), transparent),
+                radial-gradient(2px 2px at 15% 75%, rgba(163, 230, 53, 0.4), transparent),
+                radial-gradient(2px 2px at 85% 5%, rgba(163, 230, 53, 0.3), transparent);
+            animation: move-particles 120s linear infinite;
+        }
+        @keyframes move-particles {
+            from { background-position: 0 0; }
+            to   { background-position: -1000px 500px; }
+        }
+
+        .main-title {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--glow-color-keto);
+            text-shadow: 0 0 8px var(--glow-color-keto), 0 0 20px rgba(163, 230, 53, 0.5);
+        }
+
+        .accordion-item {
+            background-color: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--glow-color-keto);
+            box-shadow: 0 0 15px rgba(163, 230, 53, 0.3);
+            backdrop-filter: blur(10px);
+            transition: box-shadow 0.3s ease;
+        }
+        .accordion-item[open] { box-shadow: 0 0 25px rgba(163, 230, 53, 0.6); }
+
+        .accordion-title {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--glow-color-keto);
+            text-shadow: 0 0 5px rgba(163, 230, 53, 0.7);
+            cursor: pointer;
+        }
+        .accordion-title::-webkit-details-marker { display: none; }
+
+        .accordion-content li::marker,
+        .accordion-content ol li::marker { color: var(--glow-color-keto); }
+
+        .back-button {
+            border-color: var(--glow-color-keto);
+            box-shadow: 0 0 10px var(--glow-color-keto);
+            transition: all 0.3s ease;
+        }
+        .back-button:hover { box-shadow: 0 0 25px var(--glow-color-keto); transform: scale(1.05); }
+    </style>
+</head>
+<body class="min-h-screen">
+    <div class="particle-bg"></div>
+
+    <div class="container mx-auto px-4 py-8 md:py-12">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl md:text-6xl font-bold main-title tracking-widest">KETO</h1>
+            <p class="text-lime-300 mt-4 text-lg">Fett som bränsle — kroppen växlar om till ketoner.</p>
+        </header>
+
+        <main class="max-w-4xl mx-auto space-y-6">
+            <details class="accordion-item rounded-lg p-6">
+                <summary class="accordion-title text-2xl flex justify-between items-center"><span>Vad är keto?</span><svg class="w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                <div class="accordion-content mt-4 space-y-3">
+                    <p>Keto (ketogen kost) är ett sätt att äta som tvingar kroppen att byta bränslekälla — från glukos (socker/kolhydrater) till <strong>ketoner</strong> (nedbrutet fett). Resultatet är ett stabilare blodsocker, jämnare energi och ofta mindre hunger.</p>
+                </div>
+            </details>
+
+            <details class="accordion-item rounded-lg p-6">
+                <summary class="accordion-title text-2xl flex justify-between items-center"><span>Makrofördelning</span><svg class="w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                <div class="accordion-content mt-4 space-y-2">
+                    <ul class="list-disc list-inside space-y-2">
+                        <li><strong>Fett:</strong> ca 70–75 % av kalorierna</li>
+                        <li><strong>Protein:</strong> ca 20–25 % (rätt mängd — för mycket slår ut ketos)</li>
+                        <li><strong>Kolhydrater:</strong> max 5 % — ofta under 30 g netto/dag</li>
+                    </ul>
+                    <p class="mt-3">Målet är inte "högfett" rakt igenom — det är <em>fett som primär bränslekälla</em>, inte fett som primär smakförstärkare.</p>
+                </div>
+            </details>
+
+            <details class="accordion-item rounded-lg p-6">
+                <summary class="accordion-title text-2xl flex justify-between items-center"><span>Vad man äter</span><svg class="w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                <div class="accordion-content mt-4 space-y-2">
+                    <ul class="list-disc list-inside space-y-2">
+                        <li>Kött av alla slag — nötkött, lamm, kyckling, vilt.</li>
+                        <li>Fisk &amp; skaldjur — särskilt fet fisk (lax, makrill, sardiner).</li>
+                        <li>Ägg — en keto-stapelvara.</li>
+                        <li>Fullfetaost, grädde, smör, ghee.</li>
+                        <li>Olivolja, kokosolja, avokadoolja, C8-MCT-olja.</li>
+                        <li>Nötter &amp; frön — mandel, macadamia, valnöt, chia, linfrö.</li>
+                        <li>Låg-carb grönsaker — spenat, broccoli, blomkål, zucchini, sallad.</li>
+                        <li>Avokado, bär i måttliga mängder (hallon, blåbär).</li>
+                    </ul>
+                </div>
+            </details>
+
+            <details class="accordion-item rounded-lg p-6">
+                <summary class="accordion-title text-2xl flex justify-between items-center"><span>Vad man undviker</span><svg class="w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                <div class="accordion-content mt-4 space-y-2">
+                    <ul class="list-disc list-inside space-y-2">
+                        <li>Socker i alla former — godis, läsk, juice, "nyttiga" bars.</li>
+                        <li>Bröd, pasta, ris, potatis, flingor.</li>
+                        <li>De flesta frukter — banan, äpple, druva, mango.</li>
+                        <li>Vegetabiliska oljor med hög omega-6 (solrosolja, majsolja, sojaolja).</li>
+                        <li>Processad "low-fat"-mat — ofta full av socker som ersättning.</li>
+                        <li>Öl och de flesta cocktails.</li>
+                    </ul>
+                </div>
+            </details>
+
+            <details class="accordion-item rounded-lg p-6">
+                <summary class="accordion-title text-2xl flex justify-between items-center"><span>Ketos — vad som händer</span><svg class="w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                <div class="accordion-content mt-4 space-y-3">
+                    <p>När kolhydraterna är tillräckligt låga börjar levern omvandla fettsyror till <strong>ketoner</strong> (β-hydroxybutyrat, acetoacetat, aceton). Hjärnan, som normalt bara gillar glukos, kan nu använda ketoner som bränsle — ofta med klarare tanke som bonus.</p>
+                    <p>Näringsmässigt ketos kräver:</p>
+                    <ul class="list-disc list-inside space-y-2">
+                        <li>Under 30 g kolhydrater/dag för de flesta vuxna.</li>
+                        <li>Tillräckligt med elektrolyter (se fasta-sidan).</li>
+                        <li>Måttlig mängd protein — för mycket kan glukoneogenes kicka in.</li>
+                    </ul>
+                </div>
+            </details>
+
+            <details class="accordion-item rounded-lg p-6">
+                <summary class="accordion-title text-2xl flex justify-between items-center"><span>Keto-flu — första veckorna</span><svg class="w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                <div class="accordion-content mt-4 space-y-3">
+                    <p>De första 5–10 dagarna kan ge trötthet, huvudvärk och irritabilitet — så kallad <strong>keto-flu</strong>. Det är inte farligt, det är kroppen som växlar bränslekälla.</p>
+                    <p>Så lindras det:</p>
+                    <ul class="list-disc list-inside space-y-2">
+                        <li>Mer salt (havssalt i vattnet).</li>
+                        <li>Extra magnesium (citrat eller glycinat).</li>
+                        <li>Tillräckligt med sömn.</li>
+                        <li>Lättare träning de första dagarna, inte tung styrka.</li>
+                    </ul>
+                </div>
+            </details>
+
+            <details class="accordion-item rounded-lg p-6">
+                <summary class="accordion-title text-2xl flex justify-between items-center"><span>Vanliga misstag</span><svg class="w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                <div class="accordion-content mt-4 space-y-2">
+                    <ul class="list-disc list-inside space-y-2">
+                        <li>För mycket protein — kickar ut ketos.</li>
+                        <li>Glömma elektrolyter — speciellt natrium.</li>
+                        <li>Dölja kolhydrater ("low-carb-tårta" med mandelmjöl kan ha 20+ g carbs/bitar).</li>
+                        <li>För lite fett — man blir hungrig och trött.</li>
+                        <li>Ge upp för tidigt — kroppen behöver 2–4 veckor för att anpassa sig.</li>
+                    </ul>
+                </div>
+            </details>
+        </main>
+
+        <!-- CTA: Personlig keto-dagbok -->
+        <section class="max-w-4xl mx-auto mt-12">
+            <div class="rounded-2xl border-2 p-8 text-center" style="border-color: var(--glow-color-keto); background: rgba(15, 23, 42, 0.6); box-shadow: 0 0 25px rgba(163, 230, 53, 0.25);">
+                <p class="text-lime-300/80 uppercase tracking-widest text-xs mb-2 font-semibold">Personlig data</p>
+                <h2 class="font-bold text-3xl md:text-4xl mb-4" style="font-family: 'Orbitron', sans-serif; color: var(--glow-color-keto); text-shadow: 0 0 8px var(--glow-color-keto), 0 0 20px rgba(163, 230, 53, 0.4);">
+                    Mina dokumenterade resultat
+                </h2>
+                <p class="text-slate-300 mb-8 max-w-2xl mx-auto">
+                    Jag körde keto i <strong class="text-lime-300">11 dagar</strong> och mätte allt: vikt, ketoner, blodsocker, GKI, makros, kost och aktivitet. Här är hela dagboken med verkliga siffror och insikter från kroppen.
+                </p>
+                <a href="keto-resultat.html" class="inline-block font-bold py-4 px-10 rounded-full border-2 transition-all duration-300" style="border-color: var(--glow-color-keto); color: var(--glow-color-keto); box-shadow: 0 0 10px var(--glow-color-keto); background: rgba(163, 230, 53, 0.05);" onmouseover="this.style.boxShadow='0 0 30px var(--glow-color-keto)'; this.style.background='rgba(163, 230, 53, 0.18)'; this.style.transform='scale(1.05)'" onmouseout="this.style.boxShadow='0 0 10px var(--glow-color-keto)'; this.style.background='rgba(163, 230, 53, 0.05)'; this.style.transform='scale(1)'">
+                    Öppna Keto-dagboken (11 dagar) →
+                </a>
+            </div>
+        </section>
+
+        <footer class="text-center mt-12">
+            <a href="reningssystem.html" class="inline-block bg-slate-900/80 text-lime-400 font-bold py-3 px-6 rounded-full border-2 back-button">
+                &larr; Tillbaka till Reningssystem
+            </a>
+        </footer>
+    </div>
+
+    <script>
+        document.querySelectorAll('details').forEach((detail) => {
+            detail.addEventListener('toggle', (event) => {
+                const arrow = detail.querySelector('summary svg');
+                arrow.style.transform = detail.open ? 'rotate(180deg)' : 'rotate(0deg)';
+            });
+        });
+    </script>
+</body>
+</html>

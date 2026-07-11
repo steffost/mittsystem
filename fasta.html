@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fasta - Reningssystem</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --glow-color-fasta: #f59e0b; /* amber */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #020617;
+            color: #a7f3d0;
+        }
+
+        .particle-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background-image:
+                radial-gradient(1px 1px at 25% 15%, rgba(229, 231, 235, 0.4), transparent),
+                radial-gradient(1px 1px at 50% 35%, rgba(229, 231, 235, 0.3), transparent),
+                radial-gradient(1px 1px at 75% 55%, rgba(229, 231, 235, 0.4), transparent),
+                radial-gradient(2px 2px at 15% 75%, rgba(245, 158, 11, 0.4), transparent),
+                radial-gradient(2px 2px at 85% 5%, rgba(245, 158, 11, 0.3), transparent);
+            animation: move-particles 120s linear infinite;
+        }
+        @keyframes move-particles {
+            from { background-position: 0 0; }
+            to   { background-position: -1000px 500px; }
+        }
+
+        .main-title {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--glow-color-fasta);
+            text-shadow: 0 0 8px var(--glow-color-fasta), 0 0 20px rgba(245, 158, 11, 0.5);
+        }
+
+        .accordion-item {
+            background-color: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--glow-color-fasta);
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.3);
+            backdrop-filter: blur(10px);
+            transition: box-shadow 0.3s ease;
+        }
+        .accordion-item[open] { box-shadow: 0 0 25px rgba(245, 158, 11, 0.6); }
+
+        .accordion-title {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--glow-color-fasta);
+            text-shadow: 0 0 5px rgba(245, 158, 11, 0.7);
+            cursor: pointer;
+        }
+        .accordion-title::-webkit-details-marker { display: none; }
+
+        .accordion-content li::marker,
+        .accordion-content ol li::marker { color: var(--glow-color-fasta); }
+
+        .back-button {
+            border-color: var(--glow-color-fasta);
+            box-shadow: 0 0 10px var(--glow-color-fasta);
+            transition: all 0.3s ease;
+        }
+        .back-button:hover { box-shadow: 0 0 25px var(--glow-color-fasta); transform: scale(1.05); }
+    </style>
+</head>
+<body class="min-h-screen">
+    <div class="particle-bg"></div>
+
+    <div class="container mx-auto px-4 py-8 md:py-12">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl md:text-6xl font-bold main-title tracking-widest">FASTA</h1>
+            <p class="text-amber-300 mt-4 text-lg">Kroppens egen rening — tid att låta systemet andas.</p>
+        </header>
+
+        <main class="max-w-4xl mx-auto space-y-6">
+            <details class="accordion-item rounded-lg p-6">
+                <summary class="accordion-title text-2xl flex justify-between items-center"><span>Vad är fasta?</span><svg class="w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                <div class="accordion-content mt-4 space-y-3">
+                    <p>Fasta är ett medvetet uppehåll i matintaget — ett fönster där kroppen inte lägger energi på matsmältning utan istället kan fokusera på reparation, autofagi och hormonell balans. Det är inget diettänk utan ett <strong>verktyg för reningssystemet</strong>.</p>
+                </div>
+            </details>
+
+            <details class="accordion-item rounded-lg p-6">
+                <summary class="accordion-title text-2xl flex justify-between items-center"><span>Vanliga protokoll</span><svg class="w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                <div class="accordion-content mt-4 space-y-2">
+                    <ul class="list-disc list-inside space-y-2">
+                        <li><strong>16:8</strong> — den populäraste. 16 timmars fasta, 8 timmars ätfönster (t.ex. äta mellan 12–20).</li>
+                        <li><strong>18:6</strong> — lite tightare. Bra steg upp från 16:8.</li>
+                        <li><strong>OMAD (One Meal A Day)</strong> — ett enda mål om dagen, ofta efter 22–23 timmars fasta.</li>
+                        <li><strong>5:2</strong> — äta normalt 5 dagar, kalorirestriktion (~500 kcal) 2 dagar.</li>
+                        <li><strong>Längre fasta (24–72 h)</strong> — djupare autofagi. Bör tas med förberedelse och inte för ofta.</li>
+                    </ul>
+                </div>
+            </details>
+
+            <details class="accordion-item rounded-lg p-6">
+                <summary class="accordion-title text-2xl flex justify-between items-center"><span>Autofagi — kroppens städpatrull</span><svg class="w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                <div class="accordion-content mt-4 space-y-3">
+                    <p>Efter ca 12–16 timmar utan mat börjar kroppen <strong>autofagi</strong> (grekiska för "själv-ätande") — en process där cellerna återvinner skadade proteiner och organeller.</p>
+                    <ul class="list-disc list-inside space-y-2">
+                        <li>Nyckeln till många av fastans långsiktiga hälsofördelar.</li>
+                        <li>Stimuleras även av motion, vissa polyfenoler (kaffe, grönt te) och bastu.</li>
+                        <li>2016 Nobelpriset i medicin gick till Yoshinori Ohsumi för upptäckten av autofagi-mekanismerna.</li>
+                    </ul>
+                </div>
+            </details>
+
+            <details class="accordion-item rounded-lg p-6">
+                <summary class="accordion-title text-2xl flex justify-between items-center"><span>Elektrolyter &amp; vätska under fasta</span><svg class="w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                <div class="accordion-content mt-4 space-y-2">
+                    <p>Vatten, svart kaffe, och osötad te är fasta-vänliga. Längre fastor kräver dock tillskott av elektrolyter för att undvika yrsel, huvudvärk och hjärtklappning.</p>
+                    <ul class="list-disc list-inside space-y-2">
+                        <li><strong>Natrium</strong> — en nypa havssalt i vattnet, eller salttabletter.</li>
+                        <li><strong>Kalium</strong> — svår att få under fasta, men avgörande för muskelfunktion.</li>
+                        <li><strong>Magnesium</strong> — hjälper sömn, kramper och lugn.</li>
+                        <li>Min <strong>Kombite</strong> (Pau D'Arco, ingefära, citron, xylitol) är fasta-vänlig och stöttar elektrolytbalansen.</li>
+                    </ul>
+                </div>
+            </details>
+
+            <details class="accordion-item rounded-lg p-6">
+                <summary class="accordion-title text-2xl flex justify-between items-center"><span>Hur man börjar</span><svg class="w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                <div class="accordion-content mt-4 space-y-3">
+                    <ol class="list-decimal list-inside space-y-2">
+                        <li><strong>Vecka 1–2:</strong> Skippa frukosten eller kvällsmelet — land på 12–14 timmars nattfasta.</li>
+                        <li><strong>Vecka 3–4:</strong> Utöka till 16:8. Välj ett ätfönster som passar livsstilen (jag brukar 14–22).</li>
+                        <li><strong>Månad 2:</strong> Testa 18:6 eller en 24-h fasta några gånger i månaden.</li>
+                        <li><strong>Längre sikt:</strong> Hitta en rytm som känns hållbar. Fasta är ett verktyg, inte en religion.</li>
+                    </ol>
+                </div>
+            </details>
+
+            <details class="accordion-item rounded-lg p-6">
+                <summary class="accordion-title text-2xl flex justify-between items-center"><span>När fasta INTE passar</span><svg class="w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                <div class="accordion-content mt-4 space-y-2">
+                    <ul class="list-disc list-inside space-y-2">
+                        <li>Graviditet, amning, barn och ungdomar i tillväxt.</li>
+                        <li>Aktiv ätstörning eller historik av det.</li>
+                        <li>Typ 1-diabetes eller okontrollerad typ 2 — kräver medicinsk vägledning.</li>
+                        <li>Under viktökning-faser eller högintensiv träningsperiod om man inte vet vad man gör.</li>
+                    </ul>
+                    <p class="text-amber-200/80 italic mt-3">Vid tveksamhet — alltid konsultera en läkare först.</p>
+                </div>
+            </details>
+        </main>
+
+        <footer class="text-center mt-12">
+            <a href="reningssystem.html" class="inline-block bg-slate-900/80 text-amber-400 font-bold py-3 px-6 rounded-full border-2 back-button">
+                &larr; Tillbaka till Reningssystem
+            </a>
+        </footer>
+    </div>
+
+    <script>
+        document.querySelectorAll('details').forEach((detail) => {
+            detail.addEventListener('toggle', (event) => {
+                const arrow = detail.querySelector('summary svg');
+                arrow.style.transform = detail.open ? 'rotate(180deg)' : 'rotate(0deg)';
+            });
+        });
+    </script>
+</body>
+</html>

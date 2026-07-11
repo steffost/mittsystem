@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="sv" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keto-dagbok - Reningssystem</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        keto: {
+                            light: '#bef264',   /* lime-300 */
+                            DEFAULT: '#a3e635', /* site lime accent */
+                            dark: '#65a30d',    /* lime-600 */
+                        },
+                        slate: {
+                            850: '#151e2e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :root {
+            --glow-color-keto: #a3e635;
+            --glow-color-keto-rgb: 163, 230, 53;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #020617;
+            color: #e5e7eb;
+            padding-bottom: 3rem;
+        }
+
+        /* Particle background (lime-tinted, matches keto.html) */
+        .particle-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background-image:
+                radial-gradient(1px 1px at 25% 15%, rgba(229, 231, 235, 0.4), transparent),
+                radial-gradient(1px 1px at 50% 35%, rgba(229, 231, 235, 0.3), transparent),
+                radial-gradient(1px 1px at 75% 55%, rgba(229, 231, 235, 0.4), transparent),
+                radial-gradient(2px 2px at 15% 75%, rgba(163, 230, 53, 0.4), transparent),
+                radial-gradient(2px 2px at 85% 5%, rgba(163, 230, 53, 0.3), transparent);
+            animation: move-particles 120s linear infinite;
+        }
+        @keyframes move-particles {
+            from { background-position: 0 0; }
+            to   { background-position: -1000px 500px; }
+        }
+
+        /* Major headings — Orbitron to match site */
+        .main-title {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--glow-color-keto);
+            text-shadow: 0 0 8px var(--glow-color-keto), 0 0 20px rgba(var(--glow-color-keto-rgb), 0.5);
+            letter-spacing: 0.05em;
+        }
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--glow-color-keto);
+        }
+
+        /* Custom accordion (matches site's keto.html style) */
+        details > summary { list-style: none; }
+        details > summary::-webkit-details-marker { display: none; }
+        details[open] summary ~ * { animation: sweep .3s ease-in-out; }
+        @keyframes sweep {
+            0% { opacity: 0; transform: translateY(-10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+        /* Back button matching keto.html */
+        .back-button {
+            border-color: var(--glow-color-keto);
+            box-shadow: 0 0 10px var(--glow-color-keto);
+            transition: all 0.3s ease;
+        }
+        .back-button:hover {
+            box-shadow: 0 0 25px var(--glow-color-keto);
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-300 font-sans antialiased selection:bg-keto-dark selection:text-white">
+
+    <div class="particle-bg"></div>
+
+    <!-- Header -->
+    <header class="bg-slate-950/85 border-b border-keto/30 shadow-xl backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 py-8">
+            <div class="flex items-center justify-between flex-wrap gap-4">
+                <div>
+                    <h1 class="main-title text-3xl md:text-4xl font-bold flex items-center gap-3">
+                        <i class="fa-solid fa-leaf text-keto"></i> Vegan Keto & Fasta
+                    </h1>
+                    <p class="mt-2 text-slate-400">Master-dashboard för din hälsoresa</p>
+                </div>
+                <div class="hidden sm:block text-right">
+                    <p class="text-sm font-semibold uppercase tracking-wider text-keto">Coach</p>
+                    <p class="text-xl font-bold text-slate-200">Hälsokoll</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 mt-8 space-y-12">
+
+        <!-- SYSTEM PRINCIPER & STRATEGI -->
+        <section>
+            <h2 class="section-title text-2xl font-bold mb-6 border-b border-slate-700 pb-2 flex items-center gap-2">
+                <i class="fa-solid fa-scale-balanced text-keto"></i> Systemprinciper & Strategi
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-slate-800 border-l-4 border-keto p-4 rounded-r-xl shadow-md">
+                    <h4 class="font-bold text-slate-100 mb-2">1. Protein Först</h4>
+                    <p class="text-sm text-slate-400">Minst 125g/dag, men sikta på <span class="text-keto font-bold">200g</span>. Bygg hela kostschemat runt detta fundament.</p>
+                </div>
+                <div class="bg-slate-800 border-l-4 border-blue-500 p-4 rounded-r-xl shadow-md">
+                    <h4 class="font-bold text-slate-100 mb-2">2. Ge Bränsle, Träna Bort</h4>
+                    <p class="text-sm text-slate-400">Sätt inte kroppen i svältläge. Ät för att klara dagen och prestera, och skapa därefter underskottet (500-1000 kcal) genom aktivitet.</p>
+                </div>
+                <div class="bg-slate-800 border-l-4 border-purple-500 p-4 rounded-r-xl shadow-md">
+                    <h4 class="font-bold text-slate-100 mb-2">3. Mät Fett, Inte Vikt</h4>
+                    <p class="text-sm text-slate-400">Stirra dig inte blind på vågen. Fokusera på fettprocent och hur kroppen känns. Vågen ljuger ofta vid vätskeförändringar.</p>
+                </div>
+                <div class="bg-slate-800 border-l-4 border-orange-500 p-4 rounded-r-xl shadow-md">
+                    <h4 class="font-bold text-slate-100 mb-2">4. Termisk Effekt (TEF)</h4>
+                    <p class="text-sm text-slate-400">Protein kostar <span class="text-orange-400 font-bold">20-30%</span> av sin energi bara för att smältas (jmf kolhydrater 5-10%, fett 0-3%). Ett proteinrikt schema maximerar förbränningen.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ENERGI BUDGET -->
+        <section>
+            <h2 class="section-title text-2xl font-bold mb-6 border-b border-slate-700 pb-2 flex items-center gap-2">
+                <i class="fa-solid fa-calculator text-keto"></i> Energibudget & Makros
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Aktiva Dagar -->
+                <div class="bg-slate-800 rounded-xl p-6 border border-slate-700 relative overflow-hidden shadow-lg">
+                    <div class="absolute top-0 right-0 bg-keto text-slate-900 text-xs font-bold px-3 py-1 rounded-bl-lg uppercase">Förbränning ~3000 kcal</div>
+                    <h3 class="text-xl font-bold text-slate-100 mb-4 flex items-center gap-2"><i class="fa-solid fa-person-running text-keto"></i> Aktiva Keto-dagar</h3>
+
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between text-sm mb-1"><span class="text-slate-400">Undre gräns (-1000)</span> <span class="font-bold text-rose-400">2000 kcal</span></div>
+                            <div class="w-full bg-slate-700 rounded-full h-1.5"><div class="bg-rose-500 h-1.5 rounded-full" style="width: 66%"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-sm mb-1"><span class="text-slate-400">Mittpunkt/Mål (-750)</span> <span class="font-bold text-keto">2250 kcal</span></div>
+                            <div class="w-full bg-slate-700 rounded-full h-2"><div class="bg-keto h-2 rounded-full" style="width: 75%"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-sm mb-1"><span class="text-slate-400">Övre gräns (-500)</span> <span class="font-bold text-blue-400">2500 kcal</span></div>
+                            <div class="w-full bg-slate-700 rounded-full h-1.5"><div class="bg-blue-500 h-1.5 rounded-full" style="width: 83%"></div></div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 flex justify-between items-center bg-slate-900/50 p-3 rounded-lg border border-slate-700">
+                        <div class="text-center w-1/2 border-r border-slate-700">
+                            <span class="block text-xs text-slate-400 uppercase">Max Kolhydrater</span>
+                            <span class="font-bold text-lg text-slate-200">25 g</span>
+                        </div>
+                        <div class="text-center w-1/2">
+                            <span class="block text-xs text-slate-400 uppercase">Mål Protein</span>
+                            <span class="font-bold text-lg text-slate-200">200 g</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vilodagar -->
+                <div class="bg-slate-800 rounded-xl p-6 border border-slate-700 relative overflow-hidden shadow-lg">
+                    <div class="absolute top-0 right-0 bg-slate-600 text-slate-200 text-xs font-bold px-3 py-1 rounded-bl-lg uppercase">Förbränning ~2200 kcal</div>
+                    <h3 class="text-xl font-bold text-slate-100 mb-4 flex items-center gap-2"><i class="fa-solid fa-bed text-slate-400"></i> Vilodagar (Drönardagar)</h3>
+
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between text-sm mb-1"><span class="text-slate-400">Absolut minimum (-1000)</span> <span class="font-bold text-rose-500">1200 kcal</span></div>
+                            <div class="w-full bg-slate-700 rounded-full h-1.5"><div class="bg-rose-600 h-1.5 rounded-full" style="width: 54%"></div></div>
+                            <p class="text-[10px] text-rose-400 mt-1">Gå ALDRIG under detta - krävs för att skydda organen.</p>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-sm mb-1"><span class="text-slate-400">Optimal vilodag (-750)</span> <span class="font-bold text-keto">1450 kcal</span></div>
+                            <div class="w-full bg-slate-700 rounded-full h-2"><div class="bg-keto h-2 rounded-full" style="width: 65%"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-sm mb-1"><span class="text-slate-400">Högsta intag (-500)</span> <span class="font-bold text-blue-400">1700 kcal</span></div>
+                            <div class="w-full bg-slate-700 rounded-full h-1.5"><div class="bg-blue-500 h-1.5 rounded-full" style="width: 77%"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DJUPARE INSIKTER -->
+        <section class="mb-12">
+            <h2 class="section-title text-2xl font-bold mb-6 border-b border-slate-700 pb-2 flex items-center gap-2">
+                <i class="fa-solid fa-microscope text-keto"></i> Djupare Insikter (Kropp & Knopp)
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-slate-800/50 p-5 rounded-xl border border-slate-700 hover:border-keto/30 hover:bg-slate-800 transition">
+                    <h4 class="text-keto font-bold mb-2 flex items-center gap-2"><i class="fa-solid fa-brain"></i> Det Psykologiska "Lugnet"</h4>
+                    <p class="text-sm text-slate-300">"Känns som toppar och dalar är bortskalade... nästan lite psykopatiskt." Det jämna flödet av energi och den extrema stabiliteten i humöret ger mer stamina. Kroppen bränner rent fett istället för att åka glukos-berg-och-dalbana.</p>
+                </div>
+                <div class="bg-slate-800/50 p-5 rounded-xl border border-slate-700 hover:border-keto/30 hover:bg-slate-800 transition">
+                    <h4 class="text-keto font-bold mb-2 flex items-center gap-2"><i class="fa-solid fa-poop"></i> Matsmältning & Allergier</h4>
+                    <p class="text-sm text-slate-300">Inga akuta toalettbesök. Fasta, fina resultat ("präktiga kablar"). Allergier försvann helt på keto och kom tillbaka med kolhydraterna. Ketos fungerar kraftigt anti-inflammatoriskt.</p>
+                </div>
+                <div class="bg-slate-800/50 p-5 rounded-xl border border-slate-700 hover:border-keto/30 hover:bg-slate-800 transition">
+                    <h4 class="text-keto font-bold mb-2 flex items-center gap-2"><i class="fa-solid fa-eye"></i> Synförändringar</h4>
+                    <p class="text-sm text-slate-300">Sämre på nära håll, men extremt skarpt och färgrikt på långt håll. <strong>Coachens notering:</strong> Vätskeförändringar i linsen pga lågt insulin. Se till att boosta med salt/elektrolyter!</p>
+                </div>
+                <div class="bg-slate-800/50 p-5 rounded-xl border border-slate-700 hover:border-keto/30 hover:bg-slate-800 transition">
+                    <h4 class="text-keto font-bold mb-2 flex items-center gap-2"><i class="fa-solid fa-tooth"></i> Läkning & Inflammation</h4>
+                    <p class="text-sm text-slate-300">Tandköttet visade extrem skillnad i minskad inflammation. Huden på näsan blev helt ny och skrovligheter försvann. Ett ont ben i bröstkorgen läkte. Autofagi (cellstädning) pågår!</p>
+                </div>
+            </div>
+        </section>
+
+
+        <h2 class="section-title text-2xl font-bold mb-6 border-b border-slate-700 pb-2">Dag för Dag Logg</h2>
+
+        <!-- Dagbok Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+            <!-- DAG 1 -->
+            <article class="bg-slate-800 rounded-xl shadow-md overflow-hidden border border-slate-700 flex flex-col hover:border-slate-600 transition">
+                <div class="bg-slate-900 px-4 py-3 border-b border-slate-700 flex justify-between items-center">
+                    <h3 class="font-bold text-slate-200">Dag 1</h3>
+                    <span class="text-xs font-semibold px-2 py-1 bg-keto-dark/40 text-keto-light border border-keto-dark rounded-full">Ketos start</span>
+                </div>
+                <div class="p-4 flex-grow">
+                    <div class="grid grid-cols-2 gap-4 mb-4 text-sm">
+                        <div><span class="text-slate-500 block text-xs uppercase">Vikt</span><span class="font-bold">87 kg</span></div>
+                        <div><span class="text-slate-500 block text-xs uppercase">Ketoner</span><span class="font-bold text-keto">1.4</span></div>
+                        <div><span class="text-slate-500 block text-xs uppercase">Blodsocker</span><span class="font-bold">4.3</span></div>
+                        <div><span class="text-slate-500 block text-xs uppercase">GKI</span><span class="font-bold">3.07</span></div>
+                    </div>
+                    <div class="bg-slate-900/50 p-3 rounded-lg mb-4 text-sm border border-slate-700/50">
+                        <div class="flex justify-between mb-1"><span class="font-semibold text-slate-400">Kcal:</span> <span class="text-slate-200">2098</span></div>
+                        <div class="flex justify-between mb-1"><span class="font-semibold text-slate-400">Kolhydrater:</span> <span class="text-slate-200">13.5 g</span></div>
+                        <div class="flex justify-between"><span class="font-semibold text-slate-500">Protein:</span> <span class="text-slate-600">-</span></div>
+                    </div>
+                    <div class="text-sm mb-4">
+                        <p class="font-semibold text-slate-400"><i class="fa-solid fa-person-running mr-1 text-slate-500"></i> Aktivitet:</p>
+                        <p class="text-slate-300">Rundan + 1km + simma</p>
+                    </div>
+
+                    <details class="group mt-auto bg-slate-900 rounded-lg border border-slate-700">
+                        <summary class="cursor-pointer px-4 py-2 font-semibold text-sm text-slate-300 flex justify-between items-center hover:bg-slate-800 rounded-lg transition">
+                            Visa matdagbok
+                            <i class="fa-solid fa-chevron-down transition-transform group-open:rotate-180 text-slate-500"></i>
+                        </summary>
+                        <div class="px-4 py-3 text-xs text-slate-400 border-t border-slate-700 space-y-2">
+                            <p><strong>08:00</strong> Värden tagna</p>
+                            <p><strong>09:00</strong> Motivationsdricka (305 kcal)</p>
+                            <p><strong>11:00</strong> 100g oliver (130 kcal)</p>
+                            <p><strong>13:00</strong> 100g oliver (130 kcal)</p>
+                            <p><strong>17:30</strong> 100g oliver (130 kcal)</p>
+                            <p><strong>20:00</strong> Middag</p>
+                        </div>
+                    </details>
+                </div>
+            </article>
+
+            <!-- DAG 2 -->
+            <article class="bg-slate-800 rounded-xl shadow-md overflow-hidden border border-slate-700 flex flex-col hover:border-slate-600 transition">
+                <div class="bg-slate-900 px-4 py-3 border-b border-slate-700 flex justify-between items-center">
+                    <h3 class="font-bold text-slate-200">Dag 2</h3>
+                </div>
+                <div class="p-4 flex-grow">
+                    <div class="grid grid-cols-2 gap-4 mb-4 text-sm">
+                        <div><span class="text-slate-500 block text-xs uppercase">Vikt</span><span class="font-bold">87.6 kg</span></div>
+                        <div><span class="text-slate-500 block text-xs uppercase">Ketoner</span><span class="font-bold text-keto">1.6</span></div>
+                        <div><span class="text-slate-500 block text-xs uppercase">Blodsocker</span><span class="font-bold">4.7</span></div>
+                        <div><span class="text-slate-500 block text-xs uppercase">GKI</span><span class="font-bold text-keto">2.94</span></div>
+                    </div>
+
+                    <div class="mb-4 bg-emerald-900/20 text-emerald-300 p-3 rounded text-xs italic border border-emerald-800/50">
+                        "Märker att mitt tandkött är mycket bättre och mindre inflammerat."
+                    </div>
+
+                    <div class="bg-slate-900/50 p-3 rounded-lg mb-4 text-sm border border-slate-700/50">
+                        <div class="flex justify-between mb-1"><span class="font-semibold text-slate-400">Kcal:</span> <span class="text-slate-200">1746</span></div>
+                        <div class="flex justify-between mb-1"><span class="font-semibold text-slate-400">Kolhydrater:</span> <span class="text-slate-200">18.2 g</span></div>
+                        <div class="flex justify-between"><span class="font-semibold text-slate-400">Protein:</span> <span class="text-slate-200">125 g</span></div>
+                    </div>
+                    <div class="text-sm mb-4">
+                        <p class="font-semibold text-slate-400"><i class="fa-solid fa-person-running mr-1 text-slate-500"></i> Aktivitet:</p>
+                        <p class="text-slate-300">Rundan + 1km + simma</p>
+                    </div>
+
+                    <details class="group mt-auto bg-slate-900 rounded-lg border border-slate-700">
+                        <summary class="cursor-pointer px-4 py-2 font-semibold text-sm text-slate-300 flex justify-between items-center hover:bg-slate-800 rounded-lg transition">
+                            Visa matdagbok
+                            <i class="fa-solid fa-chevron-down transition-transform group-open:rotate-180 text-slate-500"></i>
+                        </summary>
+                        <div class="px-4 py-3 text-xs text-slate-400 border-t border-slate-700 space-y-1">
+                            <p>Peas of heaven tofu (1 pkt)</p>
+                            <p>Svamp (1/2 pkt)</p>
+                            <p>Pekannötter (25g)</p>
+                            <p>Chiapudding med björnbär (1 port)</p>
+                            <p>Mandelmjölk (1L)</p>
+                            <p>Oliver (200g totalt)</p>
+                        </div>
+                    </details>
+                </div>
+            </article>
+
+            <!-- DAG 3 -->
+            <article class="bg-slate-800 rounded-xl shadow-md overflow-hidden border border-slate-700 flex flex-col border-t-4 border-t-keto hover:border-slate-600 transition">
+                <div class="bg-slate-900 px-4 py-3 border-b border-slate-700 flex justify-between items-center">
+                    <h3 class="font-bold text-slate-200">Dag 3 <span class="text-xs font-normal text-slate-500">(1 Juli)</span></h3>
+                    <span class="text-xs font-semibold px-2 py-1 bg-keto-dark/40 text-keto-light border border-keto-dark rounded-full" title="Bästa GKI & Ketoner">Peak Ketos</span>
+                </div>
+                <div class="p-4 flex-grow">
+                    <div class="grid grid-cols-2 gap-4 mb-4 text-sm">
+                        <div><span class="text-slate-500 block text-xs uppercase">Vikt</span><span class="font-bold">87.5 kg <span class="text-xs font-normal text-slate-400">(27.2% BF)</span></span></div>
+                        <div><span class="text-slate-500 block text-xs uppercase">Ketoner</span><span class="font-bold text-keto text-lg">1.8</span></div>
+                        <div><span class="text-slate-500 block text-xs uppercase">Blodsocker</span><span class="font-bold">3.9</span></div>
+                        <div><span class="text-slate-500 block text-xs uppercase">GKI</span><span class="font-bold text-keto text-lg">2.17</span></div>
+                    </div>
+
+                    <div class="mb-4 bg-emerald-900/20 text-emerald-300 p-3 rounded text-xs italic border border-emerald-800/50">
+                        "Mår bra, känner mig lite tung i kroppen, klar i huvudet, jämn men långsam energi."
+                    </div>
+
+                    <div class="bg-slate-900/50 p-3 rounded-lg mb-4 text-sm border border-slate-700/50">
+                        <div class="flex justify-between mb-1"><span class="font-semibold text-slate-400">Kcal:</span> <span class="text-slate-200">2172</span></div>
+                        <div class="flex justify-between mb-1"><span class="font-semibold text-slate-400">Kolhydrater:</span> <span class="text-slate-200">20.68 g</span></div>
+                        <div class="flex justify-between"><span class="font-semibold text-slate-400">Protein:</span> <span class="text-slate-200">130.1 g</span></div>
+                    </div>
+                    <div class="text-sm mb-4">
+                        <p class="font-semibold text-slate-400"><i class="fa-solid fa-person-running mr-1 text-slate-500"></i> Aktivitet:</p>
+                        <p class="text-slate-300">Rundan + rundan</p>
+                    </div>
+
+                    <details class="group mt-auto bg-slate-900 rounded-lg border border-slate-700">
+                        <summary class="cursor-pointer px-4 py-2 font-semibold text-sm text-slate-300 flex justify-between items-center hover:bg-slate-800 rounded-lg transition">
+                            Visa matdagbok
+                            <i class="fa-solid fa-chevron-down transition-transform group-open:rotate-180 text-slate-500"></i>
+                        </summary>
+                        <div class="px-4 py-3 text-xs text-slate-400 border-t border-slate-700 space-y-2">
+                            <p><strong>14:00</strong> Tofu, avokadoolja, sallad, vinegrette, surkål, oliver, svamp, soja, mandelmjölk.<br><em>Snacks: Oliver, pekannötter</em></p>
+                            <p><strong>17:00</strong> Chiapudding med bär.<br><em>Snacks: Oliver, pekannötter</em></p>
+                            <p><strong>20:00</strong> Shiratakinudlar, avokadoolja, tofu, svamp, soja, sallad.</p>
+                        </div>
+                    </details>
+                </div>
+            </article>
+
+            <!-- DAG 4 -->
+            <article class="bg-slate-800 rounded-xl shadow-md overflow-hidden border border-slate-700 flex flex-col hover:border-slate-600 transition">
+                <div class="bg-slate-900 px-4 py-3 border-b border-slate-700 flex justify-between items-center">
+                    <h3 class="font-bold text-slate-200">Dag 4 <span class="text-xs font-normal text-slate-500">(2 Juli)</span></h3>
+                </div>
+                <div class="p-4 flex-grow">
+                    <div class="grid grid-cols-2 gap-4 mb-4 text-sm">
+                        <div><span class="text-slate-500 block text-xs uppercase">Vikt</span><span class="font-bold">87.9 kg</span></div>
+                        <div><span class="text-slate-500 block text-xs uppercase">Ketoner</span><span class="font-bold text-keto">1.7</span></div>
+                        <div><span class="text-slate-500 block text-xs uppercase">Blodsocker</span><span class="font-bold">4.2</span></div>
+                        <div><span class="text-slate-500 block text-xs uppercase">GKI</span><span class="font-bold text-keto">2.47</span></div>
+                    </div>
+
+                    <div class="bg-slate-900/50 p-3 rounded-lg mb-4 text-sm border border-slate-700/50">
+                        <div class="flex justify-between mb-1"><span class="font-semibold text-slate-400">Kcal:</span> <span class="text-slate-200">2307</span></div>
+                        <div class="flex justify-between mb-1"><span class="font-semibold text-slate-400">Kolhydrater:</span> <span class="text-slate-200">20.68 g</span></div>
+                        <div class="flex justify-between"><span class="font-semibold text-slate-400">Protein:</span> <span class="text-slate-200">130.1 g</span></div>
+                    </div>
+                    <div class="text-sm mb-4">
+                        <p class="font-semibold text-slate-400"><i class="fa-solid fa-person-running mr-1 text-slate-500"></i> Aktivitet:</p>
+                        <p class="text-slate-300">4km + 4km + 1km</p>
+                    </div>
+
+                    <details class="group mt-auto bg-slate-900 rounded-lg border border-slate-700">
+                        <summary class="cursor-pointer px-4 py-2 font-semibold text-sm text-slate-300 flex justify-between items-center hover:bg-slate-800 rounded-lg transition">
+                            Visa matdagbok
+                            <i class="fa-solid fa-chevron-down transition-transform group-open:rotate-180 text-slate-500"></i>
+                        </summary>
+                        <div class="px-4 py-3 text-xs text-slate-400 border-t border-slate-700 space-y-1">
+                            <p>Peas of heaven tofu (1 pkt)</p>
+                            <p>Svamp (1/2 pkt)</p>
+                            <p>Pekannötter (25g)</p>
+                            <p>Chiapudding med björnbär (1 port)</p>
+                            <p>Mandelmjölk (1L)</p>
+                            <p>Motivationsdricka + C8 olja (1 msk)</p>
+                            <p>Oliver (100g), Shiratakinudlar, Surkål</p>
+                            <p>Soja, Avokadoolja (2 msk), Vinigrette</p>
+                        </div>
+                    </details>
+                </div>
+            </article>
+
+            <!-- DAG 5 -->
+            <article class="bg-slate-800 rounded-xl shadow-md overflow-hidden border border-slate-700 flex flex-col hover:border-slate-600 transition">
+                <div class="bg-slate-900 px-4 py-3 border-b border-slate-700 flex justify-between items-center">
+                    <h3 class="font-bold text-slate-200">Dag 5 <span class="text-xs font-normal text-slate-500">(3 Juli)</span></h3>
+                </div>
+                <div class="p-4 flex-grow">
+                    <div class="grid grid-cols-2 gap-4 mb-4 text-sm">
+                        <div><span class="text-slate-500 block text-xs uppercase">Vikt</span><span class="font-bold">87.5 kg</span></div>
+                        <div><span class="text-slate-500 block text-xs uppercase">Ketoner</span><span class="font-bold text-keto">1.4</span></div>
+                        <div><span class="text-slate-500 block text-xs uppercase">Blodsocker</span><span class="font-bold">4.1</span></div>
+                        <div><span class="text-slate-500 block text-xs uppercase">GKI</span><span class="font-bold text-keto">2.93</span></div>
+                    </div>
+
+                    <div class="bg-slate-900/50 p-3 rounded-lg mb-4 text-sm border border-slate-700/50">
+                        <div class="flex justify-between mb-1"><span class="font-semibold text-slate-400">Kcal:</span> <span class="text-slate-200">2481.65</span></div>
+                        <div class="flex justify-between mb-1"><span class="font-semibold text-slate-400">Kolhydrater:</span> <span class="text-slate-200">25.78 g</span></div>
+                        <div class="flex justify-between"><span class="font-semibold text-slate-400">Protein:</span> <span class="text-slate-200">194.4 g</span></div>
+                    </div>
+                    <div class="text-sm mb-4">
+                        <p class="font-semibold text-slate-400"><i class="fa-solid fa-person-running mr-1 text-slate-500"></i> Aktivitet:</p>
+                        <p class="text-slate-300">4km + 4km + 500m + 1km</p>
+                    </div>
+
+                    <details class="group mt-auto bg-slate-900 rounded-lg border border-slate-700">
+                        <summary class="cursor-pointer px-4 py-2 font-semibold text-sm text-slate-300 flex justify-between items-center hover:bg-slate-800 rounded-lg transition">
+                            Visa matdagbok
+                            <i class="fa-solid fa-chevron-down transition-transform group-open:rotate-180 text-slate-500"></i>
+                        </summary>
+                        <div class="px-4 py-3 text-xs text-slate-400 border-t border-slate-700 space-y-1">
+                            <p>Proteinbar nr 1 Steffos (x2)</p>
+                            <p>Proteinpulver Sunwarrior (1 skopa)</p>
+                            <p>Peas of heaven tofu (1 pkt)</p>
+                            <p>Svamp (1/2 pkt), Pekannötter (25g)</p>
+                            <p>Mandelmjölk (1L), Shiratakinudlar</p>
+                            <p>Surkål, Soja, Avokadoolja (2 msk), Vinigrette</p>
+                        </div>
+                    </details>
+                </div>
+            </article>
+
+            <!-- DAG 6 -->
+            <article class="bg-slate-800 rounded-xl shadow-md overflow-hidden border border-slate-700 flex flex-col hover:border-slate-600 transition">
+                <div class="bg-slate-900 px-4 py-3 border-b border-slate-700 flex justify-between items-center">
+                    <h3 class="font-bold text-slate-200">Dag 6 <span class="text-xs font-normal text-slate-500">(4 Juli)</span></h3>
+                </div>
+                <div class="p-4 flex-grow">
+                    <div class="grid grid-cols-2 gap-4 mb-4 text-sm">
+                        <div><span class="text-slate-500 block text-xs uppercase">Vikt</span><span class="font-bold">87.2 kg</span></div>
+                        <div><span class="text-slate-500 block text-xs uppercase">Ketoner</span><span class="font-bold text-keto">1.5</span></div>
+                        <div><span class="text-slate-500 block text-xs uppercase">Blodsocker</span><span class="font-bold">3.9</span></div>
+                        <div><span class="text-slate-500 block text-xs uppercase">GKI</span><span class="font-bold text-keto">2.60</span></div>
+                    </div>
+
+                    <div class="bg-slate-900/50 p-3 rounded-lg mb-4 text-sm border border-slate-700/50">
+                        <div class="flex justify-between mb-1"><span class="font-semibold text-slate-400">Kcal:</span> <span class="text-slate-200">2697</span></div>
+                        <div class="flex justify-between mb-1"><span class="font-semibold text-orange-400">Kolhydrater:</span> <span class="text-orange-300">30 g</span></div>
+                        <div class="flex justify-between"><span class="font-semibold text-slate-400">Protein:</span> <span class="text-slate-200">191.9 g</span></div>
+                    </div>
+                    <div class="text-sm mb-4">
+                        <p class="font-semibold text-slate-400"><i class="fa-solid fa-person-running mr-1 text-slate-500"></i> Aktivitet:</p>
+                        <p class="text-slate-300">4km + 4km + 1km + träning</p>
+                    </div>
+
+                    <details class="group mt-auto bg-slate-900 rounded-lg border border-slate-700">
+                        <summary class="cursor-pointer px-4 py-2 font-semibold text-sm text-slate-300 flex justify-between items-center hover:bg-slate-800 rounded-lg transition">
+                            Visa matdagbok
+                            <i class="fa-solid fa-chevron-down transition-transform group-open:rotate-180 text-slate-500"></i>
+                        </summary>
+                        <div class="px-4 py-3 text-xs text-slate-400 border-t border-slate-700 space-y-1">
+                            <p>Proteinpulver Sunwarrior (2 skopor totalt)</p>
+                            <p>Proteinbar nr 1 Steffos (x2)</p>
+                            <p>Köttfärssås Stiffes keto (halv batch)</p>
+                            <p>Spagetti Slender Chef (200g)</p>
+                            <p>Shiratakinudlar</p>
+                            <p>Avokadoolja (1 msk), Olivolja (1 msk)</p>
+                            <p>Mandelmjölk (1L)</p>
+                        </div>
+                    </details>
+                </div>
+            </article>
+
+            <!-- DAG 7 -->
+            <article class="bg-slate-800 rounded-xl shadow-md overflow-hidden border border-slate-700 flex flex-col hover:border-slate-600 transition">
+                <div class="bg-slate-900 px-4 py-3 border-b border-slate-700 flex justify-between items-center">
+                    <h3 class="font-bold text-slate-200">Dag 7 <span class="text-xs font-normal text-slate-500">(5 Juli)</span></h3>
+                </div>
+                <div class="p-4 flex-grow">
+                    <div class="grid grid-cols-2 gap-4 mb-4 text-sm">
+                        <div><span class="text-slate-500 block text-xs uppercase">Vikt</span><span class="font-bold">87.0 kg</span></div>
+                        <div><span class="text-slate-500 block text-xs uppercase">Ketoner</span><span class="font-bold text-keto-light">1.2</span></div>
+                        <div><span class="text-slate-500 block text-xs uppercase">Blodsocker</span><span class="font-bold">4.2</span></div>
+                        <div><span class="text-slate-500 block text-xs uppercase">GKI</span><span class="font-bold text-orange-400">3.50</span></div>
+                    </div>
+
+                    <div class="bg-slate-900/50 p-3 rounded-lg mb-4 text-sm border border-slate-700/50">
+                        <div class="flex justify-between mb-1"><span class="font-semibold text-slate-400">Kcal:</span> <span class="text-slate-200">2360.5</span></div>
+                        <div class="flex justify-between mb-1"><span class="font-semibold text-orange-400">Kolhydrater:</span> <span class="text-orange-300">35.8 g</span></div>
+                        <div class="flex justify-between"><span class="font-semibold text-slate-400">Protein:</span> <span class="text-slate-200">172.1 g</span></div>
+                    </div>
+                    <div class="text-sm mb-4">
+                        <p class="font-semibold text-slate-400"><i class="fa-solid fa-person-running mr-1 text-slate-500"></i> Aktivitet:</p>
+                        <p class="text-slate-300">4km + 4km + badat</p>
+                    </div>
+
+                    <details class="group mt-auto bg-slate-900 rounded-lg border border-slate-700">
+                        <summary class="cursor-pointer px-4 py-2 font-semibold text-sm text-slate-300 flex justify-between items-center hover:bg-slate-800 rounded-lg transition">
+                            Visa matdagbok
+                            <i class="fa-solid fa-chevron-down transition-transform group-open:rotate-180 text-slate-500"></i>
+                        </summary>
+                        <div class="px-4 py-3 text-xs text-slate-400 border-t border-slate-700 space-y-1">
+                            <p>Proteinpulver Sunwarrior (2 skopor totalt)</p>
+                            <p>Proteinbar sojacrisp (x2)</p>
+                            <p>2 middagar (spett, ris och nudlar) - obs, kolhydrater steg här!</p>
+                            <p>Zucchini (100g)</p>
+                        </div>
+                    </details>
+                </div>
+            </article>
+
+            <!-- DAG 8 -->
+            <article class="bg-slate-800 rounded-xl shadow-md overflow-hidden border border-slate-700 flex flex-col border-t-4 border-t-blue-500 hover:border-slate-600 transition">
+                <div class="bg-slate-900 px-4 py-3 border-b border-slate-700 flex justify-between items-center">
+                    <h3 class="font-bold text-slate-200">Dag 8 <span class="text-xs font-normal text-slate-500">(6 Juli)</span></h3>
+                    <span class="text-xs font-semibold px-2 py-1 bg-blue-900/40 text-blue-400 border border-blue-800 rounded-full">Lägsta vikt!</span>
+                </div>
+                <div class="p-4 flex-grow">
+                    <div class="grid grid-cols-2 gap-4 mb-4 text-sm">
+                        <div><span class="text-slate-500 block text-xs uppercase">Vikt</span><span class="font-bold text-blue-400">86.9 kg <span class="text-xs font-normal text-slate-500">(26.9% BF)</span></span></div>
+                        <div><span class="text-slate-500 block text-xs uppercase">Ketoner</span><span class="font-bold text-keto">1.7</span></div>
+                        <div><span class="text-slate-500 block text-xs uppercase">Blodsocker</span><span class="font-bold">4.4</span></div>
+                        <div><span class="text-slate-500 block text-xs uppercase">GKI</span><span class="font-bold text-keto">2.59</span></div>
+                    </div>
+
+                    <div class="bg-slate-900/50 p-3 rounded-lg mb-4 text-sm border border-slate-700/50">
+                        <div class="flex justify-between mb-1"><span class="font-semibold text-slate-400">Kcal:</span> <span class="text-slate-200">2358.1</span></div>
+                        <div class="flex justify-between mb-1"><span class="font-semibold text-slate-400">Kolhydrater:</span> <span class="text-slate-200">29.58 g</span></div>
+                        <div class="flex justify-between"><span class="font-semibold text-slate-400">Protein:</span> <span class="text-keto-light font-bold">216.93 g</span></div>
+                    </div>
+                    <div class="text-sm mb-4">
+                        <p class="font-semibold text-slate-400"><i class="fa-solid fa-person-running mr-1 text-slate-500"></i> Aktivitet:</p>
+                        <p class="text-slate-300">3.5km x3 + 20 min träning</p>
+                    </div>
+
+                    <details class="group mt-auto bg-slate-900 rounded-lg border border-slate-700">
+                        <summary class="cursor-pointer px-4 py-2 font-semibold text-sm text-slate-300 flex justify-between items-center hover:bg-slate-800 rounded-lg transition">
+                            Visa matdagbok
+                            <i class="fa-solid fa-chevron-down transition-transform group-open:rotate-180 text-slate-500"></i>
+                        </summary>
+                        <div class="px-4 py-3 text-xs text-slate-400 border-t border-slate-700 space-y-1">
+                            <p>Proteinpulver Sunwarrior (2 skopor)</p>
+                            <p>Proteinbar sojacrisp (x2)</p>
+                            <p>Tofu ICA Basic (400g) + gammal tofu (180g)</p>
+                            <p>Garants eko bokspånsrökt (180g)</p>
+                            <p>Zucchini (200g)</p>
+                            <p>Soja (2 msk), Shiratakinudlar</p>
+                            <p>Vinaigrette (C8, linfröolja, ACV)</p>
+                            <p>Olja (2 msk)</p>
+                        </div>
+                    </details>
+                </div>
+            </article>
+
+            <!-- DAG 9 -->
+            <article class="bg-slate-850 rounded-xl shadow-md overflow-hidden border border-slate-700 flex flex-col opacity-90 border-t-4 border-t-slate-600 hover:border-slate-600 transition">
+                <div class="bg-slate-900 px-4 py-3 border-b border-slate-700 flex justify-between items-center">
+                    <h3 class="font-bold text-slate-400">Dag 9</h3>
+                    <span class="text-xs font-semibold px-2 py-1 bg-slate-800 text-slate-400 border border-slate-700 rounded-full"><i class="fa-solid fa-bed text-xs"></i> Vilodag</span>
+                </div>
+                <div class="p-4 flex-grow">
+                    <div class="grid grid-cols-2 gap-4 mb-4 text-sm opacity-60">
+                        <div><span class="text-slate-600 block text-xs uppercase">Vikt</span><span class="font-bold text-slate-500">-</span></div>
+                        <div><span class="text-slate-600 block text-xs uppercase">Ketoner</span><span class="font-bold text-slate-500">-</span></div>
+                        <div><span class="text-slate-600 block text-xs uppercase">Blodsocker</span><span class="font-bold text-slate-500">-</span></div>
+                        <div><span class="text-slate-600 block text-xs uppercase">GKI</span><span class="font-bold text-slate-500">-</span></div>
+                    </div>
+
+                    <div class="mb-4 bg-slate-800 text-slate-400 p-3 rounded text-xs italic border border-slate-700">
+                        "Vilar idag för jag har kört för hårt, känner av det i fötterna."
+                    </div>
+
+                    <div class="bg-slate-900/50 p-3 rounded-lg mb-4 text-sm border border-slate-700/50">
+                        <div class="flex justify-between mb-1"><span class="font-semibold text-rose-500">Kcal:</span> <span class="text-rose-400">2745</span></div>
+                        <div class="flex justify-between mb-1"><span class="font-semibold text-slate-400">Kolhydrater:</span> <span class="text-slate-300">26.9 g</span></div>
+                        <div class="flex justify-between"><span class="font-semibold text-slate-400">Protein:</span> <span class="text-slate-300">192.9 g</span></div>
+                    </div>
+                    <div class="text-sm mb-4 text-slate-500">
+                        Ingen aktivitet loggad.
+                    </div>
+
+                    <details class="group mt-auto bg-slate-900 rounded-lg border border-slate-700">
+                        <summary class="cursor-pointer px-4 py-2 font-semibold text-sm text-slate-400 flex justify-between items-center hover:bg-slate-800 rounded-lg transition">
+                            Visa matdagbok
+                            <i class="fa-solid fa-chevron-down transition-transform group-open:rotate-180 text-slate-600"></i>
+                        </summary>
+                        <div class="px-4 py-3 text-xs text-slate-500 border-t border-slate-700 space-y-1">
+                            <p>Proteinpulver Sunwarrior (4 skopor totalt)</p>
+                            <p>Zucchini (100g)</p>
+                            <p>Anammas formbara sojafärs (850g) - stort intag!</p>
+                            <p>Olja (3 msk totalt)</p>
+                            <p>Green garlic Caj P (100g totalt)</p>
+                        </div>
+                    </details>
+                </div>
+            </article>
+
+            <!-- DAG 10 -->
+            <article class="bg-slate-800 rounded-xl shadow-md overflow-hidden border border-rose-900/50 flex flex-col border-t-4 border-t-rose-500 hover:border-rose-700 transition">
+                <div class="bg-slate-900 px-4 py-3 border-b border-rose-900/50 flex justify-between items-center">
+                    <h3 class="font-bold text-rose-400">Dag 10 <span class="text-xs font-normal text-rose-500/70">(8 Juli)</span></h3>
+                    <span class="text-xs font-semibold px-2 py-1 bg-rose-900/40 text-rose-400 border border-rose-800 rounded-full" title="Ur ketos">Ut ur ketos</span>
+                </div>
+                <div class="p-4 flex-grow">
+                    <div class="grid grid-cols-2 gap-4 mb-4 text-sm">
+                        <div><span class="text-slate-500 block text-xs uppercase">Vikt</span><span class="font-bold text-rose-400">87.3 kg</span></div>
+                        <div><span class="text-slate-500 block text-xs uppercase">Ketoner</span><span class="font-bold text-rose-500">0.3</span></div>
+                        <div><span class="text-slate-500 block text-xs uppercase">Blodsocker</span><span class="font-bold text-slate-600">-</span></div>
+                        <div><span class="text-slate-500 block text-xs uppercase">GKI</span><span class="font-bold text-slate-600">-</span></div>
+                    </div>
+
+                    <div class="mb-4 bg-rose-900/20 text-rose-300 p-3 rounded text-xs italic border border-rose-800/50">
+                        <i class="fa-solid fa-triangle-exclamation mr-1"></i> "Gick upp i vikt och kom ur ketosen på vilan. Krävs lägre kcal &amp; &lt;20g kolhydrater om jag vilar annars fångar inte musklerna upp glykosen."
+                    </div>
+
+                    <div class="bg-slate-900/50 p-3 rounded-lg mb-4 text-sm border border-slate-700/50">
+                        <div class="flex justify-between mb-1"><span class="font-semibold text-slate-400">Kcal:</span> <span class="text-slate-200">1960</span></div>
+                        <div class="flex justify-between mb-1"><span class="font-semibold text-slate-400">Kolhydrater:</span> <span class="text-slate-200">31.02 g</span></div>
+                        <div class="flex justify-between"><span class="font-semibold text-slate-400">Protein:</span> <span class="text-slate-200">158.3 g</span></div>
+                    </div>
+                    <div class="text-sm mb-4">
+                        <p class="font-semibold text-slate-400"><i class="fa-solid fa-person-running mr-1 text-slate-500"></i> Aktivitet:</p>
+                        <p class="text-slate-300">4km x3 + träning axlar ben</p>
+                    </div>
+
+                    <details class="group mt-auto bg-slate-900 rounded-lg border border-slate-700">
+                        <summary class="cursor-pointer px-4 py-2 font-semibold text-sm text-slate-300 flex justify-between items-center hover:bg-slate-800 rounded-lg transition">
+                            Visa matdagbok
+                            <i class="fa-solid fa-chevron-down transition-transform group-open:rotate-180 text-slate-500"></i>
+                        </summary>
+                        <div class="px-4 py-3 text-xs text-slate-400 border-t border-slate-700 space-y-1">
+                            <p>Olja (5 msk totalt)</p>
+                            <p>Zucchini (400g totalt)</p>
+                            <p>Peas of heaven tofu (1 pkt)</p>
+                            <p>Proteinpulver Sunwarrior (3 skopor)</p>
+                            <p>Shiratakinudlar</p>
+                            <p>Champinjoner (1/2 pkt)</p>
+                            <p>Soja (1 msk)</p>
+                            <p>Sallad, gurka, oliver (100g), Sriracha (5g)</p>
+                        </div>
+                    </details>
+                </div>
+            </article>
+
+            <!-- DAG 11 -->
+            <article class="bg-slate-800 rounded-xl shadow-md overflow-hidden border border-slate-700 flex flex-col border-t-4 border-t-purple-500 hover:border-slate-600 transition">
+                <div class="bg-slate-900 px-4 py-3 border-b border-slate-700 flex justify-between items-center">
+                    <h3 class="font-bold text-purple-400">Dag 11</h3>
+                    <span class="text-xs font-semibold px-2 py-1 bg-purple-900/40 text-purple-300 border border-purple-800 rounded-full">Återgång</span>
+                </div>
+                <div class="p-4 flex-grow">
+                    <div class="grid grid-cols-2 gap-4 mb-4 text-sm">
+                        <div><span class="text-slate-500 block text-xs uppercase">Vikt</span><span class="font-bold text-slate-200">87.2 kg</span></div>
+                        <div><span class="text-slate-500 block text-xs uppercase">Ketoner</span><span class="font-bold text-orange-400">0.9</span></div>
+                        <div><span class="text-slate-500 block text-xs uppercase">Blodsocker</span><span class="font-bold text-slate-200">4.6</span></div>
+                        <div><span class="text-slate-500 block text-xs uppercase">GKI</span><span class="font-bold text-rose-500">5.11</span></div>
+                    </div>
+
+                    <div class="mb-4 bg-purple-900/20 text-purple-300 p-3 rounded text-xs italic border border-purple-800/50">
+                        "Lämnade keto idag, ska börja med vanlig kost men med restriktion."
+                    </div>
+
+                    <div class="bg-slate-900/50 p-3 rounded-lg mb-4 text-sm border border-slate-700/50">
+                        <div class="flex justify-between mb-1"><span class="font-semibold text-slate-400">Kcal:</span> <span class="text-slate-200">2795.5</span></div>
+                        <div class="flex justify-between mb-1"><span class="font-semibold text-purple-400">Kolhydrater:</span> <span class="font-bold text-purple-300">277 g</span></div>
+                        <div class="flex justify-between"><span class="font-semibold text-slate-400">Protein:</span> <span class="text-slate-200">169 g</span></div>
+                    </div>
+                    <div class="text-sm mb-4">
+                        <p class="font-semibold text-slate-400"><i class="fa-solid fa-person-running mr-1 text-slate-500"></i> Aktivitet:</p>
+                        <p class="text-slate-300">4km x2 + handlat</p>
+                    </div>
+
+                    <details class="group mt-auto bg-slate-900 rounded-lg border border-slate-700">
+                        <summary class="cursor-pointer px-4 py-2 font-semibold text-sm text-slate-300 flex justify-between items-center hover:bg-slate-800 rounded-lg transition">
+                            Visa matdagbok
+                            <i class="fa-solid fa-chevron-down transition-transform group-open:rotate-180 text-slate-500"></i>
+                        </summary>
+                        <div class="px-4 py-3 text-xs text-slate-400 border-t border-slate-700 space-y-1">
+                            <p>Jalapenos (100g)</p>
+                            <p>Proteinpulver (1 skopa)</p>
+                            <p>Vegan fudge Barebells (2 bars)</p>
+                            <p>Linspasta Kungsörnen (2 port)</p>
+                            <p>Anamma baljväxtfärs (500g)</p>
+                            <p>Loka Crush (3 st)</p>
+                            <p>Vegan parmesan (2/4)</p>
+                            <p>Vinaigrette</p>
+                            <p>Proteinvatten Better You</p>
+                            <p>Gröna bönor/poten (150 kcal)</p>
+                        </div>
+                    </details>
+                </div>
+            </article>
+
+        </div>
+    </main>
+
+    <!-- Back button -->
+    <footer class="text-center mt-16">
+        <a href="keto.html" class="inline-block bg-slate-900/80 text-keto font-bold py-3 px-6 rounded-full border-2 back-button">
+            &larr; Tillbaka till Keto
+        </a>
+        <p class="mt-6 text-slate-500 text-xs">Skapad av Hälsokoll för din fortsatta hälsoresa. Anpassad för mörkt tema.</p>
+    </footer>
+
+</body>
+</html>

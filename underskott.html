@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Underskott med Kolhydrater - Reningssystem</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --glow-color-underskott: #ec4899; /* rose/pink */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #020617;
+            color: #a7f3d0;
+        }
+
+        .particle-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background-image:
+                radial-gradient(1px 1px at 25% 15%, rgba(229, 231, 235, 0.4), transparent),
+                radial-gradient(1px 1px at 50% 35%, rgba(229, 231, 235, 0.3), transparent),
+                radial-gradient(1px 1px at 75% 55%, rgba(229, 231, 235, 0.4), transparent),
+                radial-gradient(2px 2px at 15% 75%, rgba(236, 72, 153, 0.4), transparent),
+                radial-gradient(2px 2px at 85% 5%, rgba(236, 72, 153, 0.3), transparent);
+            animation: move-particles 120s linear infinite;
+        }
+        @keyframes move-particles {
+            from { background-position: 0 0; }
+            to   { background-position: -1000px 500px; }
+        }
+
+        .main-title {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--glow-color-underskott);
+            text-shadow: 0 0 8px var(--glow-color-underskott), 0 0 20px rgba(236, 72, 153, 0.5);
+        }
+
+        .accordion-item {
+            background-color: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--glow-color-underskott);
+            box-shadow: 0 0 15px rgba(236, 72, 153, 0.3);
+            backdrop-filter: blur(10px);
+            transition: box-shadow 0.3s ease;
+        }
+        .accordion-item[open] { box-shadow: 0 0 25px rgba(236, 72, 153, 0.6); }
+
+        .accordion-title {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--glow-color-underskott);
+            text-shadow: 0 0 5px rgba(236, 72, 153, 0.7);
+            cursor: pointer;
+        }
+        .accordion-title::-webkit-details-marker { display: none; }
+
+        .accordion-content li::marker,
+        .accordion-content ol li::marker { color: var(--glow-color-underskott); }
+
+        .back-button {
+            border-color: var(--glow-color-underskott);
+            box-shadow: 0 0 10px var(--glow-color-underskott);
+            transition: all 0.3s ease;
+        }
+        .back-button:hover { box-shadow: 0 0 25px var(--glow-color-underskott); transform: scale(1.05); }
+
+        /* Liten box för makro-bar */
+        .macro-bar {
+            display: flex;
+            height: 28px;
+            border-radius: 9999px;
+            overflow: hidden;
+            margin: 8px 0;
+            box-shadow: 0 0 12px rgba(236, 72, 153, 0.35);
+        }
+        .macro-bar > div {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #0f172a;
+        }
+        .macro-carbs { background: #f59e0b; }
+        .macro-protein { background: #38bdf8; }
+        .macro-fat { background: #a3e635; }
+    </style>
+</head>
+<body class="min-h-screen">
+    <div class="particle-bg"></div>
+
+    <div class="container mx-auto px-4 py-8 md:py-12">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl md:text-5xl font-bold main-title tracking-widest">UNDERSKOTT<br class="md:hidden"> MED KOLHYDRATER</h1>
+            <p class="text-rose-300 mt-4 text-lg">Måttligt minus, massor av kolhydrater — den hållbara viktbalansen.</p>
+        </header>
+
+        <main class="max-w-4xl mx-auto space-y-6">
+            <details class="accordion-item rounded-lg p-6">
+                <summary class="accordion-title text-2xl flex justify-between items-center"><span>Vad är kaloribalans?</span><svg class="w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                <div class="accordion-content mt-4 space-y-3">
+                    <p>Kroppsvikten styrs av en enkel ekvation:</p>
+                    <p class="text-center text-lg text-rose-200"><strong>Kalorier in &minus; Kalorier ut = Förändring</strong></p>
+                    <p>För att tappa fett behöver vi ligga i ett <em>måttligt underskott</em>. Till skillnad från keto eller fasta behåller vi här kolhydraterna i kosten — vilket ger mer träningsvänlig energi och färre restriktioner.</p>
+                </div>
+            </details>
+
+            <details class="accordion-item rounded-lg p-6">
+                <summary class="accordion-title text-2xl flex justify-between items-center"><span>TDEE — din dagliga energiförbrukning</span><svg class="w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                <div class="accordion-content mt-4 space-y-3">
+                    <p><strong>TDEE</strong> = Total Daily Energy Expenditure. Det är hur många kalorier du gör av med per dag, givet din vikt, längd, ålder, aktivitetsnivå och träning.</p>
+                    <p>Räkna ut via Mifflin-St Jeor-formeln:</p>
+                    <p class="bg-slate-900/60 p-3 rounded text-sm font-mono text-rose-200">
+                        Män: BMR = 10·kg + 6.25·cm &minus; 5·år + 5<br>
+                        Kvinnor: BMR = 10·kg + 6.25·cm &minus; 5·år &minus; 161
+                    </p>
+                    <p>Multiplicera med en aktivitetsfaktor:</p>
+                    <ul class="list-disc list-inside space-y-1">
+                        <li>Stillasittande (1.2)</li>
+                        <li>Lätt aktiv (1.375) — 1–3 träningspass/vecka</li>
+                        <li>Måttligt aktiv (1.55) — 3–5 pass/vecka</li>
+                        <li>Mycket aktiv (1.725) — 6–7 pass/vecka</li>
+                        <li>Athlet (1.9) — tung träning dagligen</li>
+                    </ul>
+                </div>
+            </details>
+
+            <details class="accordion-item rounded-lg p-6">
+                <summary class="accordion-title text-2xl flex justify-between items-center"><span>Storleken på underskottet</span><svg class="w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                <div class="accordion-content mt-4 space-y-3">
+                    <p>Det "magiska" intervallet är <strong>300–500 kcal underskott per dag</strong>. Det ger ungefär 0,3–0,5 kg viktnedgång per vecka — hållbart utan muskelförlust.</p>
+                    <ul class="list-disc list-inside space-y-2">
+                        <li><strong>1000+ kcal underskott</strong> för tungt — risk för muskelförlust, hormonstörning, energilöss.</li>
+                        <li><strong>200–300 kcal underskott</strong> försiktigt — bra för långsam, hållbar viktnedgång.</li>
+                        <li><strong>Diet-break:</strong> var 8–12 vecka, ät på underhåll i 1–2 veckor för att återställa hormoner (leptin, sköldkörtel).</li>
+                    </ul>
+                </div>
+            </details>
+
+            <details class="accordion-item rounded-lg p-6">
+                <summary class="accordion-title text-2xl flex justify-between items-center"><span>Makrofördelning (med kolhydrater)</span><svg class="w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                <div class="accordion-content mt-4 space-y-3">
+                    <p>En bra grundfördelning för de flesta vuxna:</p>
+                    <div class="macro-bar">
+                        <div class="macro-carbs" style="width: 45%;">45% Kolhydrater</div>
+                        <div class="macro-protein" style="width: 25%;">25% Protein</div>
+                        <div class="macro-fat" style="width: 30%;">30% Fett</div>
+                    </div>
+                    <ul class="list-disc list-inside space-y-1">
+                        <li><strong>Kolhydrater:</strong> 3–6 g per kg kroppsvikt (justera efter träningsvolym).</li>
+                        <li><strong>Protein:</strong> 1,6–2,2 g per kg — speciellt viktigt under viktnedgång för att bevara muskelmassa.</li>
+                        <li><strong>Fett:</strong> minst 0,7–1 g per kg — för hormoner (testosteron, östrogen, kortisolreglering).</li>
+                    </ul>
+                    <p class="text-sm text-rose-200/80 italic">Inte hysteriska procentsatser — viktigast är protein per kg och ett totalunderskott som fungerar.</p>
+                </div>
+            </details>
+
+            <details class="accordion-item rounded-lg p-6">
+                <summary class="accordion-title text-2xl flex justify-between items-center"><span>Livsmedel som mättar med färre kalorier</span><svg class="w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                <div class="accordion-content mt-4 space-y-2">
+                    <ul class="list-disc list-inside space-y-2">
+                        <li><strong>Låg energitäthet:</strong> sallad, broccoli, blomkål, zucchini, gurka.</li>
+                        <li><strong>Högt protein per kalori:</strong> kycklingbröst, kalkon, vit fisk, äggvita, kvarg.</li>
+                        <li><strong>Komplexa kolhydrater:</strong> fullkornsris, sötpotatis, linser, bönor, havre.</li>
+                        <li><strong>Volymmat:</strong> soppor, gröna smoothies, stora salladsbäddar.</li>
+                        <li><strong>Mättande fetter:</strong> avokado, olivolja, nötter i portionerade mängder.</li>
+                    </ul>
+                </div>
+            </details>
+
+            <details class="accordion-item rounded-lg p-6">
+                <summary class="accordion-title text-2xl flex justify-between items-center"><span>Styrketräning — den hemliga vapnen</span><svg class="w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                <div class="accordion-content mt-4 space-y-3">
+                    <p>Viktnedgång utan styrketräning = förlust av både fett OCH muskel. Resultatet ser inte bra ut och ämnesomsättningen sjunker.</p>
+                    <p>Styrketräning 3–4 ggr/vecka:</p>
+                    <ul class="list-disc list-inside space-y-1">
+                        <li>Bevarar muskelmassan.</li>
+                        <li>Höjer viloförbränningen (EPOC-effekten).</li>
+                        <li>Förbättrar insulinkänsligheten.</li>
+                        <li>Ger form åt kroppen under viktnedgången.</li>
+                    </ul>
+                </div>
+            </details>
+
+            <details class="accordion-item rounded-lg p-6">
+                <summary class="accordion-title text-2xl flex justify-between items-center"><span>Vanliga misstag</span><svg class="w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></summary>
+                <div class="accordion-content mt-4 space-y-2">
+                    <ul class="list-disc list-inside space-y-2">
+                        <li>För aggressivt underskott → muskelförlust + hormonproblem.</li>
+                        <li>Skippa styrketräning för att "bara köra cardio".</li>
+                        <li>För lågprotein — kroppen bryter ner muskler.</li>
+                        <li>Lita på vegansk proteinrika källor som enda proteinkälla utan planering.</li>
+                        <li>Våga inte väga sig regelbundet — utan data blir det gissningar.</li>
+                        <li>Glömma "diet-break" — kroppen behöver underhållsveckor för att hålla sig frisk.</li>
+                    </ul>
+                </div>
+            </details>
+        </main>
+
+        <footer class="text-center mt-12">
+            <a href="reningssystem.html" class="inline-block bg-slate-900/80 text-rose-400 font-bold py-3 px-6 rounded-full border-2 back-button">
+                &larr; Tillbaka till Reningssystem
+            </a>
+        </footer>
+    </div>
+
+    <script>
+        document.querySelectorAll('details').forEach((detail) => {
+            detail.addEventListener('toggle', (event) => {
+                const arrow = detail.querySelector('summary svg');
+                arrow.style.transform = detail.open ? 'rotate(180deg)' : 'rotate(0deg)';
+            });
+        });
+    </script>
+</body>
+</html>
