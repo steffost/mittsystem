@@ -11,8 +11,8 @@
     <style>
         :root {
             --glow-color-rening: #14b8a6;      /* teal — Reningssystem (parent) */
-            --glow-color-fasta: #f59e0b;       /* amber — Fasta Keto */
-            --glow-color-underskott: #a3e635;  /* lime  — Underskott med Kolhydrater */
+            --glow-color-fasta: #f59e0b;       /* amber — Fasta */
+            --glow-color-keto: #a3e635;        /* lime  — Keto */
         }
 
         body {
@@ -147,20 +147,20 @@
         .planet-fasta .planet-label { color: var(--glow-color-fasta); text-shadow: 0 0 5px var(--glow-color-fasta); }
         .planet-fasta:hover .planet-visual { box-shadow: 0 0 25px var(--glow-color-fasta); }
 
-        .planet-underskott .planet-visual {
-            border-color: var(--glow-color-underskott);
-            box-shadow: 0 0 10px var(--glow-color-underskott);
+        .planet-keto .planet-visual {
+            border-color: var(--glow-color-keto);
+            box-shadow: 0 0 10px var(--glow-color-keto);
         }
-        .planet-underskott { animation-name: orbit-underskott; }
-        .planet-underskott .planet-label { color: var(--glow-color-underskott); text-shadow: 0 0 5px var(--glow-color-underskott); }
-        .planet-underskott:hover .planet-visual { box-shadow: 0 0 25px var(--glow-color-underskott); }
+        .planet-keto { animation-name: orbit-keto; }
+        .planet-keto .planet-label { color: var(--glow-color-keto); text-shadow: 0 0 5px var(--glow-color-keto); }
+        .planet-keto:hover .planet-visual { box-shadow: 0 0 25px var(--glow-color-keto); }
 
         /* 2 planets: 180° apart (one at 180, the other at 0/360) */
         @keyframes orbit-fasta {
             from { transform: rotate(0deg) translateY(-200px) rotate(0deg); }
             to   { transform: rotate(360deg) translateY(-200px) rotate(-360deg); }
         }
-        @keyframes orbit-underskott {
+        @keyframes orbit-keto {
             from { transform: rotate(180deg) translateY(-200px) rotate(-180deg); }
             to   { transform: rotate(540deg) translateY(-200px) rotate(-540deg); }
         }
@@ -220,32 +220,32 @@
 
     <header class="page-header">
         <h1>Reningssystem</h1>
-        <p>Välj en rening — två vägar mot ett renare system.</p>
+        <p>Tvä skilda system — välj det som passar dig.</p>
     </header>
 
     <main class="interactive-hub">
         <div class="central-sun"></div>
         <div class="planet-container">
-            <!-- Planet: Fasta Keto -->
-            <a href="#fasta-keto" class="planet planet-fasta" id="planet-fasta-keto">
+            <!-- Planet: Fasta -->
+            <a href="#fasta" class="planet planet-fasta" id="planet-fasta">
                 <div class="planet-visual">
                     <div class="planet-icon-wrapper">
-                        <!-- Icon: Flame (ketosis / fasting) -->
-                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="stroke-current text-amber-400"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+                        <!-- Icon: Hourglass (time / fasting) -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="stroke-current text-amber-400"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414-4.414A2 2 0 0 1 7 6.172V2"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414 4.414A2 2 0 0 1 17 17.828V22"/></svg>
                     </div>
                 </div>
-                <span class="planet-label">Fasta Keto</span>
+                <span class="planet-label">Fasta</span>
             </a>
 
-            <!-- Planet: Underskott med Kolhydrater -->
-            <a href="#underskott-kolhydrater" class="planet planet-underskott" id="planet-underskott">
+            <!-- Planet: Keto -->
+            <a href="#keto" class="planet planet-keto" id="planet-keto">
                 <div class="planet-visual">
                     <div class="planet-icon-wrapper">
-                        <!-- Icon: Wheat/Carbs -->
-                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="stroke-current text-lime-400"><path d="M2 22 16 8"/><path d="M3.47 12.53 5 11l1.53 1.53a3.5 3.5 0 0 1 0 4.94L5 19l-1.53-1.53a3.5 3.5 0 0 1 0-4.94Z"/><path d="M7.47 8.53 9 7l1.53 1.53a3.5 3.5 0 0 1 0 4.94L9 15l-1.53-1.53a3.5 3.5 0 0 1 0-4.94Z"/><path d="M11.47 4.53 13 3l1.53 1.53a3.5 3.5 0 0 1 0 4.94L13 11l-1.53-1.53a3.5 3.5 0 0 1 0-4.94Z"/></svg>
+                        <!-- Icon: Flame (ketosis / fat-burning) -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="stroke-current text-lime-400"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
                     </div>
                 </div>
-                <span class="planet-label">Underskott med Kolhydrater</span>
+                <span class="planet-label">Keto</span>
             </a>
         </div>
     </main>
